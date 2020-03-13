@@ -1,0 +1,112 @@
+git log --stat
+commit c9402904c778c8bb1b540361bd185f1ebce117bc (HEAD -> master)
+Author: Ilkka Mäkinen <ijmakine@gmail.com>
+Date:   Fri Mar 13 13:26:03 2020 +0200
+
+    muutoksia lisää
+
+ tiedostoja/file22 | 0
+ tiedostoja/file3  | 1 +
+ 2 files changed, 1 insertion(+)
+
+commit d44cb29c5e11e3cff66fd8e76c05681732156ed7
+Author: Ilkka Mäkinen <ijmakine@gmail.com>
+Date:   Fri Mar 13 13:18:13 2020 +0200
+
+    muutoksia muutoksia
+
+ eka.txt    | 6 ++++--
+ kolmas.txt | 2 +-
+ 2 files changed, 5 insertions(+), 3 deletions(-)
+
+commit 7b2783cf9d4a19e378c0f746d6f50e85e96fedc7
+Author: Ilkka Mäkinen <ijmakine@gmail.com>
+Date:   Fri Mar 13 13:16:36 2020 +0200
+
+    tiedosto.txt uudelleenimetty
+
+ eka.txt | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
+
+commit b0bbcca30267bc24149136c8f76a071730c23115
+Author: Ilkka Mäkinen <ijmakine@gmail.com>
+Date:   Fri Mar 13 13:16:27 2020 +0200
+
+    tiedosto.txt uudelleenimetty
+
+ tiedosto.txt | 11 -----------
+ 1 file changed, 11 deletions(-)
+
+commit 638841595a6e049affb38364d272612917c387f7
+Author: Ilkka Mäkinen <ijmakine@gmail.com>
+Date:   Fri Mar 13 13:15:32 2020 +0200
+
+    toinen poistettu
+
+ toinen.txt | 1 -
+ 1 file changed, 1 deletion(-)
+
+commit 27d1407da0e7acfdd7e5815551720107d6af145b
+Author: Ilkka Mäkinen <ijmakine@gmail.com>
+Date:   Fri Mar 13 13:14:01 2020 +0200
+
+    tekstiä poistettu ja lisätty
+
+ tiedosto.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+commit d25487a66e734ab6edd0920143c5234d4a225ebf
+Author: Ilkka Mäkinen <ijmakine@gmail.com>
+Date:   Fri Mar 13 13:13:08 2020 +0200
+
+    paljon sisältöä lisätty
+
+ tiedosto.txt | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
+
+commit 1fbe2d6615a40dffb7fe85bf96d7126892e7f17c
+Author: Ilkka Mäkinen <ijmakine@gmail.com>
+Date:   Fri Mar 13 13:11:12 2020 +0200
+
+    stuff lisätty
+
+ stuff/joku.txt | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+
+commit b5dbbeb754417286c1c8ff12df2146b99ab9ccae
+Author: Ilkka Mäkinen <ijmakine@gmail.com>
+Date:   Fri Mar 13 13:10:45 2020 +0200
+
+    toista ja kolmatta muutettu
+
+ kolmas.txt | 1 +
+ toinen.txt | 1 +
+ 2 files changed, 2 insertions(+)
+
+commit c052d2c03715799693602f5bf5efd3fcccee1f87
+Author: Ilkka Mäkinen <ijmakine@gmail.com>
+Date:   Fri Mar 13 13:10:16 2020 +0200
+
+    kolmas lisätty
+
+ kolmas.txt | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+
+commit 5960c93b6ac0ac43befe8127972369bba911ad82
+Author: Ilkka Mäkinen <ijmakine@gmail.com>
+Date:   Fri Mar 13 13:09:34 2020 +0200
+
+    muutos ja lisäys
+
+ tiedosto.txt | 1 +
+ toinen.txt   | 0
+ 2 files changed, 1 insertion(+)
+
+commit 5b6e3a5725bb69a98ee536ddc26d0d0c8ecd24f2
+Author: Ilkka Mäkinen <ijmakine@gmail.com>
+Date:   Fri Mar 13 13:08:25 2020 +0200
+
+    tietosto.txt luotu
+
+ tiedosto.txt | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
