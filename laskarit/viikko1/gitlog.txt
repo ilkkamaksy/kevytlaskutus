@@ -1,3 +1,5 @@
+# Gitin tuloste
+
 git log --stat
 commit c9402904c778c8bb1b540361bd185f1ebce117bc (HEAD -> master)
 Author: Ilkka Mäkinen <ijmakine@gmail.com>
