@@ -1,7 +1,9 @@
 # Ohjelmointitekniikan harjoitustyö ja laskarit
 
-Täällä **ohjelmointitekniikan** kurssin *työt kansioissa*:
+Täällä **ohjelmointitekniikan** kurssin tehtävät *omissa kansioissaan*. 
 
-* Harjoitustyö kansiossa ot-harjoitustyo
-* Laskarit kansiossa laskarit
+## Viikko 1
+
+* [gitlog](https://github.com/ilkkamaksy/ot-harjoitustyo/blob/master/laskarit/viikko1/gitlog.txt)
+* [komentorivi](https://github.com/ilkkamaksy/ot-harjoitustyo/blob/master/laskarit/viikko1/komentorivi.txt)
 
