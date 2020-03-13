@@ -1,6 +1,6 @@
-# Ohjelmointitekniikan harjoitustyö ja laskarit
+# Ohjelmistotekniikan harjoitustyö ja laskarit
 
-Täällä **ohjelmointitekniikan** kurssin tehtävät *omissa kansioissaan*. 
+Kevään 2020 ohjelmistotekniikka-kurssi.
 
 ## Viikko 1
 
