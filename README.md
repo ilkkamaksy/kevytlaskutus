@@ -4,8 +4,8 @@ Kevään 2020 ohjelmistotekniikka-kurssi.
 
 ## Harjoitustyö
 
-* [Vaatimusmäärittely](https://github.com/ilkkamaksy/ot-harjoitustyo/dokumentaatio/vaatimusmaarittely.md)
-* [Tuntikirjanpito](https://github.com/ilkkamaksy/ot-harjoitustyo/dokumentaatio/tuntikirjanpito)
+* [Vaatimusmäärittely](https://github.com/ilkkamaksy/ot-harjoitustyo/blob/master/dokumentaatio/vaatimusmaarittely.md)
+* [Tuntikirjanpito](https://github.com/ilkkamaksy/ot-harjoitustyo/blob/master/dokumentaatio/tuntikirjanpito.md)
 * [Kevytlaskutus-Appi](https://github.com/ilkkamaksy/ot-harjoitustyo/Kevytlaskutus)
 
 ## Laskarit 
