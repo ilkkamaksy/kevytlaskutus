@@ -19,9 +19,9 @@ Suorat linkit laskaritehtäviin:
 
 ### Viikko2 
 
-* [Maksukortti](https://github.com/ilkkamaksy/ot-harjoitustyo/laskarit/viikko2/Maksukortti/)
-* [Unicafe](https://github.com/ilkkamaksy/ot-harjoitustyo/laskarit/viikko2/Unicafe/)
-* [Jacoco-testikattavuus](https://github.com/ilkkamaksy/ot-harjoitustyo/laskarit/viikko2/testikattavuus-jacoco.jpg)
+* [Maksukortti](https://github.com/ilkkamaksy/ot-harjoitustyo/tree/master/laskarit/viikko2/Maksukortti)
+* [Unicafe](https://github.com/ilkkamaksy/ot-harjoitustyo/tree/master/laskarit/viikko2/Unicafe)
+* [Jacoco-testikattavuus](https://github.com/ilkkamaksy/ot-harjoitustyo/blob/master/laskarit/viikko2/testikattavuus-jacoco.jpg)
 
 
 
