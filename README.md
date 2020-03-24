@@ -6,7 +6,7 @@ Kevään 2020 ohjelmistotekniikka-kurssi.
 
 * [Vaatimusmäärittely](https://github.com/ilkkamaksy/ot-harjoitustyo/blob/master/dokumentaatio/vaatimusmaarittely.md)
 * [Tuntikirjanpito](https://github.com/ilkkamaksy/ot-harjoitustyo/blob/master/dokumentaatio/tuntikirjanpito.md)
-* [Kevytlaskutus-Appi](https://github.com/ilkkamaksy/ot-harjoitustyo/Kevytlaskutus)
+* [Kevytlaskutus-Appi](https://github.com/ilkkamaksy/ot-harjoitustyo/tree/master/Kevytlaskutuss)
 
 ## Laskarit 
 
