@@ -2,9 +2,28 @@
 
 Kevään 2020 ohjelmistotekniikka-kurssi.
 
-## Viikko 1
+## Harjoitustyö
+
+* [Vaatimusmäärittely](https://github.com/ilkkamaksy/ot-harjoitustyo/dokumentaatio/vaatimusmaarittely.md)
+* [Tuntikirjanpito](https://github.com/ilkkamaksy/ot-harjoitustyo/dokumentaatio/tuntikirjanpito)
+* [Kevytlaskutus-Appi](https://github.com/ilkkamaksy/ot-harjoitustyo/Kevytlaskutus)
+
+## Laskarit 
+
+Suorat linkit laskaritehtäviin:
+
+### Viikko 1
 
 * [gitlog](https://github.com/ilkkamaksy/ot-harjoitustyo/blob/master/laskarit/viikko1/gitlog.txt)
 * [komentorivi](https://github.com/ilkkamaksy/ot-harjoitustyo/blob/master/laskarit/viikko1/komentorivi.txt)
 
-Tässä muutos.
+### Viikko2 
+
+* [Maksukortti](https://github.com/ilkkamaksy/ot-harjoitustyo/laskarit/viikko2/Maksukortti/)
+* [Unicafe](https://github.com/ilkkamaksy/ot-harjoitustyo/laskarit/viikko2/Unicafe/)
+* [Jacoco-testikattavuus](https://github.com/ilkkamaksy/ot-harjoitustyo/laskarit/viikko2/testikattavuus-jacoco.jpg)
+
+
+
+
+
