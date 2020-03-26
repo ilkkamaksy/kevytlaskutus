@@ -24,6 +24,10 @@ public class Company {
     private String ovtId;
     private String provider;
     
+    public Company() {
+        this("", "", "", "", "", "", "", "");
+    }
+    
     public Company(
         String name, 
         String regId, 

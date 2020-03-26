@@ -1,13 +1,12 @@
 package kevytlaskutus;
 
-
 import javafx.application.Application;
-import kevytlaskutus.ui.AppUi;
+import kevytlaskutus.ui.Launcher;
 
 public class Main {
 
     public static void main(String[] args)  {
-        AppUi.main(args);
+        Launcher.main(args);
     }   
 
 }

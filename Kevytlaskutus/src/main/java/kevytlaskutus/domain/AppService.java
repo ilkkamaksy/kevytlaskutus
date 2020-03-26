@@ -24,13 +24,24 @@ import kevytlaskutus.dao.CustomerCompanyDao;
  */
 public class AppService {
 
-    ManagedCompanyDao managedCompanyDao;
-    CustomerCompanyDao customerCompanyDao;
-   
+    private ManagedCompanyDao managedCompanyDao;
+    private CustomerCompanyDao customerCompanyDao;
+    
+    private Company currentCompany;
+    
     public AppService(ManagedCompanyDao managedCompanyDao, CustomerCompanyDao customerCompanyDao) {
         this.managedCompanyDao = managedCompanyDao;
         this.customerCompanyDao = customerCompanyDao;
         this.initDb();
+        this.currentCompany = new Company();
+    }
+    
+    public void setCurrentCompany(Company company) {
+        this.currentCompany = company;
+    }
+    
+    public Company getCurrentCompany() {
+        return this.currentCompany;
     }
     
     public boolean createManagedCompany(ManagedCompany company) {
@@ -151,6 +162,21 @@ public class AppService {
         }
         
         return result;
+    }
+    
+    public List<CustomerCompany> getCustomerCompanies() {
+        
+        List<CustomerCompany> results = new ArrayList<>();
+        
+        try {
+            Connection conn = this.getConnection();
+            customerCompanyDao.setConnection(conn);
+            results = customerCompanyDao.list();
+        } catch (SQLException | ClassNotFoundException e) {
+            Logger.getLogger(AppService.class.getName()).log(Level.SEVERE, null, e);
+        }
+        
+        return results;
     }
     
     private void initDb() {

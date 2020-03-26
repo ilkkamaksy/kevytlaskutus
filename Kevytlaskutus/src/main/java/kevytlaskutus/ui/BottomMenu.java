@@ -30,14 +30,12 @@ public class BottomMenu {
     }
     
     public HBox getMenu() {
-        System.out.println("menu " + menu);
         return this.menu;
     }   
     
-    public void addMenuItem(String buttonText, BorderPane target) {
+    public void addMenuItem(String buttonText) {
         Button button = new Button(buttonText);
         menu.getChildren().add(button);
-        System.out.println("button " + buttonText);
         button.setOnAction(e->{
             this.screenController.activate(buttonText);
         });

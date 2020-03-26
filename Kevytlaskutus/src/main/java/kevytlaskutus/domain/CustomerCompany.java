@@ -12,7 +12,7 @@ package kevytlaskutus.domain;
 public class CustomerCompany extends Company {
    
     public CustomerCompany() {
-        super("", "", "", "", "", "", "", "");
+        this("", "", "", "", "", "", "", "");
     }
     
     public CustomerCompany(

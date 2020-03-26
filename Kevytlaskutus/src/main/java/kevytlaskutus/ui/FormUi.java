@@ -18,17 +18,18 @@ import javafx.scene.layout.VBox;
  */
 public class FormUi {
     
+    private VBox form;
     private HashMap<String, TextField> formFields;
     private HashMap<String, Label> formLabels;
     private Button submitButton = new Button("Submit");
  
     public FormUi() {
+        form = new VBox(10);
         this.formFields = new HashMap<>();
         this.formLabels = new HashMap<>();
     }
     
     public VBox make() {       
-        VBox form = new VBox(10);
         addAllNodesToForm(form);
         return form;
     }
@@ -56,5 +57,9 @@ public class FormUi {
             form.getChildren().add(this.formFields.get(key));
         }
         form.getChildren().add(this.submitButton);
+    }
+    
+    public VBox getForm() {
+        return this.form;
     }
 }

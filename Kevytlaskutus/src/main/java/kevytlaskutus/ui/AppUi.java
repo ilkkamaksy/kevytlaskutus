@@ -11,6 +11,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Properties;
 
+import javafx.beans.value.ObservableValue;
+import javafx.beans.value.ChangeListener;
+
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.Event;
@@ -47,22 +50,14 @@ public class AppUi extends Application {
     private Stage primaryStage;
     
     private Scene mainScene;
-    
-    private Scene dashboardScene;
-    
-    private Scene newManagedCompanyScene;
-    private Scene editManagedCompanyScene;
-    private Scene manageCompanyScene;
-    
-    private Scene newCustomerCompanyScene;
-    private Scene edtCustomerCompanyScene;
-    
+   
     private VBox managedCompanyNodes;
     private VBox customerCompanyNodes;
-    
-    private Label menuLabel = new Label();
-    
+   
     private ManagedCompany currentManagedCompany;
+    
+    private FormUi editManagedCompanyForm;
+    
     private FormActionFactory formActions;
     
     private ScreenController screenController;
@@ -74,9 +69,7 @@ public class AppUi extends Application {
         ManagedCompanyDao managedCompanyDao = new ManagedCompanyDao();
         CustomerCompanyDao customerCompanyDao = new CustomerCompanyDao();
         appService = new AppService(managedCompanyDao, customerCompanyDao);
-        
     }
-   
    
     @Override
     public void start(Stage stage) {
@@ -97,13 +90,21 @@ public class AppUi extends Application {
         VBox newCustomerForm = this.makeNewCustomerCompanyScene();
         BorderPane newCustomer = this.makeScene(newCustomerForm);
 
+        // this.editManagedCompanyForm = new FormUi();
+        // this.makeEditManagedCompanyScene();
+        // BorderPane editManagedCompany = this.makeScene(this.editManagedCompanyForm.getForm());
+        
+//        Form form = new Form(this.screenController.getCurrentCompany());
+//        form.make();
+//        BorderPane editManagedCompany = this.makeScene(form.getForm());
+        
         this.screenController.addScreen("Dashboard", dashboard);
         this.screenController.addScreen("Add New Managed Company", newManagedCompany);
+//        this.screenController.addScreen("Edit Managed Company", editManagedCompany);
         this.screenController.addScreen("Add New Customer", newCustomer);
         
-        dashboard = this.addMenuToScene(dashboard);
-        newManagedCompany = this.addMenuToScene(newManagedCompany);
-        newCustomer = this.addMenuToScene(newCustomer);        
+        this.createBottomMenu();
+        this.screenController.addGlobalBottomMenu(this.bottomMenu.getMenu());
 
         this.screenController.activate("Dashboard");
         primaryStage.setScene(this.mainScene);
@@ -114,7 +115,14 @@ public class AppUi extends Application {
         
         formActions = new FormActionFactory(appService);
     }
-
+    
+    private void createBottomMenu() {
+        this.bottomMenu = new BottomMenu(this.screenController);
+        this.bottomMenu.addMenuItem("Dashboard");
+        this.bottomMenu.addMenuItem("Add New Managed Company");
+        this.bottomMenu.addMenuItem("Add New Customer");
+    }
+  
     private BorderPane makeScene(VBox content) {
         VBox container = new VBox(10);
         container.setMaxWidth(400);
@@ -127,27 +135,9 @@ public class AppUi extends Application {
        
         return pane;
     }
-    
-    public BorderPane addMenuToScene(BorderPane scene) {
-        
-        BottomMenu bottomMenu = new BottomMenu(this.screenController);
-        
-        for ( String key : this.screenController.getScreenMap().keySet() ) {
-            this.screenController.getScreenMap().get(key);
-            bottomMenu.addMenuItem(key, this.screenController.getScreenMap().get(key));
-        }
-        
-        scene.setBottom(bottomMenu.getMenu());
-        
-        return scene;
-    }
-    
+   
     private void makeDashboardScene() {
-
         managedCompanyNodes = new VBox(10);
-        managedCompanyNodes.setMaxWidth(400);
-        managedCompanyNodes.setMinWidth(280); 
-        
         redrawManagedCompanies();
     }
    
@@ -167,27 +157,40 @@ public class AppUi extends Application {
         form.setSubmitButtonText("Save");
         VBox content = form.make();
         this.setFormAction(form, "newManagedCompany");
-        
+       
         return content;
     }
 
-    private VBox makeEditManagedCompanyScene() {
-        FormUi form = new FormUi();
-        form.setSubmitButtonText("Save");
-        form.addFormField("Name", this.currentManagedCompany.getName());
-        form.addFormField("Register Id", this.currentManagedCompany.getRegId());
-        form.addFormField("Phone", this.currentManagedCompany.getPhone());
-        form.addFormField("Street address", this.currentManagedCompany.getStreet());
-        form.addFormField("Postcode", this.currentManagedCompany.getPostcode());
-        form.addFormField("Commune/City", this.currentManagedCompany.getCommune());
-        form.addFormField("OVT", this.currentManagedCompany.getOvtId());
-        form.addFormField("Provider", this.currentManagedCompany.getProvider());
-        form.addFormField("IBAN", this.currentManagedCompany.getIban());
-        form.addFormField("BIC", this.currentManagedCompany.getBic());
-        VBox content = form.make();
-        this.setFormAction(form, "updateManagedCompany");
+    public void makeEditManagedCompanyScene() {
        
-        return content;
+        if ( this.screenController.getCurrentCompany() == null ) {
+            editManagedCompanyForm.addFormField("Name", "");
+            editManagedCompanyForm.addFormField("Register Id", "");
+            editManagedCompanyForm.addFormField("Phone", "");
+            editManagedCompanyForm.addFormField("Street address", "");
+            editManagedCompanyForm.addFormField("Postcode", "");
+            editManagedCompanyForm.addFormField("Commune/City", "");
+            editManagedCompanyForm.addFormField("OVT", "");
+            editManagedCompanyForm.addFormField("Provider", "");
+            return;
+        }
+       
+        this.editManagedCompanyForm.getForm().getChildren().clear();
+        
+        editManagedCompanyForm.setSubmitButtonText("Save");
+        editManagedCompanyForm.addFormField("Name", screenController.getCurrentCompany().getName());
+        editManagedCompanyForm.addFormField("Register Id", screenController.getCurrentCompany().getRegId());
+        editManagedCompanyForm.addFormField("Phone", screenController.getCurrentCompany().getPhone());
+        editManagedCompanyForm.addFormField("Street address", screenController.getCurrentCompany().getStreet());
+        editManagedCompanyForm.addFormField("Postcode", screenController.getCurrentCompany().getPostcode());
+        editManagedCompanyForm.addFormField("Commune/City", screenController.getCurrentCompany().getCommune());
+        editManagedCompanyForm.addFormField("OVT", screenController.getCurrentCompany().getOvtId());
+        editManagedCompanyForm.addFormField("Provider", screenController.getCurrentCompany().getProvider());
+        // editManagedCompanyForm.addFormField("IBAN", this.currentManagedCompany.getIban());
+        // editManagedCompanyForm.addFormField("BIC", this.currentManagedCompany.getBic());
+        editManagedCompanyForm.make();
+        setFormAction(editManagedCompanyForm, "updateManagedCompany");
+
     }
 
     private VBox makeNewCustomerCompanyScene() {
@@ -231,14 +234,30 @@ public class AppUi extends Application {
    
     public void redrawManagedCompanies() {
         managedCompanyNodes.getChildren().clear();     
-
+        
         List<ManagedCompany> managedCompanies = appService.getManagedCompanies();
         managedCompanies.forEach(company->{
-            managedCompanyNodes.getChildren().add(createManagedCompanyNode(company));
+            managedCompanyNodes.getChildren().add(createCompanyNode(company));
         });     
     }
    
-    public Node createManagedCompanyNode(ManagedCompany company) {
+    public void redrawCustomerCompanies() {
+        customerCompanyNodes.getChildren().clear();     
+        
+        List<CustomerCompany> customerCompanies = appService.getCustomerCompanies();
+        customerCompanies.forEach(company->{
+            customerCompanyNodes.getChildren().add(createCompanyNode(company));
+        });     
+    }
+    
+    public Node createCompanyNode(Company company) {
+//        CompanyNode node = new CompanyNode(this.screenController, company, "Edit Managed Company", this); 
+//        return node.getCompanyNode();
+            return null;
+    }
+    
+    public Node xxxcreateCompanyNode(ManagedCompany company) {
+        
         HBox box = new HBox(10);
         Label label  = new Label(company.getName());
         label.setMinHeight(28);
@@ -250,10 +269,9 @@ public class AppUi extends Application {
         
         Button editButton = new Button("Edit");
         editButton.setOnAction(e->{
-            this.currentManagedCompany = company;    
+            this.currentManagedCompany = company;
             this.makeEditManagedCompanyScene();
-            primaryStage.setTitle("Edit company: " + company.getName());
-            primaryStage.setScene(this.editManagedCompanyScene);   
+            this.screenController.activate("Edit Managed Company");
         });
         
         Button deleteButton = new Button("Delete");
@@ -279,8 +297,9 @@ public class AppUi extends Application {
     private void setFormAction(FormUi form, String action) {
         HashMap<String, TextField> formFields = form.getFormFields();
         form.getSubmitButton().setOnAction(e->{
-            formActions.getAction(action, formFields, this.currentManagedCompany);
-            this.redrawManagedCompanies();
+//            formActions.getAction(action, formFields, this.currentManagedCompany);
+//            this.redrawManagedCompanies();
+//            this.makeEditManagedCompanyScene();
         });
     }
    

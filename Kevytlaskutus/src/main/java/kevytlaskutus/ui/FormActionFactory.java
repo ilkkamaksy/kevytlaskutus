@@ -25,30 +25,23 @@ public class FormActionFactory {
         this.appService = appService;
     }
     
-    public void getAction(String action, HashMap<String, TextField> formFields, Company company) {
+    public void execute(HashMap<String, TextField> formFields, Company company) {
         
         FormAction save = null;
+        Company companyToSave = this.makeManagedCompanyFromFieldValues(formFields, company);
         
-        if ( action.equals("newManagedCompany") ) {
-            Company companyToSave = this.makeManagedCompanyFromFieldValues(formFields, company);
+        if ( companyToSave.getId() == 0 ) {
             save = new SaveNewManagedCompany(companyToSave, appService);
-        } else if ( action.equals("updateManagedCompany")) {
-            Company companyToSave = this.makeManagedCompanyFromFieldValues(formFields, company);
+        } else if ( company.getId() != 0 ) {
             save = new UpdateManagedCompany(companyToSave, appService);
-        } else if ( action.equals("newCustomerCompany")) {
-            Company companyToSave = this.makeCustomerCompanyFromFieldValues(formFields, company);
-            save = new SaveNewCustomerCompany(companyToSave, appService);
-        } else if ( action.equals("UpdateCustomerCompany")) {
-            Company companyToSave = this.makeCustomerCompanyFromFieldValues(formFields, company);
-            save = new UpdateCustomerCompany(companyToSave, appService);
-        }
-        
+        } 
+       
         save.save();
 
     }
     
     private ManagedCompany makeManagedCompanyFromFieldValues(HashMap<String, TextField> formFields, Company company) {
-        
+    
         ManagedCompany result = new ManagedCompany(
             formFields.get("Name").getText(), 
             formFields.get("Register Id").getText(),
@@ -60,33 +53,13 @@ public class FormActionFactory {
             formFields.get("Provider").getText()
         );
         
-        result.setIban(formFields.get("IBAN").getText());
-        result.setBic(formFields.get("BIC").getText());
-        
-        if ( company != null ) {
+        if ( company.getId() != 0 ) {
             result.setId(company.getId());
+        } else {
+            result.setId(0);
         }
         
         return result;
     }
-    
-    private Company makeCustomerCompanyFromFieldValues(HashMap<String, TextField> formFields, Company company) {
-        
-        Company result = new CustomerCompany(
-            formFields.get("Name").getText(), 
-            formFields.get("Register Id").getText(),
-            formFields.get("Phone").getText(),
-            formFields.get("Street address").getText(),
-            formFields.get("Postcode").getText(),
-            formFields.get("Commune/City").getText(),
-            formFields.get("OVT").getText(),
-            formFields.get("Provider").getText()
-        );
-        
-        if ( company != null ) {
-            result.setId(company.getId());
-        }
-        
-        return result;
-    }
+   
 }

@@ -16,6 +16,10 @@ public class ManagedCompany extends Company {
     private String iban;
     private String bic;
     
+    public ManagedCompany() {
+        this("", "", "", "", "", "", "", "");
+    }
+    
     public ManagedCompany(
             String name, 
             String regId, 
