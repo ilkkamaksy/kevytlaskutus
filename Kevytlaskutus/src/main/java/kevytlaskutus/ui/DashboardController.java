@@ -20,9 +20,12 @@ import javafx.scene.control.ListView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import kevytlaskutus.domain.AppService;
 import kevytlaskutus.domain.Company;
+import kevytlaskutus.domain.CustomerCompany;
 import kevytlaskutus.domain.ManagedCompany;
 
 /**
@@ -46,11 +49,27 @@ public class DashboardController extends BaseController implements Initializable
     
     private void setupManagedCompanyListView() {
         this.managedCompaniesListView.getItems().clear();
-        super.appService.getManagedCompanies().forEach(company->{
-            this.createListNode(company);
-        });  
+       
+        List<ManagedCompany> companies = super.appService.getManagedCompanies();
+        if ( companies.isEmpty() ) {
+            this.noContentMessage();
+            return;
+        }
+        
+        this.makeList(companies);
+    }
+
+    private void noContentMessage() {
+        VBox container = new VBox(10);
+        container.getChildren().add(new Text("You haven't added any companies yet. Add one to kick things off!"));
+        this.managedCompaniesListView.getItems().add(container);
     }
     
+    private void makeList(List<ManagedCompany> companies) {
+        companies.forEach(company->{
+            this.createListNode(company);
+        });
+    }
     private void createListNode(Company company) {
         
         HBox box = new HBox(10);
@@ -85,6 +104,7 @@ public class DashboardController extends BaseController implements Initializable
                 deleteButton
         );
         
+        System.out.println("dash " + this.managedCompaniesListView.getItems());
         this.managedCompaniesListView.getItems().add(box);
     }
     

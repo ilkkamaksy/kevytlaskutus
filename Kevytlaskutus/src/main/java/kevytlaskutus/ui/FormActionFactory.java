@@ -27,6 +27,7 @@ public class FormActionFactory {
     
     public void execute(HashMap<String, TextField> formFields, Company company) {
         
+        System.out.println(company.getClass());
         FormAction save = null;
         Company companyToSave = this.makeManagedCompanyFromFieldValues(formFields, company);
         

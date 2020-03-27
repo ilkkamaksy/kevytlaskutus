@@ -15,27 +15,14 @@ import kevytlaskutus.domain.AppService;
  * @author ilkka
  */
 public class ProductsController extends BaseController {
-
+    
+    @FXML
+    private ListView<?> productListView;
+    
     public ProductsController(AppService appService, ViewFactory viewFactory, String fxmlName) {
         super(appService, viewFactory, fxmlName);
     }
        
-    @FXML
-    private ListView<?> productListView;
 
-    @FXML
-    void manageCompaniesAction(ActionEvent event) {
 
-    }
-
-    @FXML
-    void manageCustomersAction(ActionEvent event) {
-
-    }
-
-    @FXML
-    void manageProductsAction(ActionEvent event) {
-
-    }
-    
 }

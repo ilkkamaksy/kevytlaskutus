@@ -23,6 +23,8 @@ public class Company {
     private String commune;
     private String ovtId;
     private String provider;
+    private String iban;
+    private String bic;
     
     public Company() {
         this("", "", "", "", "", "", "", "");
@@ -119,7 +121,24 @@ public class Company {
     public String getProvider() {
         return provider;
     }
+
+    public void setIban(String iban) {
+        this.iban = iban;
+    }
+
+    public void setBic(String bic) {
+        this.bic = bic;
+    }
+
+    public String getIban() {
+        return iban;
+    }
+
+    public String getBic() {
+        return bic;
+    }
   
+    
     @Override
     public String toString() {
         return "id " + id + " name " + name + " regId " + regId + " postcode " + postcode; 
