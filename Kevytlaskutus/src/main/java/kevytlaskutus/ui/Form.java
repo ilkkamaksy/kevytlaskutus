@@ -24,7 +24,7 @@ public class Form {
     
     private HashMap<String, TextField> formFields;
     private HashMap<String, Label> formLabels;
-    
+   
     public Form() {
         this.formFields = new HashMap<>();
         this.formLabels = new HashMap<>();

@@ -5,6 +5,8 @@
  */
 package kevytlaskutus.domain;
 
+import java.util.List;
+
 /**
  *
  * @author ilkka
@@ -27,4 +29,5 @@ public class CustomerCompany extends Company {
     ) {
         super(name, regId, phone, street, postcode, commune, ovtId, provider);
     }
+
 }

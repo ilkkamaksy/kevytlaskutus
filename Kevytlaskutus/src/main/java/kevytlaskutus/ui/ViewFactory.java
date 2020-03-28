@@ -32,8 +32,18 @@ public class ViewFactory {
         this.initializeStage(controller);
     }
     
+    public void showEditCompanyForm() {
+        BaseController controller = new EditCompanyController(this.appService, this, "/fxml/companyForm.fxml");
+        this.initializeStage(controller);
+    }
+    
     public void showCustomerView() {
         BaseController controller = new CustomerController(this.appService, this, "/fxml/manageCustomers.fxml");
+        this.initializeStage(controller);
+    }
+    
+    public void showEditCustomerForm() {
+        BaseController controller = new EditCustomerController(this.appService, this, "/fxml/customerForm.fxml");
         this.initializeStage(controller);
     }
     
@@ -41,9 +51,9 @@ public class ViewFactory {
         BaseController controller = new ProductsController(this.appService, this, "/fxml/manageProducts.fxml");
         this.initializeStage(controller);
     }
-    
-    public void showEditCompanyForm() {
-        BaseController controller = new EditCompanyFormController(this.appService, this, "/fxml/companyForm.fxml");
+
+    public void showEditProductForm() {
+        BaseController controller = new EditProductController(this.appService, this, "/fxml/productForm.fxml");
         this.initializeStage(controller);
     }
     

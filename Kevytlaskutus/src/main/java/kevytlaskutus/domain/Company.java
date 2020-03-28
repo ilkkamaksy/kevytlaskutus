@@ -12,7 +12,7 @@ import java.util.HashMap;
  *
  * @author ilkka
  */
-public class Company {
+public abstract class Company {
     
     private int id;
     private String name;
@@ -121,23 +121,6 @@ public class Company {
     public String getProvider() {
         return provider;
     }
-
-    public void setIban(String iban) {
-        this.iban = iban;
-    }
-
-    public void setBic(String bic) {
-        this.bic = bic;
-    }
-
-    public String getIban() {
-        return iban;
-    }
-
-    public String getBic() {
-        return bic;
-    }
-  
     
     @Override
     public String toString() {

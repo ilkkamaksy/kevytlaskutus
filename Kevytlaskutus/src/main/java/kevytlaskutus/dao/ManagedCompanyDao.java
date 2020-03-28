@@ -136,7 +136,7 @@ public class ManagedCompanyDao implements CompanyDao<ManagedCompany, Integer, St
     }
 
     @Override
-    public List<ManagedCompany> list() throws SQLException {
+    public List<ManagedCompany> getItems() throws SQLException {
         
         List<ManagedCompany> results = new ArrayList<>(); 
        

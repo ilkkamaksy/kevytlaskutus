@@ -7,5 +7,6 @@
 | 23.3. | 8    | H2-tietokannan käyttöönotto, hallinnoitavien yritysten lisäys ja asiakasyritysten lisäys |
 | 24.3. | 8    | JavaFX-opettelua ja kehitystä |
 | 26.3. | 8    | JavaFX-opettelua ja käyttöliittymän kehitystä |
-| yht   | 27    | | 
+| 27.3. | 6    | Tuotenäkymän rakentaminen, tuotteiden luominen, muokkaus ja poisto |
+| yht   | 33    | | 
 

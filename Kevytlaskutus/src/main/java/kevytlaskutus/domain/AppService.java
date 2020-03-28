@@ -13,10 +13,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.List;
 import java.util.ArrayList;
-import kevytlaskutus.Main;
 
 import kevytlaskutus.dao.ManagedCompanyDao;
 import kevytlaskutus.dao.CustomerCompanyDao;
+import kevytlaskutus.dao.ProductDaoImpl;
 
 /**
  *
@@ -26,24 +26,46 @@ public class AppService {
 
     private ManagedCompanyDao managedCompanyDao;
     private CustomerCompanyDao customerCompanyDao;
+    private ProductDaoImpl productDao;
     
-    private Company currentCompany;
+    private Company currentManagedCompany;
+    private Company currentCustomerCompany;
+    private Product currentProduct;
     
-    public AppService(ManagedCompanyDao managedCompanyDao, CustomerCompanyDao customerCompanyDao) {
+    public AppService(ManagedCompanyDao managedCompanyDao, CustomerCompanyDao customerCompanyDao, ProductDaoImpl productDao) {
         this.managedCompanyDao = managedCompanyDao;
         this.customerCompanyDao = customerCompanyDao;
+        this.productDao = productDao;
         this.initDb();
-        this.currentCompany = new Company();
+        this.currentManagedCompany = new ManagedCompany();
+        this.currentCustomerCompany = new CustomerCompany();
+        this.currentProduct = new Product();
     }
     
-    public void setCurrentCompany(Company company) {
-        this.currentCompany = company;
+    public void setCurrentManagedCompany(Company company) {
+        this.currentManagedCompany = company;
     }
     
-    public Company getCurrentCompany() {
-        return this.currentCompany;
+    public Company getCurrentManagedCompany() {
+        return this.currentManagedCompany;
     }
-    
+
+    public Company getCurrentCustomerCompany() {
+        return currentCustomerCompany;
+    }
+
+    public void setCurrentCustomerCompany(Company currentCustomerCompany) {
+        this.currentCustomerCompany = currentCustomerCompany;
+    }
+
+    public Product getCurrentProduct() {
+        return currentProduct;
+    }
+
+    public void setCurrentProduct(Product currentProduct) {
+        this.currentProduct = currentProduct;
+    }
+  
     public boolean createManagedCompany(ManagedCompany company) {
         
         Boolean result = false;
@@ -111,7 +133,7 @@ public class AppService {
         try {
             Connection conn = this.getConnection();
             managedCompanyDao.setConnection(conn);
-            results = managedCompanyDao.list();
+            results = managedCompanyDao.getItems();
         } catch (SQLException | ClassNotFoundException e) {
             Logger.getLogger(AppService.class.getName()).log(Level.SEVERE, null, e);
         }
@@ -171,7 +193,82 @@ public class AppService {
         try {
             Connection conn = this.getConnection();
             customerCompanyDao.setConnection(conn);
-            results = customerCompanyDao.list();
+            results = customerCompanyDao.getItems();
+        } catch (SQLException | ClassNotFoundException e) {
+            Logger.getLogger(AppService.class.getName()).log(Level.SEVERE, null, e);
+        }
+        
+        return results;
+    }
+    
+    public boolean createProduct(Product product) {
+        
+        Boolean result = false;
+        
+        try {    
+            Connection conn = this.getConnection();
+            productDao.setConnection(conn);
+            result = productDao.create(product);
+        } catch (SQLException | ClassNotFoundException e) {
+            Logger.getLogger(AppService.class.getName()).log(Level.SEVERE, null, e);
+        }
+        
+        return result;
+    }
+    
+    public Boolean updateProduct(int id, Product product) {
+        
+        Boolean result = false;
+        
+        try {    
+            Connection conn = this.getConnection();
+            productDao.setConnection(conn);
+            result = productDao.update(id, product);
+        } catch (SQLException | ClassNotFoundException e) {
+            Logger.getLogger(AppService.class.getName()).log(Level.SEVERE, null, e);
+        }
+        
+        return result;
+    }
+    
+    public Boolean deleteProduct(int id) {
+        
+        Boolean result = false;
+        
+        try {    
+            Connection conn = this.getConnection();
+            productDao.setConnection(conn);
+            result = productDao.delete(id);
+        } catch (SQLException | ClassNotFoundException e) {
+            Logger.getLogger(AppService.class.getName()).log(Level.SEVERE, null, e);
+        }
+        
+        return result;
+    }
+    
+    public Product getProduct(int id) {
+        
+        Product result = null;
+        
+        try {
+            Connection conn = this.getConnection();
+            productDao.setConnection(conn);
+            result = productDao.getItemById(id);
+        } catch (SQLException | ClassNotFoundException e) {
+            Logger.getLogger(AppService.class.getName()).log(Level.SEVERE, null, e);
+        }
+        
+        return result;
+    }
+    
+    public List<Product> getProducts() {
+        
+        List<Product> results = new ArrayList<>();
+        
+        try {
+            Connection conn = this.getConnection();
+            productDao.setConnection(conn);
+            results = productDao.getItems();
         } catch (SQLException | ClassNotFoundException e) {
             Logger.getLogger(AppService.class.getName()).log(Level.SEVERE, null, e);
         }
@@ -185,9 +282,11 @@ public class AppService {
             Connection conn = this.getConnection();
             managedCompanyDao.setConnection(conn);
             customerCompanyDao.setConnection(conn);
+            productDao.setConnection(conn);
             
             managedCompanyDao.initDb();
             customerCompanyDao.initDb();
+            productDao.initDb();
             
             conn.close();
             

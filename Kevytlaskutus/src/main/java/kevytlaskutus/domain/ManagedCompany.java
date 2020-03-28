@@ -5,6 +5,7 @@
  */
 package kevytlaskutus.domain;
 
+import java.util.List;
 import kevytlaskutus.domain.Company;
 
 /**
@@ -48,5 +49,7 @@ public class ManagedCompany extends Company {
     public void setBic(String bic) {
         this.bic = bic;
     }
+    
+    
    
 }

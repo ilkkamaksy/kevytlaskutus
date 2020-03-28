@@ -105,6 +105,7 @@ public class CustomerCompanyDao implements CompanyDao<CustomerCompany, Integer, 
         stmt.setString(6, company.getCommune());
         stmt.setString(7, company.getOvtId());
         stmt.setString(8, company.getProvider());
+        stmt.setInt(9, id);
         int rows = stmt.executeUpdate();  
 
         conn.close();
@@ -125,7 +126,7 @@ public class CustomerCompanyDao implements CompanyDao<CustomerCompany, Integer, 
     }
 
     @Override
-    public List<CustomerCompany> list() throws SQLException {
+    public List<CustomerCompany> getItems() throws SQLException {
         
         List<CustomerCompany> results = new ArrayList<>(); 
        

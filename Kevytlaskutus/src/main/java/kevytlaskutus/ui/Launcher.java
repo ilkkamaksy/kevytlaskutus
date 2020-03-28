@@ -13,6 +13,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import kevytlaskutus.dao.CustomerCompanyDao;
 import kevytlaskutus.dao.ManagedCompanyDao;
+import kevytlaskutus.dao.ProductDaoImpl;
 import kevytlaskutus.domain.AppService;
 
 /**
@@ -31,7 +32,8 @@ public class Launcher extends Application {
     public void init() throws Exception {
         ManagedCompanyDao managedCompanyDao = new ManagedCompanyDao();
         CustomerCompanyDao customerCompanyDao = new CustomerCompanyDao();
-        this.appService = new AppService(managedCompanyDao, customerCompanyDao);
+        ProductDaoImpl productDao = new ProductDaoImpl();
+        this.appService = new AppService(managedCompanyDao, customerCompanyDao, productDao);
     }
     
     @Override

@@ -15,24 +15,24 @@ import kevytlaskutus.domain.*;
  *
  * @author ilkka
  */
-public class SaveNewManagedCompany extends FormAction{
+public class UpdateProduct extends FormAction{
     
-    private ManagedCompany company;
+    private Product product;
     
-    public SaveNewManagedCompany(
+    public UpdateProduct(
             AppService appService
     ) {
         super(appService);
     }
-    
+
     @Override
     public void setData(HashMap<String, TextField> formFields, int id) {
-        this.company = super.makeManagedCompanyFromFieldValues(formFields, id);
+        this.product = super.makeProductFromFieldValues(formFields, id);
+    }
+        
+    @Override
+    public void save() {    
+        super.appService.updateProduct(this.product.getId(), this.product);
     }
     
-    @Override
-    public void save() {
-        super.appService.createManagedCompany(this.company);
-    }
-   
 }

@@ -20,47 +20,23 @@ import kevytlaskutus.domain.*;
 public class FormActionFactory {
     
     AppService appService;
+    HashMap<String, FormAction> commands;
     
     public FormActionFactory(AppService appService) {
         this.appService = appService;
+        this.commands = new HashMap<>();
+        this.commands.put("NewManagedCompany", new SaveNewManagedCompany(appService));
+        this.commands.put("UpdateManagedCompany", new UpdateManagedCompany(appService));
+        this.commands.put("NewCustomerCompany", new SaveNewCustomerCompany(appService));
+        this.commands.put("UpdateCustomerCompany", new UpdateCustomerCompany(appService));
+        this.commands.put("NewProduct", new SaveNewProduct(appService));
+        this.commands.put("UpdateProduct", new UpdateProduct(appService));
     }
     
-    public void execute(HashMap<String, TextField> formFields, Company company) {
-        
-        System.out.println(company.getClass());
-        FormAction save = null;
-        Company companyToSave = this.makeManagedCompanyFromFieldValues(formFields, company);
-        
-        if ( companyToSave.getId() == 0 ) {
-            save = new SaveNewManagedCompany(companyToSave, appService);
-        } else if ( company.getId() != 0 ) {
-            save = new UpdateManagedCompany(companyToSave, appService);
-        } 
-       
-        save.save();
-
+    public void execute(String actionType, HashMap<String, TextField> formFields, int id) {        
+        FormAction action = this.commands.get(actionType); 
+        action.setData(formFields, id);
+        action.save();
     }
     
-    private ManagedCompany makeManagedCompanyFromFieldValues(HashMap<String, TextField> formFields, Company company) {
-    
-        ManagedCompany result = new ManagedCompany(
-            formFields.get("Name").getText(), 
-            formFields.get("Register Id").getText(),
-            formFields.get("Phone").getText(),
-            formFields.get("Street address").getText(),
-            formFields.get("Postcode").getText(),
-            formFields.get("Commune/City").getText(),
-            formFields.get("OVT").getText(),
-            formFields.get("Provider").getText()
-        );
-        
-        if ( company.getId() != 0 ) {
-            result.setId(company.getId());
-        } else {
-            result.setId(0);
-        }
-        
-        return result;
-    }
-   
 }

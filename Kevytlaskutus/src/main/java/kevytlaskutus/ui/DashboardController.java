@@ -82,7 +82,7 @@ public class DashboardController extends BaseController implements Initializable
         
         Button editButton = new Button("Edit");
         editButton.setOnAction(e->{
-            this.appService.setCurrentCompany(company);
+            this.appService.setCurrentManagedCompany(company);
             this.viewFactory.showEditCompanyForm();
         });
         
@@ -104,13 +104,12 @@ public class DashboardController extends BaseController implements Initializable
                 deleteButton
         );
         
-        System.out.println("dash " + this.managedCompaniesListView.getItems());
         this.managedCompaniesListView.getItems().add(box);
     }
     
     @FXML
     void addNewManagedCompanyAction(ActionEvent event) {
-        this.appService.setCurrentCompany(new Company());
+        this.appService.setCurrentManagedCompany(new ManagedCompany());
         this.viewFactory.showEditCompanyForm();
     }
 

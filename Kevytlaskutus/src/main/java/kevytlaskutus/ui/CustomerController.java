@@ -83,8 +83,8 @@ public class CustomerController extends BaseController implements Initializable 
         
         Button editButton = new Button("Edit");
         editButton.setOnAction(e->{
-            this.appService.setCurrentCompany(company);
-            this.viewFactory.showEditCompanyForm();
+            this.appService.setCurrentCustomerCompany(company);
+            this.viewFactory.showEditCustomerForm();
         });
         
         Button deleteButton = new Button("Delete");
@@ -105,13 +105,12 @@ public class CustomerController extends BaseController implements Initializable 
                 deleteButton
         );
         
-        System.out.println("customer " + this.customerListView.getItems());
         this.customerListView.getItems().add(box);
     }
-   
+  
     @FXML
-    void addCustomerCompanyAction(ActionEvent event) {
-        System.out.println("sfsaf");
+    void addNewCustomerCompanyAction(ActionEvent event) {
+        this.appService.setCurrentCustomerCompany(new CustomerCompany());
+        this.viewFactory.showEditCustomerForm();
     }
-   
 }

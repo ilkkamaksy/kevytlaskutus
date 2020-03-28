@@ -17,16 +17,22 @@ import kevytlaskutus.domain.*;
  */
 public class UpdateCustomerCompany extends FormAction{
     
+    private CustomerCompany company;
+    
     public UpdateCustomerCompany(
-            Company company, 
             AppService appService
     ) {
-        super(company, appService);
+        super(appService);
+    }
+
+    @Override
+    public void setData(HashMap<String, TextField> formFields, int id) {
+        this.company = super.makeCustomerCompanyFromFieldValues(formFields, id);
     }
     
     @Override
     public void save() {
-        super.appService.updateCustomerCompany(super.company.getId(), (CustomerCompany)super.company);
+      super.appService.updateCustomerCompany(company.getId(), this.company);
     }
 
 }

@@ -6,33 +6,32 @@
 package kevytlaskutus.ui;
 
 import java.util.HashMap;
-import javafx.scene.Scene;
 import javafx.scene.control.TextField;
-import javafx.stage.Stage;
-import kevytlaskutus.domain.*;
+import kevytlaskutus.domain.AppService;
+import kevytlaskutus.domain.CustomerCompany;
+import kevytlaskutus.domain.Product;
 
 /**
  *
  * @author ilkka
  */
-public class SaveNewManagedCompany extends FormAction{
+public class SaveNewProduct extends FormAction {
     
-    private ManagedCompany company;
+    private Product product;
     
-    public SaveNewManagedCompany(
+    public SaveNewProduct(
             AppService appService
     ) {
         super(appService);
     }
-    
+
     @Override
     public void setData(HashMap<String, TextField> formFields, int id) {
-        this.company = super.makeManagedCompanyFromFieldValues(formFields, id);
+        this.product = super.makeProductFromFieldValues(formFields, id);
     }
     
     @Override
     public void save() {
-        super.appService.createManagedCompany(this.company);
+        super.appService.createProduct(this.product);
     }
-   
 }
