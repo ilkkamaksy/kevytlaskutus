@@ -6,16 +6,14 @@
 package kevytlaskutus.ui;
 
 import java.util.HashMap;
-import javafx.scene.Scene;
 import javafx.scene.control.TextField;
-import javafx.stage.Stage;
 import kevytlaskutus.domain.*;
 
 /**
  *
  * @author ilkka
  */
-public class SaveNewManagedCompany extends FormAction{
+public class SaveNewManagedCompany extends FormAction {
     
     private ManagedCompany company;
     

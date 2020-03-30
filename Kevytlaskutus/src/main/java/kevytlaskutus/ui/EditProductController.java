@@ -50,7 +50,7 @@ public class EditProductController extends BaseController implements Initializab
    
     public void setupForm() {
    
-        if ( currentProduct.getName().isEmpty() ) {
+        if (currentProduct.getName().isEmpty()) {
             this.form.addFormField("Name", "");
             this.form.addFormField("Price", "");
             this.form.addFormField("Price Unit", "");
@@ -68,7 +68,7 @@ public class EditProductController extends BaseController implements Initializab
     }
   
     public void setActionType() {
-        if ( this.currentProduct.getId() > 0) {
+        if (this.currentProduct.getId() > 0) {
             this.actionType = "UpdateProduct";
         } else {
             this.actionType = "NewProduct";
@@ -76,7 +76,7 @@ public class EditProductController extends BaseController implements Initializab
     }
     
     private void setButtonAction() {
-        this.saveFormButton.setOnAction(e->{
+        this.saveFormButton.setOnAction(e-> {
             this.actionFactory.execute(this.actionType, this.form.getFormFields(), this.currentProduct.getId());
         });
     }

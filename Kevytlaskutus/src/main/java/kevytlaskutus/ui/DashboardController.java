@@ -22,10 +22,8 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
 import kevytlaskutus.domain.AppService;
 import kevytlaskutus.domain.Company;
-import kevytlaskutus.domain.CustomerCompany;
 import kevytlaskutus.domain.ManagedCompany;
 
 /**
@@ -51,7 +49,7 @@ public class DashboardController extends BaseController implements Initializable
         this.managedCompaniesListView.getItems().clear();
        
         List<ManagedCompany> companies = super.appService.getManagedCompanies();
-        if ( companies.isEmpty() ) {
+        if (companies.isEmpty()) {
             this.noContentMessage();
             return;
         }
@@ -66,7 +64,7 @@ public class DashboardController extends BaseController implements Initializable
     }
     
     private void makeList(List<ManagedCompany> companies) {
-        companies.forEach(company->{
+        companies.forEach(company-> {
             this.createListNode(company);
         });
     }
@@ -77,24 +75,24 @@ public class DashboardController extends BaseController implements Initializable
         label.setMinHeight(28);
         
         Button selectButton = new Button("Manage");
-        selectButton.setOnAction(e->{
+        selectButton.setOnAction(e-> {
         });
         
         Button editButton = new Button("Edit");
-        editButton.setOnAction(e->{
+        editButton.setOnAction(e-> {
             this.appService.setCurrentManagedCompany(company);
             this.viewFactory.showEditCompanyForm();
         });
         
         Button deleteButton = new Button("Delete");
-        deleteButton.setOnAction(e->{
+        deleteButton.setOnAction(e-> {
             this.appService.deleteManagedCompany(company.getId());
             this.setupManagedCompanyListView();
         });
 
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
-        box.setPadding(new Insets(0,5,0,5));
+        box.setPadding(new Insets(0, 5, 0, 5));
         
         box.getChildren().addAll(
                 label, 

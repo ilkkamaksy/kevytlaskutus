@@ -8,11 +8,8 @@ package kevytlaskutus.dao;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import kevytlaskutus.domain.ManagedCompany;
-import kevytlaskutus.domain.Company;
 
 /**
  *
@@ -60,7 +57,7 @@ public class ManagedCompanyDao implements CompanyDao<ManagedCompany, Integer, St
         stmt.setString(7, company.getOvtId());
         stmt.setString(8, company.getProvider());
         stmt.setString(9, company.getIban());
-        stmt.setString(10,company.getBic());
+        stmt.setString(10, company.getBic());
         int rows = stmt.executeUpdate();  
 
         conn.close();

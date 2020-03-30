@@ -7,10 +7,7 @@ package kevytlaskutus.ui;
 
 import java.util.HashMap;
 import javafx.scene.control.TextField;
-import javafx.stage.Stage;
-import javafx.scene.Scene;
 
-import kevytlaskutus.domain.Company;
 import kevytlaskutus.domain.AppService;
 import kevytlaskutus.domain.CustomerCompany;
 import kevytlaskutus.domain.ManagedCompany;

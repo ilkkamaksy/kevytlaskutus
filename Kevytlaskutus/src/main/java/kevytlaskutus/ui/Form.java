@@ -7,12 +7,10 @@ package kevytlaskutus.ui;
 
 import java.util.HashMap;
 
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 
-import kevytlaskutus.domain.Company;
 
 /**
  *
@@ -23,11 +21,9 @@ public class Form {
     private VBox form;
     
     private HashMap<String, TextField> formFields;
-    private HashMap<String, Label> formLabels;
    
     public Form() {
         this.formFields = new HashMap<>();
-        this.formLabels = new HashMap<>();
         form = new VBox(10);
     }
       

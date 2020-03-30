@@ -26,7 +26,6 @@ import javafx.scene.text.Text;
 import kevytlaskutus.domain.AppService;
 import kevytlaskutus.domain.Company;
 import kevytlaskutus.domain.CustomerCompany;
-import kevytlaskutus.domain.ManagedCompany;
 
 /**
  * FXML Controller class
@@ -51,7 +50,7 @@ public class CustomerController extends BaseController implements Initializable 
         this.customerListView.getItems().clear();
         
         List<CustomerCompany> companies = super.appService.getCustomerCompanies();
-        if ( companies.isEmpty() ) {
+        if (companies.isEmpty()) {
             this.noContentMessage();
             return;
         }
@@ -66,7 +65,7 @@ public class CustomerController extends BaseController implements Initializable 
     }
     
     private void makeList(List<CustomerCompany> companies) {
-        companies.forEach(company->{
+        companies.forEach(company-> {
             this.createListNode(company);
         });
     }
@@ -78,24 +77,24 @@ public class CustomerController extends BaseController implements Initializable 
         label.setMinHeight(28);
         
         Button selectButton = new Button("Manage");
-        selectButton.setOnAction(e->{
+        selectButton.setOnAction(e-> {
         });
         
         Button editButton = new Button("Edit");
-        editButton.setOnAction(e->{
+        editButton.setOnAction(e-> {
             this.appService.setCurrentCustomerCompany(company);
             this.viewFactory.showEditCustomerForm();
         });
         
         Button deleteButton = new Button("Delete");
-        deleteButton.setOnAction(e->{
+        deleteButton.setOnAction(e-> {
             this.appService.deleteCustomerCompany(company.getId());
             this.setupCustomerListView();
         });
 
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
-        box.setPadding(new Insets(0,5,0,5));
+        box.setPadding(new Insets(0, 5, 0, 5));
         
         box.getChildren().addAll(
                 label, 

@@ -6,16 +6,14 @@
 package kevytlaskutus.ui;
 
 import java.util.HashMap;
-import javafx.scene.Scene;
 import javafx.scene.control.TextField;
-import javafx.stage.Stage;
 import kevytlaskutus.domain.*;
 
 /**
  *
  * @author ilkka
  */
-public class UpdateCustomerCompany extends FormAction{
+public class UpdateCustomerCompany extends FormAction {
     
     private CustomerCompany company;
     
@@ -32,7 +30,7 @@ public class UpdateCustomerCompany extends FormAction{
     
     @Override
     public void save() {
-      super.appService.updateCustomerCompany(company.getId(), this.company);
+        super.appService.updateCustomerCompany(company.getId(), this.company);
     }
 
 }

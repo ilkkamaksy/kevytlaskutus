@@ -8,5 +8,6 @@
 | 24.3. | 8    | JavaFX-opettelua ja kehitystä |
 | 26.3. | 8    | JavaFX-opettelua ja käyttöliittymän kehitystä |
 | 27.3. | 6    | Tuotenäkymän rakentaminen, tuotteiden luominen, muokkaus ja poisto |
-| yht   | 33    | | 
+| 30.3. | 4    | Checkstylen ja Jacocon lisäys, AppService-luokan yksikkötestien lisäys, maven-konfiguraatio jotta komentoriviltä suoritus onnistuu |
+| yht   | 37    | | 
 

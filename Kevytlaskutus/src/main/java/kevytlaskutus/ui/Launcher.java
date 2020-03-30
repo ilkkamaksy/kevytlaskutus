@@ -6,10 +6,6 @@
 package kevytlaskutus.ui;
 
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import kevytlaskutus.dao.CustomerCompanyDao;
 import kevytlaskutus.dao.ManagedCompanyDao;
@@ -24,7 +20,7 @@ public class Launcher extends Application {
     
     private AppService appService;
     
-    public static void main(String [] args) {
+    public static void run(String [] args) {
         launch(args);
     }
     

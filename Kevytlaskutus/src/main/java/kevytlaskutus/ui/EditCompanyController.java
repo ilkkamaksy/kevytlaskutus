@@ -40,7 +40,7 @@ public class EditCompanyController extends BaseController implements Initializab
 
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
-        this.currentCompany = (ManagedCompany)this.appService.getCurrentManagedCompany();
+        this.currentCompany = (ManagedCompany) this.appService.getCurrentManagedCompany();
         this.setActionType();
         this.form = new Form();
         this.actionFactory = new FormActionFactory(this.appService);
@@ -50,7 +50,7 @@ public class EditCompanyController extends BaseController implements Initializab
    
     public void setupForm() {
       
-        if ( currentCompany.getName().isEmpty() ) {
+        if (currentCompany.getName().isEmpty()) {
             this.form.addFormField("Name", "");
             this.form.addFormField("Register Id", "");
             this.form.addFormField("Phone", "");
@@ -80,7 +80,7 @@ public class EditCompanyController extends BaseController implements Initializab
     }
   
     public void setActionType() {
-        if ( this.currentCompany.getId() > 0) {
+        if (this.currentCompany.getId() > 0) {
             this.actionType = "UpdateManagedCompany";
         } else {
             this.actionType = "NewManagedCompany";
@@ -88,7 +88,7 @@ public class EditCompanyController extends BaseController implements Initializab
     }
     
     private void setButtonAction() {
-        this.saveFormButton.setOnAction(e->{
+        this.saveFormButton.setOnAction(e-> {
             this.actionFactory.execute(this.actionType, this.form.getFormFields(), this.currentCompany.getId());
         });
     }

@@ -45,7 +45,7 @@ public class ProductsController extends BaseController implements Initializable 
         this.productListView.getItems().clear();
         
         List<Product> products = super.appService.getProducts();
-        if ( products.isEmpty() ) {
+        if (products.isEmpty()) {
             this.noContentMessage();
             return;
         }
@@ -60,7 +60,7 @@ public class ProductsController extends BaseController implements Initializable 
     }
     
     private void makeList(List<Product> products) {
-        products.forEach(product->{
+        products.forEach(product-> {
             this.createListNode(product);
         });
     }
@@ -72,24 +72,24 @@ public class ProductsController extends BaseController implements Initializable 
         label.setMinHeight(28);
         
         Button selectButton = new Button("Manage");
-        selectButton.setOnAction(e->{
+        selectButton.setOnAction(e-> {
         });
         
         Button editButton = new Button("Edit");
-        editButton.setOnAction(e->{
+        editButton.setOnAction(e-> {
             this.appService.setCurrentProduct(product);
             this.viewFactory.showEditProductForm();
         });
         
         Button deleteButton = new Button("Delete");
-        deleteButton.setOnAction(e->{
+        deleteButton.setOnAction(e-> {
             this.appService.deleteProduct(product.getId());
             this.setupProductListView();
         });
 
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
-        box.setPadding(new Insets(0,5,0,5));
+        box.setPadding(new Insets(0, 5, 0, 5));
         
         box.getChildren().addAll(
                 label, 

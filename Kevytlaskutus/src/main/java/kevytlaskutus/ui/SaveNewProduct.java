@@ -8,7 +8,6 @@ package kevytlaskutus.ui;
 import java.util.HashMap;
 import javafx.scene.control.TextField;
 import kevytlaskutus.domain.AppService;
-import kevytlaskutus.domain.CustomerCompany;
 import kevytlaskutus.domain.Product;
 
 /**

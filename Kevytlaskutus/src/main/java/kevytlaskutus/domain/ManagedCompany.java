@@ -5,7 +5,6 @@
  */
 package kevytlaskutus.domain;
 
-import java.util.List;
 import kevytlaskutus.domain.Company;
 
 /**

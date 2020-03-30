@@ -5,8 +5,6 @@
  */
 package kevytlaskutus.domain;
 
-import java.util.List;
-
 /**
  *
  * @author ilkka
