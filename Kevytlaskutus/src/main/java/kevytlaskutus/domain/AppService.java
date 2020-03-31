@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package kevytlaskutus.domain;
 
 import java.sql.Connection;
@@ -19,8 +14,7 @@ import kevytlaskutus.dao.CustomerCompanyDao;
 import kevytlaskutus.dao.ProductDaoImpl;
 
 /**
- *
- * @author ilkka
+ * Class responsible for application logic. 
  */
 public class AppService {
 

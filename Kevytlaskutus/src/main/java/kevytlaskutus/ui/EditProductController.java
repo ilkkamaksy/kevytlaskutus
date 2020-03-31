@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package kevytlaskutus.ui;
 
 import java.net.URL;
@@ -15,8 +10,7 @@ import kevytlaskutus.domain.AppService;
 import kevytlaskutus.domain.Product;
 
 /**
- *
- * @author ilkka
+ * FXML controller class for editing product view.
  */
 public class EditProductController extends BaseController implements Initializable {
     

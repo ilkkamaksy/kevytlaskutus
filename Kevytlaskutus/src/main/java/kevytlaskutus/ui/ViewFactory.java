@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package kevytlaskutus.ui;
 
 import java.io.IOException;
@@ -13,8 +8,7 @@ import javafx.stage.Stage;
 import kevytlaskutus.domain.AppService;
 
 /**
- *
- * @author ilkka
+ * Class responsible for changing scenes.
  */
 public class ViewFactory {
     

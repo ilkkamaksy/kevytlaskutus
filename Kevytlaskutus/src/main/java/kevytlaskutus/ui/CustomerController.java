@@ -28,7 +28,7 @@ import kevytlaskutus.domain.Company;
 import kevytlaskutus.domain.CustomerCompany;
 
 /**
- * FXML Controller class
+ * FXML controller class for customer view.
  *
  * @author ilkka
  */

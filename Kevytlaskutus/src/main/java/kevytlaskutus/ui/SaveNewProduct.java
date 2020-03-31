@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package kevytlaskutus.ui;
 
 import java.util.HashMap;
@@ -11,8 +6,7 @@ import kevytlaskutus.domain.AppService;
 import kevytlaskutus.domain.Product;
 
 /**
- *
- * @author ilkka
+ * Action to save a new Product.
  */
 public class SaveNewProduct extends FormAction {
     

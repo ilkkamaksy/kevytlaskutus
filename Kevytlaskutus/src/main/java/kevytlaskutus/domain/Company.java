@@ -1,13 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package kevytlaskutus.domain;
 
 /**
- *
- * @author ilkka
+ * Abstract class that works as a blueprint for managed and customer company objects 
  */
 public abstract class Company {
     
@@ -119,8 +113,4 @@ public abstract class Company {
         return provider;
     }
     
-    @Override
-    public String toString() {
-        return "id " + id + " name " + name + " regId " + regId + " postcode " + postcode; 
-    }
 }
