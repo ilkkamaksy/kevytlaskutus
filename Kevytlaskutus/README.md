@@ -13,7 +13,7 @@ Sovelluksen avulla freelancerit ja pienyrittäjät voivat hallita yhden tai usea
 
 Ohjelma voidaan käynnistää komennolla
 
-`mvn compile exec:java` 
+`mvn compile exec:java -e -Dexec.mainClass=kevytlaskutus.Main` 
 
 ### Testaus
 
