@@ -9,6 +9,12 @@ Sovelluksen avulla freelancerit ja pienyrittäjät voivat hallita yhden tai usea
 
 ## Komentorivitoiminnot
 
+### Ohjelman suoritus
+
+Ohjelma voidaan käynnistää komennolla
+
+`mvn compile exec:java` 
+
 ### Testaus
 
 Testit suoritetaan komennolla
