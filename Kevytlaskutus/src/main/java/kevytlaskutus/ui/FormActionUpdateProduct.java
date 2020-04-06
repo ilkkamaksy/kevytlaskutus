@@ -4,11 +4,11 @@ import java.util.HashMap;
 import javafx.scene.control.TextField;
 import kevytlaskutus.domain.*;
 
-public class UpdateProduct extends FormAction {
+public class FormActionUpdateProduct extends FormAction {
     
     private Product product;
     
-    public UpdateProduct(
+    public FormActionUpdateProduct(
             AppService appService
     ) {
         super(appService);

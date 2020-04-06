@@ -8,11 +8,11 @@ import kevytlaskutus.domain.Product;
 /**
  * Action to save a new Product.
  */
-public class SaveNewProduct extends FormAction {
+public class FormActionSaveNewProduct extends FormAction {
     
     private Product product;
     
-    public SaveNewProduct(
+    public FormActionSaveNewProduct(
             AppService appService
     ) {
         super(appService);

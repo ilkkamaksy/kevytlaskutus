@@ -11,6 +11,7 @@ import java.util.ArrayList;
 
 import kevytlaskutus.dao.ManagedCompanyDao;
 import kevytlaskutus.dao.CustomerCompanyDao;
+import kevytlaskutus.dao.InvoiceDaoImpl;
 import kevytlaskutus.dao.ProductDaoImpl;
 
 /**
@@ -21,19 +22,28 @@ public class AppService {
     private ManagedCompanyDao managedCompanyDao;
     private CustomerCompanyDao customerCompanyDao;
     private ProductDaoImpl productDao;
+    private InvoiceDaoImpl invoiceDao;
     
     private Company currentManagedCompany;
     private Company currentCustomerCompany;
     private Product currentProduct;
+    private Invoice currentInvoice;
     
-    public AppService(ManagedCompanyDao managedCompanyDao, CustomerCompanyDao customerCompanyDao, ProductDaoImpl productDao) {
+    public AppService(
+            ManagedCompanyDao managedCompanyDao, 
+            CustomerCompanyDao customerCompanyDao, 
+            ProductDaoImpl productDao,
+            InvoiceDaoImpl invoiceDao
+    ) {
         this.managedCompanyDao = managedCompanyDao;
         this.customerCompanyDao = customerCompanyDao;
         this.productDao = productDao;
+        this.invoiceDao = invoiceDao;
         this.initDb();
         this.currentManagedCompany = new ManagedCompany();
         this.currentCustomerCompany = new CustomerCompany();
         this.currentProduct = new Product();
+        this.currentInvoice = new Invoice();
     }
     
     public void setCurrentManagedCompany(Company company) {
@@ -52,6 +62,14 @@ public class AppService {
         this.currentCustomerCompany = currentCustomerCompany;
     }
 
+    public Invoice getCurrentInvoice() {
+        return currentInvoice;
+    }
+
+    public void setCurrentInvoice(Invoice currentInvoice) {
+        this.currentInvoice = currentInvoice;
+    }
+    
     public Product getCurrentProduct() {
         return currentProduct;
     }
@@ -270,6 +288,66 @@ public class AppService {
         return results;
     }
     
+    public boolean createInvoice(Invoice invoice) {
+        
+        Boolean result = false;
+        
+        try {    
+            Connection conn = this.getConnection();
+            invoiceDao.setConnection(conn);
+            result = invoiceDao.create(invoice);
+        } catch (SQLException | ClassNotFoundException e) {
+            Logger.getLogger(AppService.class.getName()).log(Level.SEVERE, null, e);
+        }
+        
+        return result;
+    }
+    
+    public Boolean updateInvoice(int id, Invoice invoice) {
+        
+        Boolean result = false;
+        
+        try {    
+            Connection conn = this.getConnection();
+            invoiceDao.setConnection(conn);
+            result = invoiceDao.update(id, invoice);
+        } catch (SQLException | ClassNotFoundException e) {
+            Logger.getLogger(AppService.class.getName()).log(Level.SEVERE, null, e);
+        }
+        
+        return result;
+    }
+  
+    public Boolean deleteInvoice(int id) {
+        
+        Boolean result = false;
+        
+        try {    
+            Connection conn = this.getConnection();
+            invoiceDao.setConnection(conn);
+            result = invoiceDao.delete(id);
+        } catch (SQLException | ClassNotFoundException e) {
+            Logger.getLogger(AppService.class.getName()).log(Level.SEVERE, null, e);
+        }
+        
+        return result;
+    }
+    
+    public List<Invoice> getInvoices() {
+        
+        List<Invoice> results = new ArrayList<>();
+        
+        try {
+            Connection conn = this.getConnection();
+            invoiceDao.setConnection(conn);
+            results = invoiceDao.getItems();
+        } catch (SQLException | ClassNotFoundException e) {
+            Logger.getLogger(AppService.class.getName()).log(Level.SEVERE, null, e);
+        }
+        
+        return results;
+    }
+    
     private void initDb() {
         
         try {
@@ -277,10 +355,12 @@ public class AppService {
             managedCompanyDao.setConnection(conn);
             customerCompanyDao.setConnection(conn);
             productDao.setConnection(conn);
+            invoiceDao.setConnection(conn);
             
             managedCompanyDao.initDb();
             customerCompanyDao.initDb();
             productDao.initDb();
+            invoiceDao.initDb();
             
             conn.close();
             

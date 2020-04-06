@@ -11,18 +11,18 @@ Sovelluksessa on yksi käyttäjärooli, eli **normaali käyttäjä**.
 ## Käyttöliittymäluonnos
 
 Sovellus koostuu seuraavista näkymistä:
-1. **Hallintapaneeli**, jossa käyttäjät voi valita toiminnoista: 
-  - lisää, poista tai muokkaa hallittavia yrityksiä 
-  - hallitse asiakkaita
-  - hallitse tuotteita 
-2. **Lisää hallittava yritys** käyttäjä voi lisätä uuden hallittavan yrityksen
-3. **Muokkaa hallittavia yrityksiä** käyttäjä voi muokata hallittavan yrityksen tietoja
-4. **Hallitse asiakkaita** käyttäjä voi selata, lisätä, muokata ja poistaa asiakkaita.
-5. **Lisää asiakas** käyttäjä voi lisätä uuden asiakkaan.
-6. **Muokkaa asiakasta**: käyttäjä voi muokata asiakkaan tietoja.
-7. **Hallitse tuotteita**: käyttäjä voi selata, lisätä, muokata ja poistaa tuotteita.
-8. **Lisää tuote** käyttäjä voi lisätä uuden tuotteen tai palvelun.
-9. **Muokkaa tuotetta** käyttäjä voi muokata tuotteen tietoja.
+1. **(Tehty) Hallintapaneeli**, jossa käyttäjät voi valita toiminnoista: 
+  - (Tehty) lisää, poista tai muokkaa hallittavia yrityksiä 
+  - (Tehty) hallitse asiakkaita
+  - (Tehty) hallitse tuotteita 
+2. **(Tehty) Lisää hallittava yritys** käyttäjä voi lisätä uuden hallittavan yrityksen
+3. **(Tehty) Muokkaa hallittavia yrityksiä** käyttäjä voi muokata hallittavan yrityksen tietoja
+4. **(Tehty) Hallitse asiakkaita** käyttäjä voi selata, lisätä, muokata ja poistaa asiakkaita.
+5. **(Tehty) Lisää asiakas** käyttäjä voi lisätä uuden asiakkaan.
+6. **(Tehty) Muokkaa asiakasta**: käyttäjä voi muokata asiakkaan tietoja.
+7. **(Tehty) Hallitse tuotteita**: käyttäjä voi selata, lisätä, muokata ja poistaa tuotteita.
+8. **(Tehty) Lisää tuote** käyttäjä voi lisätä uuden tuotteen tai palvelun.
+9. **(Tehty) Muokkaa tuotetta** käyttäjä voi muokata tuotteen tietoja.
 10. **Hallitse yritystä** käyttäjä voi selata, lisätä, muokata ja poistaa yrityksen laskuja.
 11. **Lisää lasku** käyttäjä voi lisätä yritykselle laskun.
 12. **Muokkaa laskua** käyttäjä voi muokata laskua.

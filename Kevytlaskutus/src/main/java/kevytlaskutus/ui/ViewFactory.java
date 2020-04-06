@@ -26,28 +26,38 @@ public class ViewFactory {
         this.initializeStage(controller);
     }
     
-    public void showEditCompanyForm() {
-        BaseController controller = new EditCompanyController(this.appService, this, "/fxml/companyForm.fxml");
+    public void showEditCompanyView() {
+        BaseController controller = new EditCompanyController(this.appService, this, "/fxml/formEditCompany.fxml");
         this.initializeStage(controller);
     }
     
-    public void showCustomerView() {
-        BaseController controller = new CustomerController(this.appService, this, "/fxml/manageCustomers.fxml");
+    public void showManageCustomerView() {
+        BaseController controller = new ManageCustomerController(this.appService, this, "/fxml/manageCustomers.fxml");
         this.initializeStage(controller);
     }
     
-    public void showEditCustomerForm() {
-        BaseController controller = new EditCustomerController(this.appService, this, "/fxml/customerForm.fxml");
+    public void showEditCustomerView() {
+        BaseController controller = new EditCustomerController(this.appService, this, "/fxml/formEditCustomer.fxml");
         this.initializeStage(controller);
     }
     
-    public void showProductsView() {
-        BaseController controller = new ProductsController(this.appService, this, "/fxml/manageProducts.fxml");
+    public void showManageProductsView() {
+        BaseController controller = new ManageProductsController(this.appService, this, "/fxml/manageProducts.fxml");
         this.initializeStage(controller);
     }
 
-    public void showEditProductForm() {
-        BaseController controller = new EditProductController(this.appService, this, "/fxml/productForm.fxml");
+    public void showEditProductView() {
+        BaseController controller = new EditProductController(this.appService, this, "/fxml/formEditProduct.fxml");
+        this.initializeStage(controller);
+    }
+    
+    public void showManageInvoicesView() {
+        BaseController controller = new ManageInvoicesController(this.appService, this, "/fxml/manageInvoices.fxml");
+        this.initializeStage(controller);
+    }
+
+    public void showEditInvoiceView() {
+        BaseController controller = new EditInvoiceController(this.appService, this, "/fxml/formEditInvoice.fxml");
         this.initializeStage(controller);
     }
     

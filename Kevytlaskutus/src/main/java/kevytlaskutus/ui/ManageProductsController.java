@@ -21,12 +21,12 @@ import kevytlaskutus.domain.Product;
 /**
  * FXML controller class for Products view.
  */
-public class ProductsController extends BaseController implements Initializable {
+public class ManageProductsController extends BaseController implements Initializable {
     
     @FXML
     private ListView<Node> productListView;
 
-    public ProductsController(AppService appService, ViewFactory viewFactory, String fxmlName) {
+    public ManageProductsController(AppService appService, ViewFactory viewFactory, String fxmlName) {
         super(appService, viewFactory, fxmlName);
     }
    
@@ -72,7 +72,7 @@ public class ProductsController extends BaseController implements Initializable 
         Button editButton = new Button("Edit");
         editButton.setOnAction(e-> {
             this.appService.setCurrentProduct(product);
-            this.viewFactory.showEditProductForm();
+            this.viewFactory.showEditProductView();
         });
         
         Button deleteButton = new Button("Delete");
@@ -99,7 +99,7 @@ public class ProductsController extends BaseController implements Initializable 
     @FXML
     void addNewProductAction() {
         this.appService.setCurrentProduct(new Product());
-        this.viewFactory.showEditProductForm();
+        this.viewFactory.showEditProductView();
     }
 
 }

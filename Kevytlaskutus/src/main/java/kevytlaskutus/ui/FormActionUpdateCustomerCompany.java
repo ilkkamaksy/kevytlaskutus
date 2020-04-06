@@ -4,14 +4,11 @@ import java.util.HashMap;
 import javafx.scene.control.TextField;
 import kevytlaskutus.domain.*;
 
-/**
- * Action to save a new customer.
- */
-public class SaveNewCustomerCompany extends FormAction {
+public class FormActionUpdateCustomerCompany extends FormAction {
     
-    private CustomerCompany company; 
+    private CustomerCompany company;
     
-    public SaveNewCustomerCompany(
+    public FormActionUpdateCustomerCompany(
             AppService appService
     ) {
         super(appService);
@@ -24,7 +21,7 @@ public class SaveNewCustomerCompany extends FormAction {
     
     @Override
     public void save() {
-        super.appService.createCustomerCompany(this.company);
+        super.appService.updateCustomerCompany(company.getId(), this.company);
     }
 
 }

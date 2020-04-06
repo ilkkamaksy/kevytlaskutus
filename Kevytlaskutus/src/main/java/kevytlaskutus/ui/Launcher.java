@@ -3,6 +3,7 @@ package kevytlaskutus.ui;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import kevytlaskutus.dao.CustomerCompanyDao;
+import kevytlaskutus.dao.InvoiceDaoImpl;
 import kevytlaskutus.dao.ManagedCompanyDao;
 import kevytlaskutus.dao.ProductDaoImpl;
 import kevytlaskutus.domain.AppService;
@@ -20,7 +21,8 @@ public class Launcher extends Application {
         ManagedCompanyDao managedCompanyDao = new ManagedCompanyDao();
         CustomerCompanyDao customerCompanyDao = new CustomerCompanyDao();
         ProductDaoImpl productDao = new ProductDaoImpl();
-        this.appService = new AppService(managedCompanyDao, customerCompanyDao, productDao);
+        InvoiceDaoImpl invoiceDao = new InvoiceDaoImpl();
+        this.appService = new AppService(managedCompanyDao, customerCompanyDao, productDao, invoiceDao);
     }
     
     @Override

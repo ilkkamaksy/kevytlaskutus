@@ -33,6 +33,8 @@ public class AppServiceTest {
     ManagedCompanyDao managedCompanyDao;
     CustomerCompanyDao customerCompanyDao;
     ProductDaoImpl productDao;
+    InvoiceDaoImpl invoiceDao;
+    
     ManagedCompany validManagedCompany;
     ManagedCompany emptyManagedCompany;
     CustomerCompany validCustomer;
@@ -42,9 +44,10 @@ public class AppServiceTest {
     public void setUp() {
         managedCompanyDao = mock(ManagedCompanyDao.class);       
         customerCompanyDao = mock(CustomerCompanyDao.class);
+        invoiceDao = mock(InvoiceDaoImpl.class);
         productDao = mock(ProductDaoImpl.class);
         
-        appService = new AppService(managedCompanyDao, customerCompanyDao, productDao);
+        appService = new AppService(managedCompanyDao, customerCompanyDao, productDao, invoiceDao);
         
         validManagedCompany = mock(ManagedCompany.class); 
         when(validManagedCompany.getId()).thenReturn(1);

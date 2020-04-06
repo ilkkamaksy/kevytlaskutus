@@ -29,11 +29,11 @@ public abstract class BaseController {
 
     @FXML
     void manageCustomersAction() {
-        this.viewFactory.showCustomerView();
+        this.viewFactory.showManageCustomerView();
     }
 
     @FXML
     void manageProductsAction() {
-        this.viewFactory.showProductsView();
+        this.viewFactory.showManageProductsView();
     }    
 }

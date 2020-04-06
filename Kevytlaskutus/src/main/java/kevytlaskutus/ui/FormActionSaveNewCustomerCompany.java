@@ -5,26 +5,26 @@ import javafx.scene.control.TextField;
 import kevytlaskutus.domain.*;
 
 /**
- * Action to save a new managed company.
+ * Action to save a new customer.
  */
-public class SaveNewManagedCompany extends FormAction {
+public class FormActionSaveNewCustomerCompany extends FormAction {
     
-    private ManagedCompany company;
+    private CustomerCompany company; 
     
-    public SaveNewManagedCompany(
+    public FormActionSaveNewCustomerCompany(
             AppService appService
     ) {
         super(appService);
     }
-    
+
     @Override
     public void setData(HashMap<String, TextField> formFields, int id) {
-        this.company = super.makeManagedCompanyFromFieldValues(formFields, id);
+        this.company = super.makeCustomerCompanyFromFieldValues(formFields, id);
     }
     
     @Override
     public void save() {
-        super.appService.createManagedCompany(this.company);
+        super.appService.createCustomerCompany(this.company);
     }
-   
+
 }

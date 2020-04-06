@@ -32,12 +32,12 @@ import kevytlaskutus.domain.CustomerCompany;
  *
  * @author ilkka
  */
-public class CustomerController extends BaseController implements Initializable {
+public class ManageCustomerController extends BaseController implements Initializable {
 
     @FXML
     private ListView<Node> customerListView;
 
-    public CustomerController(AppService appService, ViewFactory viewFactory, String fxmlName) {
+    public ManageCustomerController(AppService appService, ViewFactory viewFactory, String fxmlName) {
         super(appService, viewFactory, fxmlName);
     }
    
@@ -83,7 +83,7 @@ public class CustomerController extends BaseController implements Initializable 
         Button editButton = new Button("Edit");
         editButton.setOnAction(e-> {
             this.appService.setCurrentCustomerCompany(company);
-            this.viewFactory.showEditCustomerForm();
+            this.viewFactory.showEditCustomerView();
         });
         
         Button deleteButton = new Button("Delete");
@@ -110,6 +110,6 @@ public class CustomerController extends BaseController implements Initializable 
     @FXML
     void addNewCustomerCompanyAction(ActionEvent event) {
         this.appService.setCurrentCustomerCompany(new CustomerCompany());
-        this.viewFactory.showEditCustomerForm();
+        this.viewFactory.showEditCustomerView();
     }
 }
