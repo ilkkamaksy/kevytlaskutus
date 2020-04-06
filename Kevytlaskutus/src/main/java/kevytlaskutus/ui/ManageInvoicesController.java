@@ -17,8 +17,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import kevytlaskutus.domain.AppService;
 import kevytlaskutus.domain.Invoice;
-import kevytlaskutus.domain.ManagedCompany;
-import kevytlaskutus.domain.Product;
 
 /**
  * FXML controller class for Products view.

@@ -83,6 +83,38 @@ public class CustomerCompanyDao implements CompanyDao<CustomerCompany, Integer, 
         return company;
 
     }
+    
+    @Override
+    public CustomerCompany getItemByName(String name) throws SQLException {
+        
+        CustomerCompany company = null;
+        
+        PreparedStatement stmt = conn.prepareStatement(
+            "SELECT * FROM Customer WHERE name LIKE ? LIMIT 1"
+        );
+        stmt.setString(1, "%" + name + "%");
+        ResultSet rs = stmt.executeQuery();
+
+        System.out.println(rs);
+        while (rs.next()) {
+            company = new CustomerCompany(
+                rs.getString("name"), 
+                rs.getString("regId"), 
+                rs.getString("phone"), 
+                rs.getString("street"), 
+                rs.getString("postcode"),
+                rs.getString("commune"),
+                rs.getString("ovtId"),
+                rs.getString("provider")
+            );
+            company.setId(rs.getInt("id"));
+        }
+
+        conn.close();
+
+        return company;
+
+    }
 
     @Override
     public boolean update(Integer id, CustomerCompany company) throws SQLException {

@@ -215,6 +215,21 @@ public class AppService {
         return results;
     }
     
+    public CustomerCompany getCustomerCompanyByName(String name) {
+        
+        CustomerCompany result = null;
+        
+        try {
+            Connection conn = this.getConnection();
+            customerCompanyDao.setConnection(conn);
+            result = customerCompanyDao.getItemByName(name);
+        } catch (SQLException | ClassNotFoundException e) {
+            Logger.getLogger(AppService.class.getName()).log(Level.SEVERE, null, e);
+        }
+        
+        return result;
+    }
+    
     public boolean createProduct(Product product) {
         
         Boolean result = false;

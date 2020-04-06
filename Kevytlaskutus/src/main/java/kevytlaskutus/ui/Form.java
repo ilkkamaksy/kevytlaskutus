@@ -4,13 +4,14 @@ import java.sql.Date;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
+import javafx.collections.ObservableList;
 import javafx.scene.Node;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
-
 
 /**
  * Class for creating Forms. 
@@ -41,6 +42,13 @@ public class Form {
         form.getChildren().add(new Label(label));
         form.getChildren().add(datePicker);
         this.formFields.put(label, datePicker);
+    }
+    
+    public void addDropDown(String label, ObservableList<String> options) {
+        form.getChildren().add(new Label(label));
+        ComboBox dropdown = new ComboBox(options);
+        form.getChildren().add(dropdown);
+        this.formFields.put(label, dropdown);
     }
     
     private LocalDate getLocalDateForToday() {

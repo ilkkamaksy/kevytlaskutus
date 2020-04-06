@@ -1,20 +1,18 @@
 package kevytlaskutus.ui;
 
-import java.math.BigDecimal;
 import java.net.URL;
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
-import javafx.scene.control.DatePicker;
 import javafx.scene.layout.Pane;
 import kevytlaskutus.domain.AppService;
 import kevytlaskutus.domain.CustomerCompany;
 import kevytlaskutus.domain.Invoice;
-import kevytlaskutus.domain.ManagedCompany;
 
 public class EditInvoiceController extends BaseController implements Initializable {
 
@@ -51,26 +49,23 @@ public class EditInvoiceController extends BaseController implements Initializab
    
     public void setupForm() {
       
-        List<CustomerCompany> customers = this.appService.getCustomerCompanies();
-        for(CustomerCompany customer : customers) {
-            System.out.println(customer.getId() + " " + customer.getName());
-        }
+        
         
         if (currentInvoice.getId() == 0) {
             this.form.addDatePicker("Date");
             this.form.addTextField("Invoice Number", "" + defaultInvoiceNumber);
             this.form.addTextField("Reference Number", "");
             this.form.addTextField("Payment due in number of days", "14");
-            this.form.addTextField("Due date", "");
+            this.form.addDatePicker("Due Date");
             this.form.addTextField("Overdue Penalty Interest rate", "");
             this.form.addTextField("Discount", "");
             this.form.addTextField("Discount Date", "");
-            this.form.addTextField("Customer Id", "");
+            this.form.addDropDown("Customer", this.createCustomerNameList());
             this.form.addTextField("Customer Contact Name", "");
             this.form.addTextField("Customer Reference", "");
             this.form.addTextField("Our Reference", "");
             this.form.addTextField("Delivery Terms", "");
-            this.form.addTextField("Delivery Date", "");
+            this.form.addDatePicker("Delivery Date");
             this.form.addTextField("Delivery Information", "");
             this.form.addTextField("Additional Information", "");
             this.form.addTextField("Amount", "");
@@ -99,6 +94,15 @@ public class EditInvoiceController extends BaseController implements Initializab
         this.editFormContainerPane.getChildren().add(this.form.getForm());
     }
   
+    private ObservableList createCustomerNameList() {
+        List<CustomerCompany> customers = this.appService.getCustomerCompanies();
+        ObservableList<String> customerNames = FXCollections.observableArrayList(); 
+        for(CustomerCompany customer : customers) {
+            customerNames.add(customer.getName());
+        }
+        return customerNames;
+    }
+    
     public void setActionType() {
         if (this.currentInvoice.getId() > 0) {
             this.actionType = "UpdateInvoice";

@@ -17,7 +17,6 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import kevytlaskutus.domain.AppService;
-import kevytlaskutus.domain.Company;
 import kevytlaskutus.domain.ManagedCompany;
 
 /**

@@ -90,6 +90,38 @@ public class ManagedCompanyDao implements CompanyDao<ManagedCompany, Integer, St
         return company;
 
     }
+    
+    @Override
+    public ManagedCompany getItemByName(String name) throws SQLException {
+        
+        ManagedCompany company = null;
+       
+        PreparedStatement stmt = conn.prepareStatement(
+            "SELECT * FROM Company WHERE name LIKE %" + name + "% LIMIT 1"
+        );
+        ResultSet rs = stmt.executeQuery();
+
+        while (rs.next()) {
+            company = new ManagedCompany(
+                rs.getString("name"), 
+                rs.getString("regId"), 
+                rs.getString("phone"), 
+                rs.getString("street"), 
+                rs.getString("postcode"),
+                rs.getString("commune"),
+                rs.getString("ovtId"),
+                rs.getString("provider")
+            );
+            company.setId(rs.getInt("id"));
+            company.setIban(rs.getString("iban"));
+            company.setBic(rs.getString("bic"));
+        }
+
+        conn.close();
+ 
+        return company;
+
+    }
 
     @Override
     public boolean update(Integer id, ManagedCompany company) throws SQLException {

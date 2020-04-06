@@ -2,7 +2,6 @@ package kevytlaskutus.ui;
 
 import java.util.HashMap;
 import javafx.scene.Node;
-import javafx.scene.control.TextField;
 import kevytlaskutus.domain.*;
 
 public class FormActionUpdateManagedCompany extends FormAction {

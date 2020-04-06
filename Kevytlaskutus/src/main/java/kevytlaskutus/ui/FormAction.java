@@ -107,16 +107,4 @@ public abstract class FormAction {
         return result;
     }
     
-    protected Invoice makeInvoiceFromFieldValues(HashMap<String, Node> formFields, int id) {
-        
-        DatePicker createdDate = (DatePicker) formFields.get("Date");
-        TextField customerId = (TextField) formFields.get("Customer Id");
-        
-        Invoice result = new Invoice(Date.valueOf(createdDate.getValue()));
-        result.setId(id);
-        result.setCustomerId(Integer.valueOf(customerId.getText()));
-       
-        return result;
-        
-    }
 }

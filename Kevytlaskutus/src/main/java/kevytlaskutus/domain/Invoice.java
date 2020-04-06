@@ -205,5 +205,8 @@ public class Invoice {
         this.additionalInfo = additionalInfo;
     }
 
-    
+    @Override
+    public String toString() {
+        return this.id + " no:" + this.invoiceNumber + " cdate:" + this.createdDate + " duedate:" + this.dueDate + " refno:" + this.referenceNumber + " customerid:" + this.customerId;
+    }
 }
