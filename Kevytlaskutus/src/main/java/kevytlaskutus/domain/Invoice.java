@@ -50,7 +50,7 @@ public class Invoice {
     }
 
     private Date calculateDueDate(Date createdDate) {
-        return new Date( createdDate.getTime() + 24*60*60*1000);
+        return new Date(createdDate.getTime() + 24 * 60 * 60 * 1000);
     }
     
     public int getId() {

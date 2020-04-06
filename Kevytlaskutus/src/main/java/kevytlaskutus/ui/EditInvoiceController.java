@@ -97,7 +97,7 @@ public class EditInvoiceController extends BaseController implements Initializab
     private ObservableList createCustomerNameList() {
         List<CustomerCompany> customers = this.appService.getCustomerCompanies();
         ObservableList<String> customerNames = FXCollections.observableArrayList(); 
-        for(CustomerCompany customer : customers) {
+        for (CustomerCompany customer : customers) {
             customerNames.add(customer.getName());
         }
         return customerNames;

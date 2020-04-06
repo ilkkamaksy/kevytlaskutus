@@ -23,9 +23,7 @@ import kevytlaskutus.domain.Invoice;
 public class FormActionSaveNewInvoice extends FormAction {
     private Invoice invoice; 
     
-    public FormActionSaveNewInvoice (
-            AppService appService
-    ) {
+    public FormActionSaveNewInvoice(AppService appService) {
         super(appService);
     }
 
