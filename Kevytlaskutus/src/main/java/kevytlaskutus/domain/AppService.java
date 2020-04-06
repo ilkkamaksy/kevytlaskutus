@@ -24,10 +24,12 @@ public class AppService {
     private ProductDaoImpl productDao;
     private InvoiceDaoImpl invoiceDao;
     
-    private Company currentManagedCompany;
-    private Company currentCustomerCompany;
+    private ManagedCompany currentManagedCompany;
+    private CustomerCompany currentCustomerCompany;
     private Product currentProduct;
     private Invoice currentInvoice;
+    
+    private int startInvoiceNumbering = 1001;
     
     public AppService(
             ManagedCompanyDao managedCompanyDao, 
@@ -46,19 +48,19 @@ public class AppService {
         this.currentInvoice = new Invoice();
     }
     
-    public void setCurrentManagedCompany(Company company) {
+    public void setCurrentManagedCompany(ManagedCompany company) {
         this.currentManagedCompany = company;
     }
     
-    public Company getCurrentManagedCompany() {
+    public ManagedCompany getCurrentManagedCompany() {
         return this.currentManagedCompany;
     }
 
-    public Company getCurrentCustomerCompany() {
+    public CustomerCompany getCurrentCustomerCompany() {
         return currentCustomerCompany;
     }
 
-    public void setCurrentCustomerCompany(Company currentCustomerCompany) {
+    public void setCurrentCustomerCompany(CustomerCompany currentCustomerCompany) {
         this.currentCustomerCompany = currentCustomerCompany;
     }
 
@@ -288,13 +290,28 @@ public class AppService {
         return results;
     }
     
+    public int getDefaultInvoiceNumber() {
+
+        try {
+            Connection conn = this.getConnection();
+            invoiceDao.setConnection(conn);
+            this.startInvoiceNumbering += invoiceDao.getInvoiceCount();
+            
+        } catch (SQLException | ClassNotFoundException e) {
+            Logger.getLogger(AppService.class.getName()).log(Level.SEVERE, null, e);
+        }
+        
+        return startInvoiceNumbering;
+    }
+    
     public boolean createInvoice(Invoice invoice) {
         
         Boolean result = false;
-        
+
         try {    
             Connection conn = this.getConnection();
             invoiceDao.setConnection(conn);
+            invoice.setCompanyId(this.currentManagedCompany.getId());
             result = invoiceDao.create(invoice);
         } catch (SQLException | ClassNotFoundException e) {
             Logger.getLogger(AppService.class.getName()).log(Level.SEVERE, null, e);
@@ -340,7 +357,7 @@ public class AppService {
         try {
             Connection conn = this.getConnection();
             invoiceDao.setConnection(conn);
-            results = invoiceDao.getItems();
+            results = invoiceDao.getItems(this.currentManagedCompany.getId());
         } catch (SQLException | ClassNotFoundException e) {
             Logger.getLogger(AppService.class.getName()).log(Level.SEVERE, null, e);
         }

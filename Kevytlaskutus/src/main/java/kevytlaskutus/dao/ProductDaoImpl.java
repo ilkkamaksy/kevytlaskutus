@@ -72,7 +72,7 @@ public class ProductDaoImpl implements ProductDao<Product, Integer, String> {
     }
 
     @Override
-    public boolean update(int id, Product product) throws SQLException {
+    public boolean update(Integer id, Product product) throws SQLException {
         PreparedStatement stmt = conn.prepareStatement(
             "UPDATE Product SET name=?, price=?, priceUnit=?, description=? WHERE id=?");
         stmt.setString(1, product.getName());

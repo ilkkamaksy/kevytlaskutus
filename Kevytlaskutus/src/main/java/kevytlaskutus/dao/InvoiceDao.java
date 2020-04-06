@@ -8,5 +8,6 @@ public interface InvoiceDao<T, K, S> {
     public T getItemById(K key) throws SQLException;
     public boolean update(int id, T object) throws SQLException;
     public boolean delete(K key) throws SQLException;
-    public List<T> getItems() throws SQLException;
+    public List<T> getItems(K key) throws SQLException;
+    public K getInvoiceCount() throws SQLException;
 }

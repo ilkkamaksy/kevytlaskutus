@@ -1,6 +1,7 @@
 package kevytlaskutus.ui;
 
 import java.util.HashMap;
+import javafx.scene.Node;
 import javafx.scene.control.TextField;
 
 import kevytlaskutus.domain.*;
@@ -23,9 +24,10 @@ public class FormActionFactory {
         this.commands.put("UpdateCustomerCompany", new FormActionUpdateCustomerCompany(appService));
         this.commands.put("NewProduct", new FormActionSaveNewProduct(appService));
         this.commands.put("UpdateProduct", new FormActionUpdateProduct(appService));
+        this.commands.put("NewInvoice", new FormActionSaveNewInvoice(appService));
     }
     
-    public void execute(String actionType, HashMap<String, TextField> formFields, int id) {        
+    public void execute(String actionType, HashMap<String, Node> formFields, int id) {        
         FormAction action = this.commands.get(actionType); 
         action.setData(formFields, id);
         action.save();

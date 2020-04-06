@@ -38,7 +38,9 @@ public class InvoiceDaoImpl implements InvoiceDao<Invoice, Integer, String>  {
             + "    deliveryDate DATE, \n"
             + "    deliveryInfo VARCHAR(100), \n"
             + "    additionalInfo VARCHAR(255), \n"
-            + "    FOREIGN KEY (customerId) REFERENCES Customer(id) \n"
+            + "    companyId INTEGER, \n"
+            + "    FOREIGN KEY (customerId) REFERENCES Customer(id), \n"
+            + "    FOREIGN KEY (companyId) REFERENCES Company(id) \n"
             + ");").executeUpdate();
     }
     
@@ -58,13 +60,14 @@ public class InvoiceDaoImpl implements InvoiceDao<Invoice, Integer, String>  {
             + "customerId, \n"
             + "customerContactName, \n"
             + "customerReference, \n"
-                    + "companyReference, \n"
-                    + "deliveryTerms, \n"
-                    + "deliveryDate, \n"
-                    + "deliveryInfo, \n"
-                    + "additionalInfo \n"
+            + "companyReference, \n"
+            + "deliveryTerms, \n"
+            + "deliveryDate, \n"
+            + "deliveryInfo, \n"
+            + "additionalInfo, \n"
+            + "companyId \n"
             + ") "
-            + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+            + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
         );
         stmt.setInt(1, invoice.getInvoiceNumber());
         stmt.setInt(2, invoice.getReferenceNumber());
@@ -83,6 +86,7 @@ public class InvoiceDaoImpl implements InvoiceDao<Invoice, Integer, String>  {
         stmt.setDate(15, invoice.getDeliveryDate());
         stmt.setString(16, invoice.getDeliveryInfo());
         stmt.setString(17, invoice.getAdditionalInfo());
+        stmt.setInt(18, invoice.getCompanyId());
         int rows = stmt.executeUpdate();  
         
         conn.close();
@@ -113,6 +117,7 @@ public class InvoiceDaoImpl implements InvoiceDao<Invoice, Integer, String>  {
             invoice.setPenaltyInterest(rs.getBigDecimal("penaltyInterest"));
             invoice.setAmount(rs.getBigDecimal("amount"));
             invoice.setCustomerId(rs.getInt("customerId"));
+            invoice.setCompanyId(rs.getInt("companyId"));
             invoice.setCustomerContactName(rs.getString("customerContactName"));
             invoice.setCustomerReference(rs.getString("customerReference"));
             invoice.setCompanyReference(rs.getString("companyReference"));
@@ -188,11 +193,12 @@ public class InvoiceDaoImpl implements InvoiceDao<Invoice, Integer, String>  {
     }
 
     @Override
-    public List<Invoice> getItems() throws SQLException {
+    public List<Invoice> getItems(Integer managedCompanyId) throws SQLException {
         
         List<Invoice> results = new ArrayList<>(); 
        
-        PreparedStatement stmt = conn.prepareStatement("SELECT * FROM Invoice");
+        PreparedStatement stmt = conn.prepareStatement("SELECT * FROM Invoice WHERE companyId = ?");
+        stmt.setInt(1, managedCompanyId);
         ResultSet rs = stmt.executeQuery();
 
         while (rs.next()) {
@@ -222,7 +228,18 @@ public class InvoiceDaoImpl implements InvoiceDao<Invoice, Integer, String>  {
         conn.close();
 
         return results;
+    }
+    
+    @Override
+    public Integer getInvoiceCount() throws SQLException {
         
+        PreparedStatement stmt = conn.prepareStatement("SELECT COUNT(*) AS rowcount FROM Invoice");
+        ResultSet rs = stmt.executeQuery();
+        rs.next();
+        int count = rs.getInt(1);
+        conn.close();
+
+        return count;
     }
 
 }

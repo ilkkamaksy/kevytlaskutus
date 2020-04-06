@@ -62,7 +62,7 @@ public class DashboardController extends BaseController implements Initializable
             this.createListNode(company);
         });
     }
-    private void createListNode(Company company) {
+    private void createListNode(ManagedCompany company) {
         
         HBox box = new HBox(10);
         Label label  = new Label(company.getName());
@@ -70,6 +70,7 @@ public class DashboardController extends BaseController implements Initializable
         
         Button selectButton = new Button("Manage");
         selectButton.setOnAction(e-> {
+            this.appService.setCurrentManagedCompany(company);
             this.viewFactory.showManageInvoicesView();
         });
         

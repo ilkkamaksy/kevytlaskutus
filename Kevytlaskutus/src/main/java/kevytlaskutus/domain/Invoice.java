@@ -8,6 +8,8 @@ import java.sql.Date;
 public class Invoice {
 
     private int id; 
+    private int customerId;
+    private int companyId;
     private int invoiceNumber;
     private int referenceNumber;
     private Date createdDate;
@@ -17,7 +19,6 @@ public class Invoice {
     private Date discountDate;
     private BigDecimal penaltyInterest;
     private BigDecimal amount;
-    private int customerId;
     private String customerContactName;
     private String customerReference;
     private String companyReference;
@@ -31,6 +32,7 @@ public class Invoice {
     }
     
     public Invoice(Date createdDate) {
+        this.invoiceNumber = 1000;
         this.createdDate = createdDate;
         this.paymentTerm = 14;
         this.dueDate = this.calculateDueDate(createdDate);
@@ -57,6 +59,14 @@ public class Invoice {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public int getCompanyId() {
+        return companyId;
+    }
+
+    public void setCompanyId(int companyId) {
+        this.companyId = companyId;
     }
 
     public int getInvoiceNumber() {

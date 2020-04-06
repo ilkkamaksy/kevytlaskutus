@@ -1,6 +1,7 @@
 package kevytlaskutus.ui;
 
 import java.util.HashMap;
+import javafx.scene.Node;
 import javafx.scene.control.TextField;
 import kevytlaskutus.domain.*;
 
@@ -18,7 +19,7 @@ public class FormActionSaveNewManagedCompany extends FormAction {
     }
     
     @Override
-    public void setData(HashMap<String, TextField> formFields, int id) {
+    public void setData(HashMap<String, Node> formFields, int id) {
         this.company = super.makeManagedCompanyFromFieldValues(formFields, id);
     }
     

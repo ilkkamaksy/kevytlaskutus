@@ -70,7 +70,7 @@ public class ManageCustomerController extends BaseController implements Initiali
         });
     }
     
-    private void createListNode(Company company) {
+    private void createListNode(CustomerCompany company) {
         
         HBox box = new HBox(10);
         Label label  = new Label(company.getName());

@@ -92,7 +92,7 @@ public class ManagedCompanyDao implements CompanyDao<ManagedCompany, Integer, St
     }
 
     @Override
-    public boolean update(int id, ManagedCompany company) throws SQLException {
+    public boolean update(Integer id, ManagedCompany company) throws SQLException {
        
         PreparedStatement stmt = conn.prepareStatement(
             "UPDATE Company SET name=?, regId=?, phone=?, street=?, postcode=?, commune=?, ovtId=?, provider=?, iban=?, bic=? WHERE id=?");

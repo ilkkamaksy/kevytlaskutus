@@ -85,7 +85,7 @@ public class CustomerCompanyDao implements CompanyDao<CustomerCompany, Integer, 
     }
 
     @Override
-    public boolean update(int id, CustomerCompany company) throws SQLException {
+    public boolean update(Integer id, CustomerCompany company) throws SQLException {
        
         PreparedStatement stmt = conn.prepareStatement(
             "UPDATE Customer SET name=?, regId=?, phone=?, street=?, postcode=?, commune=?, ovtId=?, provider=? WHERE id=?");

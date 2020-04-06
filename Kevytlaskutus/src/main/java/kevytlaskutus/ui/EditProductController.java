@@ -45,17 +45,17 @@ public class EditProductController extends BaseController implements Initializab
     public void setupForm() {
    
         if (currentProduct.getName().isEmpty()) {
-            this.form.addFormField("Name", "");
-            this.form.addFormField("Price", "");
-            this.form.addFormField("Price Unit", "");
-            this.form.addFormField("Description", "");
+            this.form.addTextField("Name", "");
+            this.form.addTextField("Price", "");
+            this.form.addTextField("Price Unit", "");
+            this.form.addTextField("Description", "");
         } else {
             this.form.getForm().getChildren().clear();
         
-            this.form.addFormField("Name", currentProduct.getName());
-            this.form.addFormField("Price", currentProduct.getPrice());
-            this.form.addFormField("Price Unit", currentProduct.getPriceUnit());
-            this.form.addFormField("Description", currentProduct.getDescription());
+            this.form.addTextField("Name", currentProduct.getName());
+            this.form.addTextField("Price", currentProduct.getPrice());
+            this.form.addTextField("Price Unit", currentProduct.getPriceUnit());
+            this.form.addTextField("Description", currentProduct.getDescription());
         }
    
         this.editFormContainerPane.getChildren().add(this.form.getForm());
