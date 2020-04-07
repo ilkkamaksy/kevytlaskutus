@@ -1,4 +1,4 @@
-# Ohjelmistotekniikan harjoitustyö ja laskarit
+# Ohjelmistotekniikan harjoitustyö
 
 Kevään 2020 ohjelmistotekniikka-kurssi.
 
