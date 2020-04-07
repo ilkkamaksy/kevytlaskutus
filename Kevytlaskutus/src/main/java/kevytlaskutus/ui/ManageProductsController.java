@@ -32,6 +32,8 @@ public class ManageProductsController extends BaseController implements Initiali
    
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
+        super.setupNotice();
+        super.noticePane.getChildren().add(super.notice);
         this.setupProductListView();
     }
     
@@ -64,11 +66,7 @@ public class ManageProductsController extends BaseController implements Initiali
         HBox box = new HBox(10);
         Label label  = new Label(product.getName());
         label.setMinHeight(28);
-        
-        Button selectButton = new Button("Manage");
-        selectButton.setOnAction(e-> {
-        });
-        
+       
         Button editButton = new Button("Edit");
         editButton.setOnAction(e-> {
             this.appService.setCurrentProduct(product);
@@ -77,8 +75,10 @@ public class ManageProductsController extends BaseController implements Initiali
         
         Button deleteButton = new Button("Delete");
         deleteButton.setOnAction(e-> {
-            this.appService.deleteProduct(product.getId());
+            boolean success = this.appService.deleteProduct(product.getId());
             this.setupProductListView();
+            super.setNoticeMessageText(success);
+            super.toggleNoticeVisibility(success);
         });
 
         Region spacer = new Region();
@@ -88,7 +88,6 @@ public class ManageProductsController extends BaseController implements Initiali
         box.getChildren().addAll(
                 label, 
                 spacer, 
-                selectButton,
                 editButton,
                 deleteButton
         );

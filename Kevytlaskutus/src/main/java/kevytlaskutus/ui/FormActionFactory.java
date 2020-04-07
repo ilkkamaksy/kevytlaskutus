@@ -26,11 +26,10 @@ public class FormActionFactory {
         this.commands.put("NewInvoice", new FormActionSaveNewInvoice(appService));
     }
     
-    public void execute(String actionType, HashMap<String, Node> formFields, int id) {        
+    public boolean execute(String actionType, HashMap<String, Node> formFields, int id) {        
         FormAction action = this.commands.get(actionType); 
         action.setData(formFields, id);
-        boolean success = action.save();
-        System.out.println("success " + success);
+        return action.execute();
     }
     
 }

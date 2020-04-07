@@ -20,7 +20,7 @@ public class FormActionUpdateProduct extends FormAction {
     }
         
     @Override
-    public boolean save() {    
+    public boolean execute() {    
         return super.appService.updateProduct(this.product.getId(), this.product);
     }
     

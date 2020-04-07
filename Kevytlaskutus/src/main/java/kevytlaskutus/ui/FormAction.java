@@ -1,14 +1,9 @@
 package kevytlaskutus.ui;
 
-import java.sql.Date;
 import java.util.HashMap;
 import javafx.scene.Node;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TextField;
-
 import kevytlaskutus.domain.AppService;
 import kevytlaskutus.domain.CustomerCompany;
-import kevytlaskutus.domain.Invoice;
 import kevytlaskutus.domain.ManagedCompany;
 import kevytlaskutus.domain.Product;
 
@@ -29,7 +24,7 @@ public abstract class FormAction {
     
     public abstract void setData(HashMap<String, Node> formFields, int id);
     
-    public abstract boolean save();
+    public abstract boolean execute();
     
     protected ManagedCompany makeManagedCompanyFromFieldValues(HashMap<String, Node> formFields, int id) {
 

@@ -34,7 +34,7 @@ public class FormActionSaveNewInvoice extends FormAction {
     }
     
     @Override
-    public boolean save() {
+    public boolean execute() {
         return super.appService.createInvoice(this.invoice);
     }
   

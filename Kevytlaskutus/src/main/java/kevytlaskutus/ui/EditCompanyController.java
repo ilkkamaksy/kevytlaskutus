@@ -4,8 +4,16 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.scene.control.Button;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
+import javafx.scene.paint.Color;
+import static javax.swing.text.StyleConstants.Background;
 import kevytlaskutus.domain.AppService;
 import kevytlaskutus.domain.ManagedCompany;
 
@@ -13,7 +21,7 @@ import kevytlaskutus.domain.ManagedCompany;
  * FXML controller class for editing managed company view.
  */
 public class EditCompanyController extends BaseController implements Initializable {
-    
+   
     @FXML
     private Pane editFormContainerPane;
    
@@ -34,16 +42,18 @@ public class EditCompanyController extends BaseController implements Initializab
 
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
-        this.currentCompany = (ManagedCompany) this.appService.getCurrentManagedCompany();
+        this.currentCompany = this.appService.getCurrentManagedCompany();
         this.setActionType();
         this.form = new Form();
+        super.setupNotice();
+        super.noticePane.getChildren().add(super.notice);
         this.actionFactory = new FormActionFactory(this.appService);
         this.setupForm();
         this.setButtonAction();
     }
    
     public void setupForm() {
-      
+
         if (currentCompany.getName().isEmpty()) {
             this.form.addTextField("Name", "");
             this.form.addTextField("Register Id", "");
@@ -70,6 +80,8 @@ public class EditCompanyController extends BaseController implements Initializab
             this.form.addTextField("BIC", currentCompany.getBic());
         }
    
+        
+        
         this.editFormContainerPane.getChildren().add(this.form.getForm());
     }
   
@@ -83,7 +95,11 @@ public class EditCompanyController extends BaseController implements Initializab
     
     private void setButtonAction() {
         this.saveFormButton.setOnAction(e-> {
-            this.actionFactory.execute(this.actionType, this.form.getFormFields(), this.currentCompany.getId());
+            boolean success = this.actionFactory.execute(this.actionType, this.form.getFormFields(), this.currentCompany.getId());
+            super.setNoticeMessageText(success);
+            super.toggleNoticeVisibility(success);
         });
     }
+    
+    
 }

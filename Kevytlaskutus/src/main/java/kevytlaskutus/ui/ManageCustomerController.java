@@ -42,6 +42,8 @@ public class ManageCustomerController extends BaseController implements Initiali
    
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
+        super.setupNotice();
+        super.noticePane.getChildren().add(super.notice);
         this.setupCustomerListView();
     }
     
@@ -75,10 +77,6 @@ public class ManageCustomerController extends BaseController implements Initiali
         Label label  = new Label(company.getName());
         label.setMinHeight(28);
         
-        Button selectButton = new Button("Manage");
-        selectButton.setOnAction(e-> {
-        });
-        
         Button editButton = new Button("Edit");
         editButton.setOnAction(e-> {
             this.appService.setCurrentCustomerCompany(company);
@@ -87,8 +85,10 @@ public class ManageCustomerController extends BaseController implements Initiali
         
         Button deleteButton = new Button("Delete");
         deleteButton.setOnAction(e-> {
-            this.appService.deleteCustomerCompany(company.getId());
+            boolean success = this.appService.deleteCustomerCompany(company.getId());
             this.setupCustomerListView();
+            super.setNoticeMessageText(success);
+            super.toggleNoticeVisibility(success);
         });
 
         Region spacer = new Region();
@@ -98,7 +98,6 @@ public class ManageCustomerController extends BaseController implements Initiali
         box.getChildren().addAll(
                 label, 
                 spacer, 
-                selectButton,
                 editButton,
                 deleteButton
         );

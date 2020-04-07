@@ -5,7 +5,7 @@ import javafx.scene.Node;
 import kevytlaskutus.domain.*;
 
 /**
- * Action to save a new customer.
+ * Action to execute a new customer.
  */
 public class FormActionSaveNewCustomerCompany extends FormAction {
     
@@ -23,7 +23,7 @@ public class FormActionSaveNewCustomerCompany extends FormAction {
     }
     
     @Override
-    public boolean save() {
+    public boolean execute() {
         return super.appService.createCustomerCompany(this.company);
     }
 

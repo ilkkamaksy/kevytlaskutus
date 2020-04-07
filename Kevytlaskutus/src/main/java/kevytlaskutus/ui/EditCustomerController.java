@@ -36,6 +36,8 @@ public class EditCustomerController extends BaseController implements Initializa
     public void initialize(URL arg0, ResourceBundle arg1) {
         this.currentCompany = (CustomerCompany) this.appService.getCurrentCustomerCompany();
         this.setActionType();
+        super.setupNotice();
+        super.noticePane.getChildren().add(super.notice);
         this.form = new Form();
         this.actionFactory = new FormActionFactory(this.appService);
         this.setupForm();
@@ -79,7 +81,9 @@ public class EditCustomerController extends BaseController implements Initializa
     
     private void setButtonAction() {
         this.saveFormButton.setOnAction(e-> {
-            this.actionFactory.execute(this.actionType, this.form.getFormFields(), this.currentCompany.getId());
+            boolean success = this.actionFactory.execute(this.actionType, this.form.getFormFields(), this.currentCompany.getId());
+            super.setNoticeMessageText(success);
+            super.toggleNoticeVisibility(success);
         });
     }
 }

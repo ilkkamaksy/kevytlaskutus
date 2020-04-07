@@ -32,6 +32,8 @@ public class ManageInvoicesController extends BaseController implements Initiali
    
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
+        super.setupNotice();
+        super.noticePane.getChildren().add(super.notice);
         this.setupInvoiceListView();
     }
     
@@ -73,8 +75,10 @@ public class ManageInvoicesController extends BaseController implements Initiali
         
         Button deleteButton = new Button("Delete");
         deleteButton.setOnAction(e-> {
-            this.appService.deleteInvoice(invoice.getId());
+            boolean success = this.appService.deleteInvoice(invoice.getId());
             this.setupInvoiceListView();
+            super.setNoticeMessageText(success);
+            super.toggleNoticeVisibility(success);
         });
 
         Region spacer = new Region();

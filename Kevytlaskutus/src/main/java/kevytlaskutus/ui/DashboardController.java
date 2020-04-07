@@ -11,7 +11,9 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
@@ -28,13 +30,15 @@ public class DashboardController extends BaseController implements Initializable
 
     @FXML
     protected ListView<Node> managedCompaniesListView;
-   
+  
     public DashboardController(AppService appService, ViewFactory viewFactory, String fxmlName) {
         super(appService, viewFactory, fxmlName);
     }
 
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
+        super.setupNotice();
+        super.noticePane.getChildren().add(super.notice);
         this.setupManagedCompanyListView();
     }
     
@@ -81,8 +85,10 @@ public class DashboardController extends BaseController implements Initializable
         
         Button deleteButton = new Button("Delete");
         deleteButton.setOnAction(e-> {
-            this.appService.deleteManagedCompany(company.getId());
+            boolean success = this.appService.deleteManagedCompany(company.getId());
             this.setupManagedCompanyListView();
+            super.setNoticeMessageText(success);
+            super.toggleNoticeVisibility(success);
         });
 
         Region spacer = new Region();

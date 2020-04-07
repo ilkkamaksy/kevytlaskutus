@@ -5,7 +5,7 @@ import javafx.scene.Node;
 import kevytlaskutus.domain.*;
 
 /**
- * Action to save a new managed company.
+ * Action to execute a new managed company.
  */
 public class FormActionSaveNewManagedCompany extends FormAction {
     
@@ -23,7 +23,7 @@ public class FormActionSaveNewManagedCompany extends FormAction {
     }
     
     @Override
-    public boolean save() {
+    public boolean execute() {
         return super.appService.createManagedCompany(this.company);
     }
    

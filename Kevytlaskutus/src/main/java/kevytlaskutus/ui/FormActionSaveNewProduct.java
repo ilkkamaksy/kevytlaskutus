@@ -6,7 +6,7 @@ import kevytlaskutus.domain.AppService;
 import kevytlaskutus.domain.Product;
 
 /**
- * Action to save a new Product.
+ * Action to execute a new Product.
  */
 public class FormActionSaveNewProduct extends FormAction {
     
@@ -24,7 +24,7 @@ public class FormActionSaveNewProduct extends FormAction {
     }
     
     @Override
-    public boolean save() {
+    public boolean execute() {
         return super.appService.createProduct(this.product);
     }
 }

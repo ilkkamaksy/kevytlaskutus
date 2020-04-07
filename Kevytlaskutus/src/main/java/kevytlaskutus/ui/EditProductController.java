@@ -36,6 +36,8 @@ public class EditProductController extends BaseController implements Initializab
     public void initialize(URL arg0, ResourceBundle arg1) {
         this.currentProduct = this.appService.getCurrentProduct();
         this.setActionType();
+        super.setupNotice();
+        super.noticePane.getChildren().add(super.notice);
         this.form = new Form();
         this.actionFactory = new FormActionFactory(this.appService);
         this.setupForm();
@@ -71,7 +73,9 @@ public class EditProductController extends BaseController implements Initializab
     
     private void setButtonAction() {
         this.saveFormButton.setOnAction(e-> {
-            this.actionFactory.execute(this.actionType, this.form.getFormFields(), this.currentProduct.getId());
+            boolean success = this.actionFactory.execute(this.actionType, this.form.getFormFields(), this.currentProduct.getId());
+            super.setNoticeMessageText(success);
+            super.toggleNoticeVisibility(success);
         });
     }
 }
