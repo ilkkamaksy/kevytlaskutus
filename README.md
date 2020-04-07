@@ -2,32 +2,55 @@
 
 Kevään 2020 ohjelmistotekniikka-kurssi.
 
-## Harjoitustyö
+# KevytlaskutusApp
 
-* [Vaatimusmäärittely](https://github.com/ilkkamaksy/ot-harjoitustyo/blob/master/dokumentaatio/vaatimusmaarittely.md)
-* [Tuntikirjanpito](https://github.com/ilkkamaksy/ot-harjoitustyo/blob/master/dokumentaatio/tuntikirjanpito.md)
-* [Kevytlaskutus-Appi](https://github.com/ilkkamaksy/ot-harjoitustyo/tree/master/Kevytlaskutus)
+Sovelluksen avulla freelancerit ja pienyrittäjät voivat hallita yhden tai useamman yrityksensä asiakakkaita, tuotteita ja palveluita, sekä laskutustietoja. Sovellus ei vaadi rekisteröitymistä.
 
-## Laskarit 
+## Dokumentaatio
 
-Suorat linkit laskaritehtäviin:
+- [Vaatimusmäärittely](/dokumentaatio/vaatimusmaarittely.md)
+- [Työaikakirjanpito](/dokumentaatio/tuntikirjanpito)
 
-### Viikko 1
+## Komentorivitoiminnot
 
-* [gitlog](https://github.com/ilkkamaksy/ot-harjoitustyo/blob/master/laskarit/viikko1/gitlog.txt)
-* [komentorivi](https://github.com/ilkkamaksy/ot-harjoitustyo/blob/master/laskarit/viikko1/komentorivi.txt)
+### Ohjelman suoritus
 
-### Viikko 2 
+Ohjelma voidaan käynnistää komennolla
 
-* [Maksukortti](https://github.com/ilkkamaksy/ot-harjoitustyo/tree/master/laskarit/viikko2/Maksukortti)
-* [Unicafe](https://github.com/ilkkamaksy/ot-harjoitustyo/tree/master/laskarit/viikko2/Unicafe)
-* [Jacoco-testikattavuus](https://github.com/ilkkamaksy/ot-harjoitustyo/blob/master/laskarit/viikko2/testikattavuus-jacoco.jpg)
+`mvn compile exec:java -e -Dexec.mainClass=kevytlaskutus.Main` 
 
-### Viikko 3 
+### Testaus
 
-* [Monopoliluokkakaavio 1](https://github.com/ilkkamaksy/ot-harjoitustyo/blob/master/laskarit/viikko3/tehtava1-monopoli.jpg)
-* [Monopoliluokkakaavio 2](https://github.com/ilkkamaksy/ot-harjoitustyo/blob/master/laskarit/viikko3/tehtava2-monopoli.jpg)
-* [Koneen sekvenssikaavio](https://github.com/ilkkamaksy/ot-harjoitustyo/blob/master/laskarit/viikko3/tehtava3-kone-sekvenssikaavio.pdf)
-* [HSL-sekvenssiokaavio](https://github.com/ilkkamaksy/ot-harjoitustyo/blob/master/laskarit/viikko3/tehtava4-HSL%20Sekvenssikaavio.pdf)
+Testit suoritetaan komennolla
 
+`mvn test`
 
+Testikattavuusraportti luodaan komennolla
+
+`mvn jacoco:report`
+
+Kattavuusraporttia voi tarkastella avaamalla selaimella tiedosto target/site/jacoco/index.html
+
+### Suoritettavan jarin generointi
+
+Komento
+
+`mvn package`
+
+generoi hakemistoon target suoritettavan jar-tiedoston Kevytlaskutus-1.0-SNAPSHOT.jar
+
+### JavaDoc
+
+JavaDoc generoidaan komennolla
+
+`mvn javadoc:javadoc`
+
+JavaDocia voi tarkastella avaamalla selaimella tiedosto target/site/apidocs/index.html
+
+### Checkstyle
+
+Tiedostoon checkstyle.xml määrittelemät tarkistukset suoritetaan komennolla
+
+`mvn jxr:jxr checkstyle:checkstyle`
+
+Mahdolliset virheilmoitukset selviävät avaamalla selaimella tiedosto target/site/checkstyle.html

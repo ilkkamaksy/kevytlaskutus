@@ -10,5 +10,6 @@
 | 27.3. | 6    | Tuotenäkymän rakentaminen, tuotteiden luominen, muokkaus ja poisto |
 | 30.3. | 4    | Checkstylen ja Jacocon lisäys, AppService-luokan yksikkötestien lisäys, maven-konfiguraatio jotta komentoriviltä suoritus onnistuu |
 | 6.4. | 8    | Laskuhallintanäkymän ja laskujen lisäysnäkymän luominen |
-| yht   | 45    | | 
+| 7.4. | 8    | Laskuhallintanäkymän työstäminen, testien lisääminen, jacoco-selvittely (dao-testien kattavuus ei näy) ja refaktoroin |
+| yht   | 53    | | 
 
