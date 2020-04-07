@@ -59,9 +59,8 @@ public class EditInvoiceController extends BaseController implements Initializab
             this.form.addTextField("Reference Number", "");
             this.form.addTextField("Payment due in number of days", "14");
             this.form.addDatePicker("Due Date");
-            this.form.addTextField("Overdue Penalty Interest rate", "");
-            this.form.addTextField("Discount", "");
-            this.form.addTextField("Discount Date", "");
+            this.form.addTextField("Overdue Penalty Interest rate", "10.0");
+            this.form.addTextField("Discount", "0.0");
             this.form.addDropDown("Customer", this.createCustomerNameList());
             this.form.addTextField("Customer Contact Name", "");
             this.form.addTextField("Customer Reference", "");
@@ -70,7 +69,7 @@ public class EditInvoiceController extends BaseController implements Initializab
             this.form.addDatePicker("Delivery Date");
             this.form.addTextField("Delivery Information", "");
             this.form.addTextField("Additional Information", "");
-            this.form.addTextField("Amount", "");
+            this.form.addTextField("Amount", "0.0");
         } else {
             this.form.getForm().getChildren().clear();
         
@@ -81,7 +80,6 @@ public class EditInvoiceController extends BaseController implements Initializab
             this.form.addTextField("Due date", "" + currentInvoice.getDueDate().toString());
             this.form.addTextField("Overdue Penalty Interest rate", "" + currentInvoice.getPenaltyInterest());
             this.form.addTextField("Discount", "" + currentInvoice.getDiscount());
-            this.form.addTextField("Discount Date", "" + currentInvoice.getDiscountDate());
             // this.form.addTextField("Customer", "" + currentInvoice.getCustomerId());
             this.form.addTextField("Customer Contact Name", "" + currentInvoice.getCustomerContactName());
             this.form.addTextField("Customer Reference", "" + currentInvoice.getCustomerReference());

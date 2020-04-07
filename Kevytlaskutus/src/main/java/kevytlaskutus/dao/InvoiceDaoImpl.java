@@ -20,7 +20,6 @@ public class InvoiceDaoImpl implements InvoiceDao<Invoice, Integer, String>  {
     }
     
     public void initDb() throws SQLException {
-        
         conn.prepareStatement("CREATE TABLE IF NOT EXISTS Invoice (\n"
             + "    id INTEGER AUTO_INCREMENT PRIMARY KEY,\n"
             + "    invoiceNumber INTEGER,\n"
@@ -73,7 +72,6 @@ public class InvoiceDaoImpl implements InvoiceDao<Invoice, Integer, String>  {
         );
         stmt = this.setupInvoiceData(stmt, invoice);
         int rows = stmt.executeUpdate();  
-        
         conn.close();
 
         return rows > 0;
@@ -81,7 +79,6 @@ public class InvoiceDaoImpl implements InvoiceDao<Invoice, Integer, String>  {
     
     @Override
     public Invoice getItemById(Integer id) throws SQLException {
-        
         PreparedStatement stmt = conn.prepareStatement(
             "SELECT * FROM Invoice AS Invoice \n"
             + "LEFT JOIN Customer AS Customer ON Invoice.customerId = Customer.id \n" 
@@ -98,14 +95,11 @@ public class InvoiceDaoImpl implements InvoiceDao<Invoice, Integer, String>  {
         }
 
         conn.close();
-        
         return invoice;
-
     }
 
     @Override
     public boolean update(int id, Invoice invoice) throws SQLException {
-       
         PreparedStatement stmt = conn.prepareStatement(
             "UPDATE Invoice SET invoiceNumber=?, "
                 + "referenceNumber=?, "
@@ -127,10 +121,46 @@ public class InvoiceDaoImpl implements InvoiceDao<Invoice, Integer, String>  {
                 + "WHERE id=?");
         stmt = this.setupInvoiceData(stmt, invoice);
         int rows = stmt.executeUpdate();  
+        
+        conn.close();
+        return rows > 0;
+    }
+
+    @Override
+    public boolean delete(Integer id) throws SQLException {
+        PreparedStatement stmt = conn.prepareStatement("DELETE FROM Invoice WHERE id=?");
+        stmt.setInt(1, id);
+        int rows = stmt.executeUpdate();  
+        
+        conn.close();
+        return rows > 0;
+    }
+
+    @Override
+    public List<Invoice> getItems(Integer managedCompanyId) throws SQLException {
+        
+        PreparedStatement stmt = conn.prepareStatement("SELECT * FROM Invoice WHERE companyId = ?");
+        stmt.setInt(1, managedCompanyId);
+        ResultSet rs = stmt.executeQuery();
+
+        List<Invoice> results = new ArrayList<>(); 
+        while (rs.next()) {
+            Invoice invoice = this.createInvoice(rs);
+            results.add(invoice);
+        }
 
         conn.close();
- 
-        return rows > 0;
+        return results;
+    }
+    
+    @Override
+    public Integer getInvoiceCount() throws SQLException {
+        PreparedStatement stmt = conn.prepareStatement("SELECT COUNT(*) AS rowcount FROM Invoice");
+        ResultSet rs = stmt.executeQuery();
+        rs.next();
+        int count = rs.getInt(1);
+        conn.close();
+        return count;
     }
 
     private PreparedStatement setupInvoiceData(PreparedStatement stmt, Invoice invoice) throws SQLException {
@@ -152,52 +182,9 @@ public class InvoiceDaoImpl implements InvoiceDao<Invoice, Integer, String>  {
         stmt.setString(16, invoice.getDeliveryInfo());
         stmt.setString(17, invoice.getAdditionalInfo());
         stmt.setInt(18, invoice.getCompany().getId());
-       
         return stmt;
     }
     
-    @Override
-    public boolean delete(Integer id) throws SQLException {
-        
-        PreparedStatement stmt = conn.prepareStatement("DELETE FROM Invoice WHERE id=?");
-        stmt.setInt(1, id);
-        int rows = stmt.executeUpdate();  
-
-        conn.close();
-        
-        return rows > 0;
-    }
-
-    @Override
-    public List<Invoice> getItems(Integer managedCompanyId) throws SQLException {
-        
-        PreparedStatement stmt = conn.prepareStatement("SELECT * FROM Invoice WHERE companyId = ?");
-        stmt.setInt(1, managedCompanyId);
-        ResultSet rs = stmt.executeQuery();
-
-        List<Invoice> results = new ArrayList<>(); 
-        while (rs.next()) {
-            Invoice invoice = this.createInvoice(rs);
-            results.add(invoice);
-        }
-
-        conn.close();
-
-        return results;
-    }
-    
-    @Override
-    public Integer getInvoiceCount() throws SQLException {
-        
-        PreparedStatement stmt = conn.prepareStatement("SELECT COUNT(*) AS rowcount FROM Invoice");
-        ResultSet rs = stmt.executeQuery();
-        rs.next();
-        int count = rs.getInt(1);
-        conn.close();
-
-        return count;
-    }
-
     private Invoice createInvoice(ResultSet rs) throws SQLException {
         Invoice invoice = new Invoice(rs.getDate("createdDate"));        
         invoice.setId(rs.getInt("Invoice.id"));

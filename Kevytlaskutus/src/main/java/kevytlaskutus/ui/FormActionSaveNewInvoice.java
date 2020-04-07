@@ -23,7 +23,7 @@ import kevytlaskutus.domain.Invoice;
 public class FormActionSaveNewInvoice extends FormAction {
     
     private Invoice invoice; 
-    
+   
     public FormActionSaveNewInvoice(AppService appService) {
         super(appService);
     }
@@ -59,18 +59,24 @@ public class FormActionSaveNewInvoice extends FormAction {
         this.invoice.setAdditionalInfo(super.dataExtractor.getValueFromTextField("Additional Information", formFields));
         
         BigDecimal overDueInterest = super.dataExtractor.getBigDecimalFromTextField("Overdue Penalty Interest rate", formFields);
-        if (overDueInterest != null) {
+        if (overDueInterest != null && isBetween(overDueInterest, new BigDecimal(0), new BigDecimal(100))) {
             this.invoice.setPenaltyInterest(overDueInterest);    
         }
-        
+               
         BigDecimal discount = super.dataExtractor.getBigDecimalFromTextField("Discount", formFields);
-        if (discount != null) {
+        if (discount != null && isBetween(discount, new BigDecimal(0), new BigDecimal(100))) {
             this.invoice.setDiscount(discount);
         }
         
         BigDecimal amount = super.dataExtractor.getBigDecimalFromTextField("Amount", formFields);
-        if (amount != null) {
+        if (amount != null && isBetween(amount, new BigDecimal(0), new BigDecimal(1000000))) {
             this.invoice.setAmount(amount);
         }    
+        
+        System.out.println(invoice.getCreatedDate() + " " + invoice.getDiscount());
+    }
+    
+    public static boolean isBetween(BigDecimal value, BigDecimal start, BigDecimal end){
+        return value.compareTo(start) > 0 && value.compareTo(end) < 0;
     }
 }

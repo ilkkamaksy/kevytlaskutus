@@ -28,23 +28,23 @@ public class InvoiceService {
     }
     
     public int getDefaultInvoiceNumber() {
-
         try {
             Connection conn = this.databaseUtils.getConnection();
             dao.setConnection(conn);
             this.startInvoiceNumbering += dao.getInvoiceCount();
-            
         } catch (SQLException e) {
             Logger.getLogger(AppService.class.getName()).log(Level.SEVERE, null, e);
         }
-        
         return startInvoiceNumbering;
     }
     
     public boolean createInvoiceForCompany(Invoice invoice, ManagedCompany managedCompany) {
+        if (invoice == null || managedCompany == null || managedCompany.getId() < 1) {
+            return false;
+        }
         
         Boolean result = false;
-
+        
         try {    
             Connection conn = this.databaseUtils.getConnection();
             dao.setConnection(conn);
@@ -58,7 +58,6 @@ public class InvoiceService {
     }
     
     public Boolean updateInvoice(int id, Invoice invoice) {
-        
         Boolean result = false;
         
         try {    
@@ -73,7 +72,6 @@ public class InvoiceService {
     }
   
     public Boolean deleteInvoice(int id) {
-        
         Boolean result = false;
         
         try {    
@@ -88,7 +86,6 @@ public class InvoiceService {
     }
     
     public List<Invoice> getInvoicesForCompany(int managedCompanyId) {
-        
         List<Invoice> results = new ArrayList<>();
         
         try {

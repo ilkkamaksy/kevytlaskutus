@@ -70,8 +70,6 @@ public class ManageInvoicesController extends BaseController implements Initiali
         
         Button editButton = new Button("Edit");
         editButton.setOnAction(e-> {
-            this.appService.setCurrentInvoice(invoice);
-            this.viewFactory.showEditInvoiceView();
         });
         
         Button deleteButton = new Button("Delete");

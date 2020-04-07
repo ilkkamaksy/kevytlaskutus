@@ -33,21 +33,9 @@ public class Invoice {
     }
     
     public Invoice(Date createdDate) {
-        this.invoiceNumber = 1000;
         this.createdDate = createdDate;
         this.paymentTerm = 14;
         this.dueDate = this.calculateDueDate(createdDate);
-        this.discount = new BigDecimal(0.0);
-        this.discountDate = null;
-        this.penaltyInterest = new BigDecimal(0.0);
-        this.amount = new BigDecimal(0.0);
-        this.customerContactName = "";
-        this.customerReference = "";
-        this.companyReference = "";
-        this.deliveryTerms = "";
-        this.deliveryDate = null;
-        this.deliveryInfo = "";
-        this.additionalInfo = "";
     }
 
     public CustomerCompany getCustomer() {
@@ -204,10 +192,5 @@ public class Invoice {
 
     public void setAdditionalInfo(String additionalInfo) {
         this.additionalInfo = additionalInfo;
-    }
-
-    @Override
-    public String toString() {
-        return this.id + " no:" + this.invoiceNumber + " cdate:" + this.createdDate + " duedate:" + this.dueDate + " refno:" + this.referenceNumber + " customerid:" + this.customer;
     }
 }

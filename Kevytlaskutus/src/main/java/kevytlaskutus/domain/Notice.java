@@ -57,7 +57,6 @@ public class Notice {
 
     public void setActionType(String actionType) {
         this.actionType = actionType;
-        System.out.println(this.actionType);
     }
     
 }

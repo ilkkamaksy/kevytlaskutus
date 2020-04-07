@@ -12,6 +12,8 @@ import kevytlaskutus.domain.AppService;
 import kevytlaskutus.dao.*;
 import kevytlaskutus.domain.Company;
 import kevytlaskutus.domain.CustomerCompany;
+import kevytlaskutus.domain.Invoice;
+import kevytlaskutus.domain.InvoiceService;
 import kevytlaskutus.domain.ManagedCompany;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -30,6 +32,7 @@ import static org.mockito.Mockito.*;
 public class AppServiceTest {
     
     AppService appService;
+    InvoiceService invoiceService;
     ManagedCompanyDao managedCompanyDao;
     CustomerCompanyDao customerCompanyDao;
     ProductDaoImpl productDao;
@@ -39,14 +42,16 @@ public class AppServiceTest {
     ManagedCompany emptyManagedCompany;
     CustomerCompany validCustomer;
     CustomerCompany emptyCustomer;
+    Invoice mockInvoice;
     
     @Before
     public void setUp() {
         managedCompanyDao = mock(ManagedCompanyDao.class);       
         customerCompanyDao = mock(CustomerCompanyDao.class);
+        invoiceService = mock(InvoiceService.class);
         invoiceDao = mock(InvoiceDaoImpl.class);
         productDao = mock(ProductDaoImpl.class);
-        
+        mockInvoice = mock(Invoice.class);
         appService = new AppService(managedCompanyDao, customerCompanyDao, productDao, invoiceDao);
         
         validManagedCompany = mock(ManagedCompany.class); 
@@ -232,5 +237,28 @@ public class AppServiceTest {
             verify(customerCompanyDao).getItems(); 
             assertEquals(results.size(), customers.size());
         } catch (SQLException e) {}
+    }
+
+    @Test
+    public void afterAddingNewItemThereAreNotificationsPending() {
+        try {
+            when(customerCompanyDao.create(validCustomer)).thenReturn(true);      
+            boolean result = appService.createCustomerCompany(validCustomer);
+            assertTrue(appService.isNoticePending());
+        } catch (SQLException e) {}
+    }
+    
+    @Test
+    public void pendingNoticeCanBeRetrieved() {
+        try {
+            when(customerCompanyDao.create(validCustomer)).thenReturn(true);      
+            boolean result = appService.createCustomerCompany(validCustomer);
+            assertEquals(appService.getPendingNotice(), "A new customer has been added");
+        } catch (SQLException e) {}
+    }
+    
+    @Test
+    public void emptyInvoiceCreatedForCurrentInvoice() {
+        assertNotNull(this.appService.getCurrentInvoice());
     }
 }
