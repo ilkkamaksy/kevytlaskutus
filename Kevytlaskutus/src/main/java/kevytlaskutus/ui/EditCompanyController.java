@@ -42,18 +42,21 @@ public class EditCompanyController extends BaseController implements Initializab
 
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
+        this.actionFactory = new FormActionFactory(this.appService);
         this.currentCompany = this.appService.getCurrentManagedCompany();
         this.setActionType();
-        this.form = new Form();
+        
         super.setupNotice();
         super.noticePane.getChildren().add(super.notice);
-        this.actionFactory = new FormActionFactory(this.appService);
+       
         this.setupForm();
         this.setButtonAction();
     }
    
     public void setupForm() {
 
+        this.form = new Form();
+        
         if (currentCompany.getName().isEmpty()) {
             this.form.addTextField("Name", "");
             this.form.addTextField("Register Id", "");
@@ -80,8 +83,6 @@ public class EditCompanyController extends BaseController implements Initializab
             this.form.addTextField("BIC", currentCompany.getBic());
         }
    
-        
-        
         this.editFormContainerPane.getChildren().add(this.form.getForm());
     }
   
@@ -95,9 +96,8 @@ public class EditCompanyController extends BaseController implements Initializab
     
     private void setButtonAction() {
         this.saveFormButton.setOnAction(e-> {
-            boolean success = this.actionFactory.execute(this.actionType, this.form.getFormFields(), this.currentCompany.getId());
-            super.setNoticeMessageText(success);
-            super.toggleNoticeVisibility(success);
+            this.actionFactory.execute(this.actionType, this.form.getFormFields(), this.currentCompany.getId());
+            this.viewFactory.showDashBoard();
         });
     }
     

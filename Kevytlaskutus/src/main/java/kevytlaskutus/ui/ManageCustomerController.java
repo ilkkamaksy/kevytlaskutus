@@ -44,6 +44,7 @@ public class ManageCustomerController extends BaseController implements Initiali
     public void initialize(URL arg0, ResourceBundle arg1) {
         super.setupNotice();
         super.noticePane.getChildren().add(super.notice);
+        super.addNoticeMessage();
         this.setupCustomerListView();
     }
     
@@ -85,10 +86,9 @@ public class ManageCustomerController extends BaseController implements Initiali
         
         Button deleteButton = new Button("Delete");
         deleteButton.setOnAction(e-> {
-            boolean success = this.appService.deleteCustomerCompany(company.getId());
+            this.appService.deleteCustomerCompany(company.getId());
+            super.addNoticeMessage();
             this.setupCustomerListView();
-            super.setNoticeMessageText(success);
-            super.toggleNoticeVisibility(success);
         });
 
         Region spacer = new Region();

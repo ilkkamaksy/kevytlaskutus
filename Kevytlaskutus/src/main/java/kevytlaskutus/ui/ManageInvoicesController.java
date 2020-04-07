@@ -34,6 +34,7 @@ public class ManageInvoicesController extends BaseController implements Initiali
     public void initialize(URL arg0, ResourceBundle arg1) {
         super.setupNotice();
         super.noticePane.getChildren().add(super.notice);
+        super.addNoticeMessage();
         this.setupInvoiceListView();
     }
     
@@ -75,10 +76,9 @@ public class ManageInvoicesController extends BaseController implements Initiali
         
         Button deleteButton = new Button("Delete");
         deleteButton.setOnAction(e-> {
-            boolean success = this.appService.deleteInvoice(invoice.getId());
+            this.appService.deleteInvoice(invoice.getId());
             this.setupInvoiceListView();
-            super.setNoticeMessageText(success);
-            super.toggleNoticeVisibility(success);
+            super.addNoticeMessage();
         });
 
         Region spacer = new Region();

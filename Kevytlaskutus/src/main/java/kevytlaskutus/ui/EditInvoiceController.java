@@ -39,21 +39,23 @@ public class EditInvoiceController extends BaseController implements Initializab
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
         this.currentInvoice = this.appService.getCurrentInvoice();
-        this.defaultInvoiceNumber = this.appService.getDefaultInvoiceNumber();
         this.setActionType();
+        
         super.setupNotice();
         super.noticePane.getChildren().add(super.notice);
-        this.form = new Form();
+        
         this.actionFactory = new FormActionFactory(this.appService);
         this.setupForm();
         this.setButtonAction();
     }
    
     public void setupForm() {
+        
+        this.form = new Form();
       
         if (currentInvoice.getId() == 0) {
             this.form.addDatePicker("Date");
-            this.form.addTextField("Invoice Number", "" + defaultInvoiceNumber);
+            this.form.addTextField("Invoice Number", "" + this.appService.getDefaultInvoiceNumber());
             this.form.addTextField("Reference Number", "");
             this.form.addTextField("Payment due in number of days", "14");
             this.form.addDatePicker("Due Date");
@@ -113,9 +115,8 @@ public class EditInvoiceController extends BaseController implements Initializab
     
     private void setButtonAction() {
         this.saveFormButton.setOnAction(e-> {
-            boolean success = this.actionFactory.execute(this.actionType, this.form.getFormFields(), this.currentInvoice.getId());
-            super.setNoticeMessageText(success);
-            super.toggleNoticeVisibility(success);
+            this.actionFactory.execute(this.actionType, this.form.getFormFields(), this.currentInvoice.getId());
+            this.viewFactory.showManageInvoicesView();
         });
     }
 

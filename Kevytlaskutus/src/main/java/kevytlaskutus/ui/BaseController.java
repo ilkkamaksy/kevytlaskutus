@@ -52,25 +52,28 @@ public abstract class BaseController {
         this.notice = new HBox(20);
         this.notice.setPadding(new Insets(8));
         this.notice.setMinHeight(30);
-        this.notice.setPrefWidth(500);
-        this.noticeMessage = new Text();
-        this.noticeMessage.setText("asfsasfsaf");
+        this.setupInitialNoticeMessage();
         this.notice.getChildren().add(noticeMessage);
-        this.notice.setVisible(true);
         this.notice.managedProperty().bind(this.notice.visibleProperty());
     }
     
-    protected void toggleNoticeVisibility(boolean visible) {
-        this.notice.setVisible(visible);
+    private void setupInitialNoticeMessage() {
+        this.noticeMessage = new Text();
+        this.noticeMessage.setText("");
+        this.noticeMessage.setVisible(true);
+    }
+       
+    public void addNoticeMessage() {
+        this.toggleNoticeVisibility(this.appService.isNoticePending());
+        this.setNoticeMessageText(this.appService.getPendingNotice());
     }
     
-    protected void setNoticeMessageText(boolean success) {
-        if (success) {
-            this.noticeMessage.setText("A new item has been added");
-            this.noticeMessage.setFill(Color.GREEN);
-        } else {
-            this.noticeMessage.setText("Could not add a new item, check form and try again.");
-            this.noticeMessage.setFill(Color.RED);
-        }
+    protected void toggleNoticeVisibility(boolean visible) {
+        this.noticeMessage.setVisible(visible);
+    }
+    
+    protected void setNoticeMessageText(String message) {
+        this.noticeMessage.setText(message);
+        this.noticeMessage.setFill(Color.GREEN);
     }
 }

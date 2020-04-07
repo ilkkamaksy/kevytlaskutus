@@ -34,11 +34,12 @@ public class EditCustomerController extends BaseController implements Initializa
 
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
-        this.currentCompany = (CustomerCompany) this.appService.getCurrentCustomerCompany();
+        this.currentCompany = this.appService.getCurrentCustomerCompany();
         this.setActionType();
+        
         super.setupNotice();
         super.noticePane.getChildren().add(super.notice);
-        this.form = new Form();
+        
         this.actionFactory = new FormActionFactory(this.appService);
         this.setupForm();
         this.setButtonAction();
@@ -46,6 +47,8 @@ public class EditCustomerController extends BaseController implements Initializa
    
     public void setupForm() {
    
+        this.form = new Form();
+        
         if (currentCompany.getName().isEmpty()) {
             this.form.addTextField("Name", "");
             this.form.addTextField("Register Id", "");
@@ -81,9 +84,8 @@ public class EditCustomerController extends BaseController implements Initializa
     
     private void setButtonAction() {
         this.saveFormButton.setOnAction(e-> {
-            boolean success = this.actionFactory.execute(this.actionType, this.form.getFormFields(), this.currentCompany.getId());
-            super.setNoticeMessageText(success);
-            super.toggleNoticeVisibility(success);
+            this.actionFactory.execute(this.actionType, this.form.getFormFields(), this.currentCompany.getId());
+            this.viewFactory.showManageCustomerView();
         });
     }
 }

@@ -39,6 +39,7 @@ public class DashboardController extends BaseController implements Initializable
     public void initialize(URL arg0, ResourceBundle arg1) {
         super.setupNotice();
         super.noticePane.getChildren().add(super.notice);
+        super.addNoticeMessage();
         this.setupManagedCompanyListView();
     }
     
@@ -85,10 +86,9 @@ public class DashboardController extends BaseController implements Initializable
         
         Button deleteButton = new Button("Delete");
         deleteButton.setOnAction(e-> {
-            boolean success = this.appService.deleteManagedCompany(company.getId());
+            this.appService.deleteManagedCompany(company.getId());
             this.setupManagedCompanyListView();
-            super.setNoticeMessageText(success);
-            super.toggleNoticeVisibility(success);
+            super.addNoticeMessage();
         });
 
         Region spacer = new Region();

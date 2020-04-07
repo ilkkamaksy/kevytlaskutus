@@ -34,6 +34,7 @@ public class ManageProductsController extends BaseController implements Initiali
     public void initialize(URL arg0, ResourceBundle arg1) {
         super.setupNotice();
         super.noticePane.getChildren().add(super.notice);
+        super.addNoticeMessage();
         this.setupProductListView();
     }
     
@@ -77,8 +78,7 @@ public class ManageProductsController extends BaseController implements Initiali
         deleteButton.setOnAction(e-> {
             boolean success = this.appService.deleteProduct(product.getId());
             this.setupProductListView();
-            super.setNoticeMessageText(success);
-            super.toggleNoticeVisibility(success);
+            super.addNoticeMessage();
         });
 
         Region spacer = new Region();
