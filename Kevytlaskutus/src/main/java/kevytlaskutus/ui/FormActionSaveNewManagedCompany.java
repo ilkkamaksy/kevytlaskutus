@@ -23,8 +23,8 @@ public class FormActionSaveNewManagedCompany extends FormAction {
     }
     
     @Override
-    public void save() {
-        super.appService.createManagedCompany(this.company);
+    public boolean save() {
+        return super.appService.createManagedCompany(this.company);
     }
    
 }

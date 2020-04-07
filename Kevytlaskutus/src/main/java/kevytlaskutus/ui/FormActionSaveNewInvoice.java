@@ -21,6 +21,7 @@ import kevytlaskutus.domain.Invoice;
  * @author ilkka
  */
 public class FormActionSaveNewInvoice extends FormAction {
+    
     private Invoice invoice; 
     
     public FormActionSaveNewInvoice(AppService appService) {
@@ -33,86 +34,43 @@ public class FormActionSaveNewInvoice extends FormAction {
     }
     
     @Override
-    public void save() {
-        super.appService.createInvoice(this.invoice);
+    public boolean save() {
+        return super.appService.createInvoice(this.invoice);
     }
-    
+  
     protected void makeInvoiceFromFieldValues(HashMap<String, Node> formFields, int id) {
         
-        // Date
-        DatePicker createdDate = (DatePicker) formFields.get("Date");
-        
-        // Customer id
-        ComboBox customerDropDown = (ComboBox) formFields.get("Customer");
-        String customerName = customerDropDown.getValue().toString();
-        CustomerCompany customer = this.appService.getCustomerCompanyByName(customerName);
-        
-        // Invoice number
-        TextField invoiceNumberField = (TextField) formFields.get("Invoice Number");
-        int invoiceNumber = Integer.valueOf(invoiceNumberField.getText());
-        
-        // Payment terms
-        TextField paymentTermsField = (TextField) formFields.get("Payment due in number of days");
-        int paymentTerm = Integer.valueOf(paymentTermsField.getText());
-        
-        // Due Date
-        DatePicker dueDateField = (DatePicker) formFields.get("Due Date");
-
-        // Overdue interest 
-        TextField overDueInterestField = (TextField) formFields.get("Overdue Penalty Interest rate");
-        BigDecimal overDueInterest = new BigDecimal(overDueInterestField.getText());
-        
-        // Discount
-        TextField discountField = (TextField) formFields.get("Discount");
-        BigDecimal discount = new BigDecimal(discountField.getText());
-        
-        // Customer Contact Name
-        TextField customerContactField = (TextField) formFields.get("Customer Contact Name");
-        String customerContactName = customerContactField.getText();
-        
-        // Customer Reference
-        TextField customerReferenceField = (TextField) formFields.get("Customer Reference");
-        String customerReference = customerReferenceField.getText();
-
-        // Our Reference
-        TextField companyReferenceField = (TextField) formFields.get("Our Reference");
-        String companyReference = companyReferenceField.getText();
-        
-        // Delivery Terms
-        TextField deliveryTermsField = (TextField) formFields.get("Delivery Terms");
-        String deliveryTerms = deliveryTermsField.getText();
-        
-        // Delivery Date
-        DatePicker deliveryDateField = (DatePicker) formFields.get("Delivery Date");
-        
-        // Delivery Information
-        TextField deliveryInfoField = (TextField) formFields.get("Delivery Information");
-        String deliveryInfo = deliveryInfoField.getText();
-        
-        // Additional Information
-        TextField additionalInfoField = (TextField) formFields.get("Additional Information");
-        String additionalInfo = additionalInfoField.getText();
-
-        // Amount
-        TextField amountField = (TextField) formFields.get("Amount");
-        BigDecimal amount = new BigDecimal(amountField.getText());
-            
-        this.invoice = new Invoice(Date.valueOf(createdDate.getValue()));
+        this.invoice = new Invoice(super.dataExtractor.createDateFromDatePicker("Date", formFields));
         this.invoice.setId(id);
-        this.invoice.setInvoiceNumber(invoiceNumber);
-        this.invoice.setCustomerId(customer.getId());
-        this.invoice.setInvoiceNumber(invoiceNumber);
-        this.invoice.setPaymentTerm(paymentTerm);
-        this.invoice.setDueDate(Date.valueOf(dueDateField.getValue()));
-        this.invoice.setPenaltyInterest(overDueInterest);
-        this.invoice.setDiscount(discount);
-        this.invoice.setCustomerContactName(customerContactName);
-        this.invoice.setCustomerReference(customerReference);
-        this.invoice.setCompanyReference(companyReference);
-        this.invoice.setDeliveryTerms(deliveryTerms);
-        this.invoice.setDueDate(Date.valueOf(deliveryDateField.getValue()));
-        this.invoice.setDeliveryInfo(deliveryInfo);
-        this.invoice.setAdditionalInfo(additionalInfo);
-        this.invoice.setAmount(amount);
+        
+        String customerName = super.dataExtractor.getSelectedValueFromComboBox("Customer", formFields);
+        CustomerCompany customer = this.appService.getCustomerCompanyByName(customerName);
+        this.invoice.setCustomer(customer);
+        
+        this.invoice.setInvoiceNumber(super.dataExtractor.getIntFromTextField("Invoice Number", formFields));
+        this.invoice.setPaymentTerm(super.dataExtractor.getIntFromTextField("Payment due in number of days", formFields));
+        this.invoice.setDueDate(super.dataExtractor.createDateFromDatePicker("Due Date", formFields));
+        this.invoice.setCustomerContactName(super.dataExtractor.getValueFromTextField("Customer Contact Name", formFields));
+        this.invoice.setCustomerReference(super.dataExtractor.getValueFromTextField("Customer Reference", formFields));
+        this.invoice.setCompanyReference(super.dataExtractor.getValueFromTextField("Our Reference", formFields));
+        this.invoice.setDeliveryTerms(super.dataExtractor.getValueFromTextField("Delivery Terms", formFields));
+        this.invoice.setDeliveryDate(super.dataExtractor.createDateFromDatePicker("Delivery Date", formFields));
+        this.invoice.setDeliveryInfo(super.dataExtractor.getValueFromTextField("Delivery Information", formFields));
+        this.invoice.setAdditionalInfo(super.dataExtractor.getValueFromTextField("Additional Information", formFields));
+        
+        BigDecimal overDueInterest = super.dataExtractor.getBigDecimalFromTextField("Overdue Penalty Interest rate", formFields);
+        if (overDueInterest != null) {
+            this.invoice.setPenaltyInterest(overDueInterest);    
+        }
+        
+        BigDecimal discount = super.dataExtractor.getBigDecimalFromTextField("Discount", formFields);
+        if (discount != null) {
+            this.invoice.setDiscount(discount);
+        }
+        
+        BigDecimal amount = super.dataExtractor.getBigDecimalFromTextField("Amount", formFields);
+        if (amount != null) {
+            this.invoice.setAmount(amount);
+        }    
     }
 }

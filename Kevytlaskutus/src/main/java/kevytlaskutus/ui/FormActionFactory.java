@@ -29,7 +29,8 @@ public class FormActionFactory {
     public void execute(String actionType, HashMap<String, Node> formFields, int id) {        
         FormAction action = this.commands.get(actionType); 
         action.setData(formFields, id);
-        action.save();
+        boolean success = action.save();
+        System.out.println("success " + success);
     }
     
 }

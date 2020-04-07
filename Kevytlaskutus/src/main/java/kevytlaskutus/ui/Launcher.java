@@ -7,6 +7,7 @@ import kevytlaskutus.dao.InvoiceDaoImpl;
 import kevytlaskutus.dao.ManagedCompanyDao;
 import kevytlaskutus.dao.ProductDaoImpl;
 import kevytlaskutus.domain.AppService;
+import kevytlaskutus.domain.DatabaseUtils;
 
 public class Launcher extends Application {
     
@@ -22,7 +23,13 @@ public class Launcher extends Application {
         CustomerCompanyDao customerCompanyDao = new CustomerCompanyDao();
         ProductDaoImpl productDao = new ProductDaoImpl();
         InvoiceDaoImpl invoiceDao = new InvoiceDaoImpl();
-        this.appService = new AppService(managedCompanyDao, customerCompanyDao, productDao, invoiceDao);
+        
+        this.appService = new AppService(
+                managedCompanyDao, 
+                customerCompanyDao, 
+                productDao, 
+                invoiceDao
+        );
     }
     
     @Override

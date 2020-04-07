@@ -8,8 +8,9 @@ import java.sql.Date;
 public class Invoice {
 
     private int id; 
-    private int customerId;
-    private int companyId;
+    private CustomerCompany customer;
+    private ManagedCompany company;
+    
     private int invoiceNumber;
     private int referenceNumber;
     private Date createdDate;
@@ -49,6 +50,22 @@ public class Invoice {
         this.additionalInfo = "";
     }
 
+    public CustomerCompany getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(CustomerCompany customer) {
+        this.customer = customer;
+    }
+
+    public ManagedCompany getCompany() {
+        return company;
+    }
+
+    public void setCompany(ManagedCompany company) {
+        this.company = company;
+    }
+
     private Date calculateDueDate(Date createdDate) {
         return new Date(createdDate.getTime() + 24 * 60 * 60 * 1000);
     }
@@ -59,14 +76,6 @@ public class Invoice {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public int getCompanyId() {
-        return companyId;
-    }
-
-    public void setCompanyId(int companyId) {
-        this.companyId = companyId;
     }
 
     public int getInvoiceNumber() {
@@ -141,14 +150,6 @@ public class Invoice {
         this.amount = amount;
     }
 
-    public int getCustomerId() {
-        return customerId;
-    }
-
-    public void setCustomerId(int customerId) {
-        this.customerId = customerId;
-    }
-
     public String getCustomerContactName() {
         return customerContactName;
     }
@@ -207,6 +208,6 @@ public class Invoice {
 
     @Override
     public String toString() {
-        return this.id + " no:" + this.invoiceNumber + " cdate:" + this.createdDate + " duedate:" + this.dueDate + " refno:" + this.referenceNumber + " customerid:" + this.customerId;
+        return this.id + " no:" + this.invoiceNumber + " cdate:" + this.createdDate + " duedate:" + this.dueDate + " refno:" + this.referenceNumber + " customerid:" + this.customer;
     }
 }

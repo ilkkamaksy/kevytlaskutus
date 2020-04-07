@@ -18,30 +18,33 @@ import kevytlaskutus.dao.ProductDaoImpl;
  * Class responsible for application logic. 
  */
 public class AppService {
-
-    private ManagedCompanyDao managedCompanyDao;
-    private CustomerCompanyDao customerCompanyDao;
-    private ProductDaoImpl productDao;
-    private InvoiceDaoImpl invoiceDao;
+    
+    private ManagedCompanyService managedCompanyService; 
+    private CustomerCompanyService customerCompanyService;
+    private ProductService productService;
+    private InvoiceService invoiceService;
+    
+    private DatabaseUtils databaseUtils;
     
     private ManagedCompany currentManagedCompany;
     private CustomerCompany currentCustomerCompany;
     private Product currentProduct;
     private Invoice currentInvoice;
-    
-    private int startInvoiceNumbering = 1001;
-    
+
     public AppService(
             ManagedCompanyDao managedCompanyDao, 
             CustomerCompanyDao customerCompanyDao, 
             ProductDaoImpl productDao,
             InvoiceDaoImpl invoiceDao
     ) {
-        this.managedCompanyDao = managedCompanyDao;
-        this.customerCompanyDao = customerCompanyDao;
-        this.productDao = productDao;
-        this.invoiceDao = invoiceDao;
-        this.initDb();
+        this.databaseUtils = new DatabaseUtils(managedCompanyDao, customerCompanyDao, productDao, invoiceDao);
+        this.databaseUtils.initDb();
+        
+        this.managedCompanyService = new ManagedCompanyService(managedCompanyDao, databaseUtils);
+        this.customerCompanyService = new CustomerCompanyService(customerCompanyDao, databaseUtils);
+        this.productService = new ProductService(productDao, databaseUtils);
+        this.invoiceService = new InvoiceService(invoiceDao, databaseUtils);
+
         this.currentManagedCompany = new ManagedCompany();
         this.currentCustomerCompany = new CustomerCompany();
         this.currentProduct = new Product();
@@ -71,7 +74,7 @@ public class AppService {
     public void setCurrentInvoice(Invoice currentInvoice) {
         this.currentInvoice = currentInvoice;
     }
-    
+   
     public Product getCurrentProduct() {
         return currentProduct;
     }
@@ -81,328 +84,83 @@ public class AppService {
     }
   
     public boolean createManagedCompany(ManagedCompany company) {
-        
-        Boolean result = false;
-        
-        try {    
-            Connection conn = this.getConnection();
-            managedCompanyDao.setConnection(conn);
-            result = managedCompanyDao.create(company);
-        } catch (SQLException | ClassNotFoundException e) {
-            Logger.getLogger(AppService.class.getName()).log(Level.SEVERE, null, e);
-        }
-        
-        return result;
+        return this.managedCompanyService.createManagedCompany(company);
     }
     
     public Boolean updateManagedCompany(int id, ManagedCompany company) {
-        
-        Boolean result = false;
-        
-        try {    
-            Connection conn = this.getConnection();
-            managedCompanyDao.setConnection(conn);
-            result = managedCompanyDao.update(id, company);
-        } catch (SQLException | ClassNotFoundException e) {
-            Logger.getLogger(AppService.class.getName()).log(Level.SEVERE, null, e);
-        }
-        
-        return result;
+        return this.managedCompanyService.updateManagedCompany(id, company);
     }
     
     public Boolean deleteManagedCompany(int id) {
-        
-        Boolean result = false;
-        
-        try {    
-            Connection conn = this.getConnection();
-            managedCompanyDao.setConnection(conn);
-            result = managedCompanyDao.delete(id);
-        } catch (SQLException | ClassNotFoundException e) {
-            Logger.getLogger(AppService.class.getName()).log(Level.SEVERE, null, e);
-        }
-        
-        return result;
+        return this.managedCompanyService.deleteManagedCompany(id);
     }
     
     public ManagedCompany getManagedCompany(int id) {
-        
-        ManagedCompany result = null;
-        
-        try {
-            Connection conn = this.getConnection();
-            managedCompanyDao.setConnection(conn);
-            result = managedCompanyDao.getItemById(id);
-        } catch (SQLException | ClassNotFoundException e) {
-            Logger.getLogger(AppService.class.getName()).log(Level.SEVERE, null, e);
-        }
-        
-        return result;
+        return this.managedCompanyService.getManagedCompany(id);
     }
     
     public List<ManagedCompany> getManagedCompanies() {
-        
-        List<ManagedCompany> results = new ArrayList<>();
-        
-        try {
-            Connection conn = this.getConnection();
-            managedCompanyDao.setConnection(conn);
-            results = managedCompanyDao.getItems();
-        } catch (SQLException | ClassNotFoundException e) {
-            Logger.getLogger(AppService.class.getName()).log(Level.SEVERE, null, e);
-        }
-        
-        return results;
+        return this.managedCompanyService.getManagedCompanies();
     }
     
     public boolean createCustomerCompany(CustomerCompany company) {
-        
-        Boolean result = false;
-        
-        try {    
-            Connection conn = this.getConnection();
-            customerCompanyDao.setConnection(conn);
-            result = customerCompanyDao.create(company);
-        } catch (SQLException | ClassNotFoundException e) {
-            Logger.getLogger(AppService.class.getName()).log(Level.SEVERE, null, e);
-        }
-        
-        return result;
+        return this.customerCompanyService.createCustomerCompany(company);
     }
     
     public Boolean updateCustomerCompany(int id, CustomerCompany company) {
-        
-        Boolean result = false;
-        
-        try {    
-            Connection conn = this.getConnection();
-            customerCompanyDao.setConnection(conn);
-            result = customerCompanyDao.update(id, company);
-        } catch (SQLException | ClassNotFoundException e) {
-            Logger.getLogger(AppService.class.getName()).log(Level.SEVERE, null, e);
-        }
-        
-        return result;
+        return this.customerCompanyService.updateCustomerCompany(id, company);
     }
   
     public Boolean deleteCustomerCompany(int id) {
-        
-        Boolean result = false;
-        
-        try {    
-            Connection conn = this.getConnection();
-            customerCompanyDao.setConnection(conn);
-            result = customerCompanyDao.delete(id);
-        } catch (SQLException | ClassNotFoundException e) {
-            Logger.getLogger(AppService.class.getName()).log(Level.SEVERE, null, e);
-        }
-        
-        return result;
+        return this.customerCompanyService.deleteCustomerCompany(id);
     }
     
     public List<CustomerCompany> getCustomerCompanies() {
-        
-        List<CustomerCompany> results = new ArrayList<>();
-        
-        try {
-            Connection conn = this.getConnection();
-            customerCompanyDao.setConnection(conn);
-            results = customerCompanyDao.getItems();
-        } catch (SQLException | ClassNotFoundException e) {
-            Logger.getLogger(AppService.class.getName()).log(Level.SEVERE, null, e);
-        }
-        
-        return results;
+        return this.customerCompanyService.getCustomerCompanies();
     }
     
     public CustomerCompany getCustomerCompanyByName(String name) {
-        
-        CustomerCompany result = null;
-        
-        try {
-            Connection conn = this.getConnection();
-            customerCompanyDao.setConnection(conn);
-            result = customerCompanyDao.getItemByName(name);
-        } catch (SQLException | ClassNotFoundException e) {
-            Logger.getLogger(AppService.class.getName()).log(Level.SEVERE, null, e);
-        }
-        
-        return result;
+        return this.customerCompanyService.getCustomerCompanyByName(name);
     }
     
     public boolean createProduct(Product product) {
-        
-        Boolean result = false;
-        
-        try {    
-            Connection conn = this.getConnection();
-            productDao.setConnection(conn);
-            result = productDao.create(product);
-        } catch (SQLException | ClassNotFoundException e) {
-            Logger.getLogger(AppService.class.getName()).log(Level.SEVERE, null, e);
-        }
-        
-        return result;
+        return this.productService.createProduct(product);
     }
     
     public Boolean updateProduct(int id, Product product) {
-        
-        Boolean result = false;
-        
-        try {    
-            Connection conn = this.getConnection();
-            productDao.setConnection(conn);
-            result = productDao.update(id, product);
-        } catch (SQLException | ClassNotFoundException e) {
-            Logger.getLogger(AppService.class.getName()).log(Level.SEVERE, null, e);
-        }
-        
-        return result;
+        return this.productService.updateProduct(id, product);
     }
     
     public Boolean deleteProduct(int id) {
-        
-        Boolean result = false;
-        
-        try {    
-            Connection conn = this.getConnection();
-            productDao.setConnection(conn);
-            result = productDao.delete(id);
-        } catch (SQLException | ClassNotFoundException e) {
-            Logger.getLogger(AppService.class.getName()).log(Level.SEVERE, null, e);
-        }
-        
-        return result;
+        return this.productService.deleteProduct(id);
     }
     
     public Product getProduct(int id) {
-        
-        Product result = null;
-        
-        try {
-            Connection conn = this.getConnection();
-            productDao.setConnection(conn);
-            result = productDao.getItemById(id);
-        } catch (SQLException | ClassNotFoundException e) {
-            Logger.getLogger(AppService.class.getName()).log(Level.SEVERE, null, e);
-        }
-        
-        return result;
+        return this.productService.getProduct(id);
     }
     
     public List<Product> getProducts() {
-        
-        List<Product> results = new ArrayList<>();
-        
-        try {
-            Connection conn = this.getConnection();
-            productDao.setConnection(conn);
-            results = productDao.getItems();
-        } catch (SQLException | ClassNotFoundException e) {
-            Logger.getLogger(AppService.class.getName()).log(Level.SEVERE, null, e);
-        }
-        
-        return results;
+        return this.productService.getProducts();
     }
     
     public int getDefaultInvoiceNumber() {
-
-        try {
-            Connection conn = this.getConnection();
-            invoiceDao.setConnection(conn);
-            this.startInvoiceNumbering += invoiceDao.getInvoiceCount();
-            
-        } catch (SQLException | ClassNotFoundException e) {
-            Logger.getLogger(AppService.class.getName()).log(Level.SEVERE, null, e);
-        }
-        
-        return startInvoiceNumbering;
+        return this.invoiceService.getDefaultInvoiceNumber();
     }
     
     public boolean createInvoice(Invoice invoice) {
-        
-        Boolean result = false;
-
-        try {    
-            Connection conn = this.getConnection();
-            invoiceDao.setConnection(conn);
-            invoice.setCompanyId(this.currentManagedCompany.getId());
-            result = invoiceDao.create(invoice);
-        } catch (SQLException | ClassNotFoundException e) {
-            Logger.getLogger(AppService.class.getName()).log(Level.SEVERE, null, e);
-        }
-        
-        return result;
+        return this.invoiceService.createInvoiceForCompany(invoice, currentManagedCompany);
     }
     
     public Boolean updateInvoice(int id, Invoice invoice) {
-        
-        Boolean result = false;
-        
-        try {    
-            Connection conn = this.getConnection();
-            invoiceDao.setConnection(conn);
-            result = invoiceDao.update(id, invoice);
-        } catch (SQLException | ClassNotFoundException e) {
-            Logger.getLogger(AppService.class.getName()).log(Level.SEVERE, null, e);
-        }
-        
-        return result;
+        return this.invoiceService.updateInvoice(id, invoice);
     }
   
     public Boolean deleteInvoice(int id) {
-        
-        Boolean result = false;
-        
-        try {    
-            Connection conn = this.getConnection();
-            invoiceDao.setConnection(conn);
-            result = invoiceDao.delete(id);
-        } catch (SQLException | ClassNotFoundException e) {
-            Logger.getLogger(AppService.class.getName()).log(Level.SEVERE, null, e);
-        }
-        
-        return result;
+        return this.invoiceService.deleteInvoice(id);
     }
     
     public List<Invoice> getInvoices() {
-        
-        List<Invoice> results = new ArrayList<>();
-        
-        try {
-            Connection conn = this.getConnection();
-            invoiceDao.setConnection(conn);
-            results = invoiceDao.getItems(this.currentManagedCompany.getId());
-        } catch (SQLException | ClassNotFoundException e) {
-            Logger.getLogger(AppService.class.getName()).log(Level.SEVERE, null, e);
-        }
-        
-        return results;
+        return this.invoiceService.getInvoicesForCompany(this.currentManagedCompany.getId());
     }
-    
-    private void initDb() {
-        
-        try {
-            Connection conn = this.getConnection();
-            managedCompanyDao.setConnection(conn);
-            customerCompanyDao.setConnection(conn);
-            productDao.setConnection(conn);
-            invoiceDao.setConnection(conn);
-            
-            managedCompanyDao.initDb();
-            customerCompanyDao.initDb();
-            productDao.initDb();
-            invoiceDao.initDb();
-            
-            conn.close();
-            
-        } catch (SQLException | ClassNotFoundException e) {
-            Logger.getLogger(AppService.class.getName()).log(Level.SEVERE, null, e);
-        }
-    }
-    
-    private Connection getConnection() throws ClassNotFoundException, SQLException {     
-        Class.forName("org.h2.Driver");
-        return DriverManager.getConnection("jdbc:h2:file:./database/kevytlaskutusdb", "sa", "");
-    }
+   
 }

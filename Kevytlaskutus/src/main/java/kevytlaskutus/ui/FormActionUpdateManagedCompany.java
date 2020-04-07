@@ -20,8 +20,8 @@ public class FormActionUpdateManagedCompany extends FormAction {
     }
         
     @Override
-    public void save() {    
-        super.appService.updateManagedCompany(this.company.getId(), this.company);
+    public boolean save() {    
+        return super.appService.updateManagedCompany(this.company.getId(), this.company);
     }
     
 }

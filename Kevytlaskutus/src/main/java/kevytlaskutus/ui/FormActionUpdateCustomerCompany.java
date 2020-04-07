@@ -20,8 +20,8 @@ public class FormActionUpdateCustomerCompany extends FormAction {
     }
     
     @Override
-    public void save() {
-        super.appService.updateCustomerCompany(company.getId(), this.company);
+    public boolean save() {
+        return super.appService.updateCustomerCompany(company.getId(), this.company);
     }
 
 }

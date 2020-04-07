@@ -24,7 +24,7 @@ public class FormActionSaveNewProduct extends FormAction {
     }
     
     @Override
-    public void save() {
-        super.appService.createProduct(this.product);
+    public boolean save() {
+        return super.appService.createProduct(this.product);
     }
 }

@@ -49,8 +49,6 @@ public class EditInvoiceController extends BaseController implements Initializab
    
     public void setupForm() {
       
-        
-        
         if (currentInvoice.getId() == 0) {
             this.form.addDatePicker("Date");
             this.form.addTextField("Invoice Number", "" + defaultInvoiceNumber);
@@ -80,7 +78,7 @@ public class EditInvoiceController extends BaseController implements Initializab
             this.form.addTextField("Overdue Penalty Interest rate", "" + currentInvoice.getPenaltyInterest());
             this.form.addTextField("Discount", "" + currentInvoice.getDiscount());
             this.form.addTextField("Discount Date", "" + currentInvoice.getDiscountDate());
-            this.form.addTextField("Customer Id", "" + currentInvoice.getCustomerId());
+            // this.form.addTextField("Customer", "" + currentInvoice.getCustomerId());
             this.form.addTextField("Customer Contact Name", "" + currentInvoice.getCustomerContactName());
             this.form.addTextField("Customer Reference", "" + currentInvoice.getCustomerReference());
             this.form.addTextField("Our Reference", "" + currentInvoice.getCompanyReference());

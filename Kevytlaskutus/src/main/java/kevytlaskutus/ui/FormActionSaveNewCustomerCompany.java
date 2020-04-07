@@ -23,8 +23,8 @@ public class FormActionSaveNewCustomerCompany extends FormAction {
     }
     
     @Override
-    public void save() {
-        super.appService.createCustomerCompany(this.company);
+    public boolean save() {
+        return super.appService.createCustomerCompany(this.company);
     }
 
 }

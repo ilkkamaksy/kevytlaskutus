@@ -14,8 +14,6 @@ public abstract class Company {
     private String commune;
     private String ovtId;
     private String provider;
-    private String iban;
-    private String bic;
     
     public Company() {
         this("", "", "", "", "", "", "", "");

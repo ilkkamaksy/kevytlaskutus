@@ -19,6 +19,7 @@ import kevytlaskutus.domain.Product;
 public abstract class FormAction {
     
     AppService appService;
+    FormFieldDataExtractor dataExtractor = new FormFieldDataExtractor();
     
     public FormAction(
             AppService appService
@@ -28,59 +29,39 @@ public abstract class FormAction {
     
     public abstract void setData(HashMap<String, Node> formFields, int id);
     
-    public abstract void save();
+    public abstract boolean save();
     
     protected ManagedCompany makeManagedCompanyFromFieldValues(HashMap<String, Node> formFields, int id) {
-    
-        TextField name = (TextField) formFields.get("Name");
-        TextField registerId = (TextField) formFields.get("Register Id");
-        TextField phone = (TextField) formFields.get("Phone");
-        TextField streetAddress = (TextField) formFields.get("Street address");
-        TextField postcode = (TextField) formFields.get("Postcode");
-        TextField city = (TextField) formFields.get("Commune/City");
-        TextField ovt = (TextField) formFields.get("OVT");
-        TextField provider = (TextField) formFields.get("Provider");
-        TextField bic = (TextField) formFields.get("BIC");
-        TextField iban = (TextField) formFields.get("IBAN");
-        
+
         ManagedCompany result = new ManagedCompany(
-            name.getText(), 
-            registerId.getText(),
-            phone.getText(),
-            streetAddress.getText(),
-            postcode.getText(),
-            city.getText(),
-            ovt.getText(),
-            provider.getText()
+            this.dataExtractor.getValueFromTextField("Name", formFields), 
+            this.dataExtractor.getValueFromTextField("Register Id", formFields),
+            this.dataExtractor.getValueFromTextField("Phone", formFields),
+            this.dataExtractor.getValueFromTextField("Street address", formFields),
+            this.dataExtractor.getValueFromTextField("Postcode", formFields),
+            this.dataExtractor.getValueFromTextField("Commune/City", formFields),
+            this.dataExtractor.getValueFromTextField("OVT", formFields),
+            this.dataExtractor.getValueFromTextField("Provider", formFields)
         );
         
-        result.setBic(bic.getText());
-        result.setIban(iban.getText());
+        result.setBic(this.dataExtractor.getValueFromTextField("BIC", formFields));
+        result.setIban(this.dataExtractor.getValueFromTextField("IBAN", formFields));
         result.setId(id);
        
         return result;
     }
     
     protected CustomerCompany makeCustomerCompanyFromFieldValues(HashMap<String, Node> formFields, int id) {
-    
-        TextField name = (TextField) formFields.get("Name");
-        TextField registerId = (TextField) formFields.get("Register Id");
-        TextField phone = (TextField) formFields.get("Phone");
-        TextField streetAddress = (TextField) formFields.get("Street address");
-        TextField postcode = (TextField) formFields.get("Postcode");
-        TextField city = (TextField) formFields.get("Commune/City");
-        TextField ovt = (TextField) formFields.get("OVT");
-        TextField provider = (TextField) formFields.get("Provider");
-        
+
         CustomerCompany result = new CustomerCompany(
-            name.getText(), 
-            registerId.getText(),
-            phone.getText(),
-            streetAddress.getText(),
-            postcode.getText(),
-            city.getText(),
-            ovt.getText(),
-            provider.getText()
+            this.dataExtractor.getValueFromTextField("Name", formFields), 
+            this.dataExtractor.getValueFromTextField("Register Id", formFields),
+            this.dataExtractor.getValueFromTextField("Phone", formFields),
+            this.dataExtractor.getValueFromTextField("Street address", formFields),
+            this.dataExtractor.getValueFromTextField("Postcode", formFields),
+            this.dataExtractor.getValueFromTextField("Commune/City", formFields),
+            this.dataExtractor.getValueFromTextField("OVT", formFields),
+            this.dataExtractor.getValueFromTextField("Provider", formFields)
         );
         
         result.setId(id);
@@ -89,22 +70,17 @@ public abstract class FormAction {
     }
     
     protected Product makeProductFromFieldValues(HashMap<String, Node> formFields, int id) {
-    
-        TextField name = (TextField) formFields.get("Name");
-        TextField price = (TextField) formFields.get("Price");
-        TextField priceUnit = (TextField) formFields.get("Price Unit");
-        TextField description = (TextField) formFields.get("Description");
-                
+
         Product result = new Product(
-            name.getText(), 
-            price.getText(),
-            priceUnit.getText(),
-            description.getText()
+            this.dataExtractor.getValueFromTextField("Name", formFields),
+            this.dataExtractor.getValueFromTextField("Price", formFields),
+            this.dataExtractor.getValueFromTextField("Price Unit", formFields),
+            this.dataExtractor.getValueFromTextField("Description", formFields)
         );
         
         result.setId(id);
        
         return result;
     }
-    
+
 }
