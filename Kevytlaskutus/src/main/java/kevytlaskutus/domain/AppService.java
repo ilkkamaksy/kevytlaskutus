@@ -30,7 +30,8 @@ public class AppService {
     private Product currentProduct;
     private Invoice currentInvoice;
     
-    private Notice notice;
+    private NoticeMessages noticeMessages = new NoticeMessages();
+    private NoticeQueue noticeQueue;
     
     public AppService(
             ManagedCompanyDao managedCompanyDao, 
@@ -49,7 +50,7 @@ public class AppService {
         this.currentCustomerCompany = new CustomerCompany();
         this.currentProduct = new Product();
         this.currentInvoice = new Invoice();
-        this.notice = new Notice();
+        this.noticeQueue = new NoticeQueue();
     }
     
     public void setCurrentManagedCompany(ManagedCompany company) {
@@ -84,22 +85,21 @@ public class AppService {
         this.currentProduct = currentProduct;
     }
 
-    
     public boolean createManagedCompany(ManagedCompany company) {
         boolean result = this.managedCompanyService.createManagedCompany(company);
-        this.setupNoticeForPreviousAction("createManagedCompany" + result);
+        this.addNoticeToQueue(result, "create" + company.getClass().getSimpleName());
         return result;
     }
-   
+  
     public Boolean updateManagedCompany(int id, ManagedCompany company) {
         boolean result = this.managedCompanyService.updateManagedCompany(id, company);
-        this.setupNoticeForPreviousAction("updateManagedCompany" + result);
+        this.addNoticeToQueue(result, "update" + company.getClass().getSimpleName());
         return result;
     }
     
     public Boolean deleteManagedCompany(int id) {
         boolean result = this.managedCompanyService.deleteManagedCompany(id);
-        this.setupNoticeForPreviousAction("deleteManagedCompany" + result);
+        this.addNoticeToQueue(result, "delete");
         return result;
     }
     
@@ -113,19 +113,19 @@ public class AppService {
     
     public boolean createCustomerCompany(CustomerCompany company) {
         boolean result = this.customerCompanyService.createCustomerCompany(company);
-        this.setupNoticeForPreviousAction("createCustomerCompany" + result);
+        this.addNoticeToQueue(result, "create" + company.getClass().getSimpleName());
         return result;
     }
     
     public Boolean updateCustomerCompany(int id, CustomerCompany company) {
         boolean result = this.customerCompanyService.updateCustomerCompany(id, company);
-        this.setupNoticeForPreviousAction("updateCustomerCompany" + result);
+        this.addNoticeToQueue(result, "update" + company.getClass().getSimpleName());
         return result;
     }
   
     public Boolean deleteCustomerCompany(int id) {
         boolean result = this.customerCompanyService.deleteCustomerCompany(id);
-        this.setupNoticeForPreviousAction("deleteCustomerCompany" + result);
+        this.addNoticeToQueue(result, "delete");
         return result;
     }
     
@@ -139,19 +139,19 @@ public class AppService {
     
     public boolean createProduct(Product product) {
         boolean result = this.productService.createProduct(product);
-        this.setupNoticeForPreviousAction("createProduct" + result);
+        this.addNoticeToQueue(result, "create" + product.getClass().getSimpleName());
         return result;
     }
     
     public Boolean updateProduct(int id, Product product) {
         boolean result = this.productService.updateProduct(id, product);
-        this.setupNoticeForPreviousAction("updateProduct" + result);
+        this.addNoticeToQueue(result, "update" + product.getClass().getSimpleName());
         return result;
     }
     
     public Boolean deleteProduct(int id) {
         boolean result = this.productService.deleteProduct(id);
-        this.setupNoticeForPreviousAction("deleteProduct" + result);
+        this.addNoticeToQueue(result, "delete");
         return result;
     }
     
@@ -169,19 +169,19 @@ public class AppService {
     
     public boolean createInvoice(Invoice invoice) {
         boolean result = this.invoiceService.createInvoiceForCompany(invoice, currentManagedCompany);
-        this.setupNoticeForPreviousAction("createInvoice" + result);
+        this.addNoticeToQueue(result, "create" + invoice.getClass().getSimpleName());
         return result;
     }
     
     public Boolean updateInvoice(int id, Invoice invoice) {
         boolean result = this.invoiceService.updateInvoice(id, invoice, currentManagedCompany);
-        this.setupNoticeForPreviousAction("updateInvoice" + result);
+        this.addNoticeToQueue(result, "update" + invoice.getClass().getSimpleName());
         return result;
     }
   
     public Boolean deleteInvoice(int id) {
         boolean result = this.invoiceService.deleteInvoice(id);
-        this.setupNoticeForPreviousAction("deleteInvoice" + result);
+        this.addNoticeToQueue(result, "delete");
         return result;
     }
     
@@ -192,19 +192,22 @@ public class AppService {
     public Invoice getInvoiceById(int id) {
         return this.invoiceService.getInvoiceById(id);
     }
-    
-    private void setupNoticeForPreviousAction(String action) {
-        this.notice.setActive();
-        this.notice.setActionType(action);
-    }
-    
-    public boolean isNoticePending() {
-        return this.notice.isIsactive();
+   
+    public boolean hasNoticePending() {
+        return this.noticeQueue.hasPendingNotice();
     }
    
-    public String getPendingNotice() {
-        String message = this.notice.getNoticeMessage();
-        this.notice.disable();
-        return message;
+    public Notice getPendingNotice() {
+        return this.noticeQueue.getPendingNotice();
+    }
+    
+    private void addNoticeToQueue(boolean success, String eventType) {
+        Notice notice = null;
+        if (success) {
+            notice = new NoticeSuccess(noticeMessages.getNoticeMessage(eventType));
+        } else {
+            notice = new NoticeError(noticeMessages.getNoticeMessage(eventType));
+        }
+        this.noticeQueue.addNotice(notice);
     }
 }

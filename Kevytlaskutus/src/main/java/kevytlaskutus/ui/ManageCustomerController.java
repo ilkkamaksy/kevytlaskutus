@@ -42,9 +42,9 @@ public class ManageCustomerController extends BaseController implements Initiali
    
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
-        super.setupNotice();
-        super.noticePane.getChildren().add(super.notice);
-        super.addNoticeMessage();
+        super.primaryNotice.setupNotice();
+        super.noticePane.getChildren().add(super.primaryNotice.notice);
+        super.primaryNotice.showPendingNoticeMessage();
         this.setupCustomerListView();
     }
     
@@ -87,7 +87,7 @@ public class ManageCustomerController extends BaseController implements Initiali
         Button deleteButton = new Button("Delete");
         deleteButton.setOnAction(e-> {
             this.appService.deleteCustomerCompany(company.getId());
-            super.addNoticeMessage();
+            super.primaryNotice.showPendingNoticeMessage();
             this.setupCustomerListView();
         });
 

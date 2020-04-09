@@ -38,8 +38,8 @@ public class EditProductController extends BaseController implements Initializab
         
         this.setActionType();
         
-        super.setupNotice();
-        super.noticePane.getChildren().add(super.notice);
+        super.primaryNotice.setupNotice();
+        super.noticePane.getChildren().add(super.primaryNotice.notice);
         
         this.actionFactory = new FormActionFactory(this.appService);
         this.setupForm();

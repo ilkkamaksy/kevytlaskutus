@@ -37,8 +37,8 @@ public class EditCustomerController extends BaseController implements Initializa
         this.currentCompany = this.appService.getCurrentCustomerCompany();
         this.setActionType();
         
-        super.setupNotice();
-        super.noticePane.getChildren().add(super.notice);
+        super.primaryNotice.setupNotice();
+        super.noticePane.getChildren().add(super.primaryNotice.notice);
         
         this.actionFactory = new FormActionFactory(this.appService);
         this.setupForm();

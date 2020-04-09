@@ -32,9 +32,9 @@ public class ManageInvoicesController extends BaseController implements Initiali
    
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
-        super.setupNotice();
-        super.noticePane.getChildren().add(super.notice);
-        super.addNoticeMessage();
+        super.primaryNotice.setupNotice();
+        super.noticePane.getChildren().add(super.primaryNotice.notice);
+        super.primaryNotice.showPendingNoticeMessage();
         this.setupInvoiceListView();
     }
     
@@ -78,7 +78,7 @@ public class ManageInvoicesController extends BaseController implements Initiali
         deleteButton.setOnAction(e-> {
             this.appService.deleteInvoice(invoice.getId());
             this.setupInvoiceListView();
-            super.addNoticeMessage();
+            super.primaryNotice.showPendingNoticeMessage();
         });
 
         Region spacer = new Region();

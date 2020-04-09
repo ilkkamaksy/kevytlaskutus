@@ -32,9 +32,9 @@ public class ManageProductsController extends BaseController implements Initiali
    
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
-        super.setupNotice();
-        super.noticePane.getChildren().add(super.notice);
-        super.addNoticeMessage();
+        super.primaryNotice.setupNotice();
+        super.noticePane.getChildren().add(super.primaryNotice.notice);
+        super.primaryNotice.showPendingNoticeMessage();
         this.setupProductListView();
     }
     
@@ -78,7 +78,7 @@ public class ManageProductsController extends BaseController implements Initiali
         deleteButton.setOnAction(e-> {
             boolean success = this.appService.deleteProduct(product.getId());
             this.setupProductListView();
-            super.addNoticeMessage();
+            super.primaryNotice.showPendingNoticeMessage();
         });
 
         Region spacer = new Region();

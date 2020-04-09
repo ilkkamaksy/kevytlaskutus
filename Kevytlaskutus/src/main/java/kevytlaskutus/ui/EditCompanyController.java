@@ -46,8 +46,8 @@ public class EditCompanyController extends BaseController implements Initializab
         this.currentCompany = this.appService.getCurrentManagedCompany();
         this.setActionType();
         
-        super.setupNotice();
-        super.noticePane.getChildren().add(super.notice);
+        super.primaryNotice.setupNotice();
+        super.noticePane.getChildren().add(super.primaryNotice.notice);
        
         this.setupForm();
         this.setButtonAction();

@@ -37,9 +37,9 @@ public class DashboardController extends BaseController implements Initializable
 
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
-        super.setupNotice();
-        super.noticePane.getChildren().add(super.notice);
-        super.addNoticeMessage();
+        super.primaryNotice.setupNotice();
+        super.noticePane.getChildren().add(super.primaryNotice.notice);
+        super.primaryNotice.showPendingNoticeMessage();
         this.setupManagedCompanyListView();
     }
     
@@ -88,7 +88,7 @@ public class DashboardController extends BaseController implements Initializable
         deleteButton.setOnAction(e-> {
             this.appService.deleteManagedCompany(company.getId());
             this.setupManagedCompanyListView();
-            super.addNoticeMessage();
+            super.primaryNotice.showPendingNoticeMessage();
         });
 
         Region spacer = new Region();
