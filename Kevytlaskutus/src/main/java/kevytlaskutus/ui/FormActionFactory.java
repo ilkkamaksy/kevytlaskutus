@@ -24,6 +24,7 @@ public class FormActionFactory {
         this.commands.put("NewProduct", new FormActionSaveNewProduct(appService));
         this.commands.put("UpdateProduct", new FormActionUpdateProduct(appService));
         this.commands.put("NewInvoice", new FormActionSaveNewInvoice(appService));
+        this.commands.put("UpdateInvoice", new FormActionUpdateInvoice(appService));
     }
     
     public boolean execute(String actionType, HashMap<String, Node> formFields, int id) {        

@@ -14,6 +14,7 @@ import kevytlaskutus.domain.ManagedCompany;
 public class InvoiceDaoImpl implements InvoiceDao<Invoice, Integer, String>  {
     
     Connection conn;
+    static Populate populate;
     
     public void setConnection(Connection conn) {
         this.conn = conn;
@@ -49,7 +50,8 @@ public class InvoiceDaoImpl implements InvoiceDao<Invoice, Integer, String>  {
     public boolean create(Invoice invoice) throws SQLException {
    
         PreparedStatement stmt = conn.prepareStatement(
-            "INSERT INTO Invoice (invoiceNumber, \n"
+            "INSERT INTO Invoice ("
+            + "invoiceNumber, \n"
             + "referenceNumber, \n"
             + "createdDate, \n"
             + "paymentTerm, \n" 
@@ -70,7 +72,7 @@ public class InvoiceDaoImpl implements InvoiceDao<Invoice, Integer, String>  {
             + ") "
             + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
         );
-        stmt = this.setupInvoiceData(stmt, invoice);
+        populate.populateCreateStatementData(stmt, invoice);
         int rows = stmt.executeUpdate();  
         conn.close();
 
@@ -89,9 +91,9 @@ public class InvoiceDaoImpl implements InvoiceDao<Invoice, Integer, String>  {
 
         Invoice invoice = null;
         while (rs.next()) {
-            invoice = this.createInvoice(rs);
-            invoice.setCustomer(this.createCustomer(rs));
-            invoice.setCompany(this.createManagedCompany(rs));
+            invoice = populate.populateInvoice(rs);
+            invoice.setCustomer(populate.populateCustomer(rs));
+            invoice.setCompany(populate.populateManagedCompany(rs));
         }
 
         conn.close();
@@ -101,31 +103,33 @@ public class InvoiceDaoImpl implements InvoiceDao<Invoice, Integer, String>  {
     @Override
     public boolean update(int id, Invoice invoice) throws SQLException {
         PreparedStatement stmt = conn.prepareStatement(
-            "UPDATE Invoice SET invoiceNumber=?, "
+            "UPDATE Invoice SET "
+                + "invoiceNumber=?, "
                 + "referenceNumber=?, "
                 + "createdDate=?, "
-                + "paymentTerm=?, "
+                + "paymentTerm=?, " 
                 + "dueDate=?, "
                 + "discount=?, "
                 + "discountDate=?, "
                 + "penaltyInterest=?, "
                 + "amount=?, "
-                + "customerId=? "
-                + "customerContactName=? "
-                + "customerReference=? "
-                + "companyReference=? "
-                + "deliveryTerms=? "
-                + "deliveryDate=? "
-                + "deliveryInfo=? "
-                + "additionalInfo=? "
+                + "customerId=?, "
+                + "customerContactName=?, "
+                + "customerReference=?, "
+                + "companyReference=?, "
+                + "deliveryTerms=?, "
+                + "deliveryDate=?, "
+                + "deliveryInfo=?, "
+                + "additionalInfo=?, "
+                + "companyId=? "
                 + "WHERE id=?");
-        stmt = this.setupInvoiceData(stmt, invoice);
+        populate.populateUpdateStatementData(stmt, invoice);
         int rows = stmt.executeUpdate();  
         
         conn.close();
         return rows > 0;
     }
-
+    
     @Override
     public boolean delete(Integer id) throws SQLException {
         PreparedStatement stmt = conn.prepareStatement("DELETE FROM Invoice WHERE id=?");
@@ -145,7 +149,7 @@ public class InvoiceDaoImpl implements InvoiceDao<Invoice, Integer, String>  {
 
         List<Invoice> results = new ArrayList<>(); 
         while (rs.next()) {
-            Invoice invoice = this.createInvoice(rs);
+            Invoice invoice = populate.populateInvoice(rs);
             results.add(invoice);
         }
 
@@ -161,81 +165,5 @@ public class InvoiceDaoImpl implements InvoiceDao<Invoice, Integer, String>  {
         int count = rs.getInt(1);
         conn.close();
         return count;
-    }
-
-    private PreparedStatement setupInvoiceData(PreparedStatement stmt, Invoice invoice) throws SQLException {
-        stmt.setInt(1, invoice.getInvoiceNumber());
-        stmt.setInt(2, invoice.getReferenceNumber());
-        stmt.setDate(3, invoice.getCreatedDate());
-        stmt.setInt(4, invoice.getPaymentTerm());
-        stmt.setDate(5, invoice.getDueDate());
-        stmt.setBigDecimal(6, invoice.getDiscount());
-        stmt.setDate(7, invoice.getDiscountDate());
-        stmt.setBigDecimal(8, invoice.getPenaltyInterest());
-        stmt.setBigDecimal(9, invoice.getAmount());
-        stmt.setInt(10, invoice.getCustomer().getId());
-        stmt.setString(11, invoice.getCustomerContactName());
-        stmt.setString(12, invoice.getCustomerReference());
-        stmt.setString(13, invoice.getCompanyReference());
-        stmt.setString(14, invoice.getDeliveryTerms());
-        stmt.setDate(15, invoice.getDeliveryDate());
-        stmt.setString(16, invoice.getDeliveryInfo());
-        stmt.setString(17, invoice.getAdditionalInfo());
-        stmt.setInt(18, invoice.getCompany().getId());
-        return stmt;
-    }
-    
-    private Invoice createInvoice(ResultSet rs) throws SQLException {
-        Invoice invoice = new Invoice(rs.getDate("createdDate"));        
-        invoice.setId(rs.getInt("Invoice.id"));
-        invoice.setInvoiceNumber(rs.getInt("invoiceNumber"));
-        invoice.setReferenceNumber(rs.getInt("referenceNumber"));
-        invoice.setCreatedDate(rs.getDate("createdDate"));
-        invoice.setPaymentTerm(rs.getInt("paymentTerm"));
-        invoice.setDueDate(rs.getDate("dueDate"));
-        invoice.setDiscount(rs.getBigDecimal("discount"));
-        invoice.setDiscountDate(rs.getDate("discountDate"));
-        invoice.setPenaltyInterest(rs.getBigDecimal("penaltyInterest"));
-        invoice.setAmount(rs.getBigDecimal("amount"));
-        invoice.setCustomerContactName(rs.getString("customerContactName"));
-        invoice.setCustomerReference(rs.getString("customerReference"));
-        invoice.setCompanyReference(rs.getString("companyReference"));
-        invoice.setDeliveryTerms(rs.getString("deliveryTerms"));
-        invoice.setDeliveryDate(rs.getDate("deliveryDate"));
-        invoice.setDeliveryInfo(rs.getString("deliveryInfo"));
-        invoice.setAdditionalInfo(rs.getString("additionalInfo"));
-        return invoice;
-    }
-    
-    private CustomerCompany createCustomer(ResultSet rs) throws SQLException {
-        CustomerCompany customer = new CustomerCompany(
-            rs.getString("Customer.name"),
-            rs.getString("Customer.regId"), 
-            rs.getString("Customer.phone"), 
-            rs.getString("Customer.street"), 
-            rs.getString("Customer.postcode"),
-            rs.getString("Customer.commune"),
-            rs.getString("Customer.ovtId"),
-            rs.getString("Customer.provider")
-        );
-        customer.setId(rs.getInt("Customer.id"));
-        return customer;
-    }
-    
-    private ManagedCompany createManagedCompany(ResultSet rs) throws SQLException {
-        ManagedCompany company = new ManagedCompany(
-            rs.getString("Company.name"), 
-            rs.getString("Company.regId"), 
-            rs.getString("Company.phone"), 
-            rs.getString("Company.street"), 
-            rs.getString("Company.postcode"),
-            rs.getString("Company.commune"),
-            rs.getString("Company.ovtId"),
-            rs.getString("Company.provider")
-        );
-        company.setId(rs.getInt("Company.id"));
-        company.setIban(rs.getString("Company.iban"));
-        company.setBic(rs.getString("Company.bic"));
-        return company;
     }
 }

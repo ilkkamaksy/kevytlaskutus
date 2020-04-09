@@ -20,6 +20,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
 /**
  *
@@ -39,8 +40,7 @@ public class InvoiceDaoImplTest {
             dao.setConnection(conn);
         } catch (SQLException e) {}
         
-        mockInvoice = mock(Invoice.class);
-        
+        mockInvoice = mock(Invoice.class);    
     }
 
     @Test
@@ -49,6 +49,7 @@ public class InvoiceDaoImplTest {
         invoice.setInvoiceNumber(1001);
         try {
             boolean result = dao.create(invoice);
+            verify(mockInvoice).getAmount();
             assertTrue(result);
         } catch (SQLException e) {}
     }
@@ -92,8 +93,17 @@ public class InvoiceDaoImplTest {
             assertEquals(results.size(), 0);    
         } catch (SQLException e) {}
     }
+   
+    @After
+    public void tearDown() {
+        try {
+            conn.close();
+        } catch (SQLException e) {}
+    }
+    
+    // Helpers
     
     public Connection getConnection() throws SQLException {     
-        return DriverManager.getConnection("jdbc:h2:file:./database/testingdb", "sa", "");
+        return DriverManager.getConnection("jdbc:h2:mem:testdb");
     }
 }

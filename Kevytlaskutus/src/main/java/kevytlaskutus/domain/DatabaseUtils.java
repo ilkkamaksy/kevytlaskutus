@@ -26,16 +26,26 @@ public class DatabaseUtils {
     private ProductDaoImpl productDao;
     private InvoiceDaoImpl invoiceDao;
     
+    private String dbOption;
+    private String dbUser;
+    private String dbPassword;
+    
     public DatabaseUtils(
         ManagedCompanyDao managedCompanyDao, 
         CustomerCompanyDao customerCompanyDao, 
         ProductDaoImpl productDao,
-        InvoiceDaoImpl invoiceDao
+        InvoiceDaoImpl invoiceDao,
+        String dbOption,
+        String dbUser,
+        String dbPassword
     ) {
         this.managedCompanyDao = managedCompanyDao;
         this.customerCompanyDao = customerCompanyDao;
         this.productDao = productDao;
         this.invoiceDao = invoiceDao;
+        this.dbOption = dbOption;
+        this.dbUser = dbUser;
+        this.dbPassword = dbPassword;
     }
     
     public void initDb() {
@@ -77,6 +87,6 @@ public class DatabaseUtils {
     }
     
     public Connection getConnection() throws SQLException {     
-        return DriverManager.getConnection("jdbc:h2:file:./database/kevytlaskutusdb", "sa", "");
+        return DriverManager.getConnection(this.dbOption, this.dbUser, this.dbPassword);
     }
 }

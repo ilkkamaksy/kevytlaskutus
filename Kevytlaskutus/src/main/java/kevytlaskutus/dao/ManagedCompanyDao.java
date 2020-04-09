@@ -12,6 +12,7 @@ import kevytlaskutus.domain.ManagedCompany;
 public class ManagedCompanyDao implements CompanyDao<ManagedCompany, Integer, String> {
 
     Connection conn;
+    static Populate populate;
     
     public void setConnection(Connection conn) {
         this.conn = conn;
@@ -32,7 +33,6 @@ public class ManagedCompanyDao implements CompanyDao<ManagedCompany, Integer, St
             + "    iban VARCHAR(40),\n"
             + "    bic VARCHAR(40)\n"
             + ");").executeUpdate();
-        
     }
     
     @Override
@@ -42,107 +42,22 @@ public class ManagedCompanyDao implements CompanyDao<ManagedCompany, Integer, St
             "INSERT INTO Company (name, regId, phone, street, postcode, commune, ovtId, provider, iban, bic) "
             + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
         );
-        stmt.setString(1, company.getName());
-        stmt.setString(2, company.getRegId());
-        stmt.setString(3, company.getPhone());
-        stmt.setString(4, company.getStreet());
-        stmt.setString(5, company.getPostcode());
-        stmt.setString(6, company.getCommune());
-        stmt.setString(7, company.getOvtId());
-        stmt.setString(8, company.getProvider());
-        stmt.setString(9, company.getIban());
-        stmt.setString(10, company.getBic());
+        populate.populateCreateStatementData(stmt, company);
         int rows = stmt.executeUpdate();  
 
         conn.close();
-
         return rows > 0;
     }
     
-    @Override
-    public ManagedCompany getItemById(Integer id) throws SQLException {
-        
-        ManagedCompany company = null;
-       
-        PreparedStatement stmt = conn.prepareStatement(
-            "SELECT * FROM Company WHERE id=" + id + " LIMIT 1"
-        );
-        ResultSet rs = stmt.executeQuery();
-
-        while (rs.next()) {
-            company = new ManagedCompany(
-                rs.getString("name"), 
-                rs.getString("regId"), 
-                rs.getString("phone"), 
-                rs.getString("street"), 
-                rs.getString("postcode"),
-                rs.getString("commune"),
-                rs.getString("ovtId"),
-                rs.getString("provider")
-            );
-            company.setId(rs.getInt("id"));
-            company.setIban(rs.getString("iban"));
-            company.setBic(rs.getString("bic"));
-        }
-
-        conn.close();
- 
-        return company;
-
-    }
-    
-    @Override
-    public ManagedCompany getItemByName(String name) throws SQLException {
-        
-        ManagedCompany company = null;
-       
-        PreparedStatement stmt = conn.prepareStatement(
-            "SELECT * FROM Company WHERE name LIKE %" + name + "% LIMIT 1"
-        );
-        ResultSet rs = stmt.executeQuery();
-
-        while (rs.next()) {
-            company = new ManagedCompany(
-                rs.getString("name"), 
-                rs.getString("regId"), 
-                rs.getString("phone"), 
-                rs.getString("street"), 
-                rs.getString("postcode"),
-                rs.getString("commune"),
-                rs.getString("ovtId"),
-                rs.getString("provider")
-            );
-            company.setId(rs.getInt("id"));
-            company.setIban(rs.getString("iban"));
-            company.setBic(rs.getString("bic"));
-        }
-
-        conn.close();
- 
-        return company;
-
-    }
-
     @Override
     public boolean update(Integer id, ManagedCompany company) throws SQLException {
        
         PreparedStatement stmt = conn.prepareStatement(
             "UPDATE Company SET name=?, regId=?, phone=?, street=?, postcode=?, commune=?, ovtId=?, provider=?, iban=?, bic=? WHERE id=?");
-        stmt.setString(1, company.getName());
-        stmt.setString(2, company.getRegId());
-        stmt.setString(3, company.getPhone());
-        stmt.setString(4, company.getStreet());
-        stmt.setString(5, company.getPostcode());
-        stmt.setString(6, company.getCommune());
-        stmt.setString(7, company.getOvtId());
-        stmt.setString(8, company.getProvider());
-        stmt.setString(9, company.getIban());
-        stmt.setString(10, company.getBic());
-        stmt.setInt(11, id);
+        populate.populateUpdateStatementData(stmt, company, id);
         int rows = stmt.executeUpdate();  
 
         conn.close();
-        
         return rows > 0;
     }
 
@@ -154,39 +69,56 @@ public class ManagedCompanyDao implements CompanyDao<ManagedCompany, Integer, St
         int rows = stmt.executeUpdate();  
 
         conn.close();
- 
         return rows > 0;
     }
 
     @Override
-    public List<ManagedCompany> getItems() throws SQLException {
-        
-        List<ManagedCompany> results = new ArrayList<>(); 
-       
-        PreparedStatement stmt = conn.prepareStatement("SELECT * FROM Company");
+    public ManagedCompany getItemById(Integer id) throws SQLException {
+      
+        PreparedStatement stmt = conn.prepareStatement(
+            "SELECT * FROM Company WHERE id=" + id + " LIMIT 1"
+        );
         ResultSet rs = stmt.executeQuery();
 
+        ManagedCompany company = null;
         while (rs.next()) {
-            ManagedCompany company = new ManagedCompany(
-                rs.getString("name"), 
-                rs.getString("regId"), 
-                rs.getString("phone"), 
-                rs.getString("street"), 
-                rs.getString("postcode"),
-                rs.getString("commune"),
-                rs.getString("ovtId"),
-                rs.getString("provider")
-            );
-            company.setId(rs.getInt("id"));
-            company.setIban(rs.getString("iban"));
-            company.setBic(rs.getString("bic"));
-            results.add(company);
+            company = populate.populateManagedCompany(rs);
         }
 
         conn.close();
-       
-        return results;
-        
+        return company;
     }
+    
+    @Override
+    public ManagedCompany getItemByName(String name) throws SQLException {
+      
+        PreparedStatement stmt = conn.prepareStatement(
+            "SELECT * FROM Company WHERE name LIKE %" + name + "% LIMIT 1"
+        );
+        ResultSet rs = stmt.executeQuery();
 
+        ManagedCompany company = null;
+        while (rs.next()) {
+            company = populate.populateManagedCompany(rs);
+        }
+
+        conn.close();
+        return company;
+    }
+    
+    @Override
+    public List<ManagedCompany> getItems() throws SQLException {
+              
+        PreparedStatement stmt = conn.prepareStatement("SELECT * FROM Company");
+        ResultSet rs = stmt.executeQuery();
+
+        List<ManagedCompany> results = new ArrayList<>(); 
+        while (rs.next()) {
+            results.add(populate.populateManagedCompany(rs));
+        }
+
+        conn.close();
+        return results;
+    }
+   
 }

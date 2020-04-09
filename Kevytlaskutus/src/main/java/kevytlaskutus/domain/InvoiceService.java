@@ -57,12 +57,13 @@ public class InvoiceService {
         return result;
     }
     
-    public Boolean updateInvoice(int id, Invoice invoice) {
+    public Boolean updateInvoice(int id, Invoice invoice, ManagedCompany managedCompany) {
         Boolean result = false;
         
         try {    
             Connection conn = this.databaseUtils.getConnection();
             dao.setConnection(conn);
+            invoice.setCompany(managedCompany);
             result = dao.update(id, invoice);
         } catch (SQLException e) {
             Logger.getLogger(AppService.class.getName()).log(Level.SEVERE, null, e);
@@ -97,5 +98,18 @@ public class InvoiceService {
         }
         
         return results;
+    }
+    
+    public Invoice getInvoiceById(int id) {
+        
+        try {
+            Connection conn = this.databaseUtils.getConnection();
+            dao.setConnection(conn);
+            return dao.getItemById(id);
+        } catch (SQLException e) {
+            Logger.getLogger(AppService.class.getName()).log(Level.SEVERE, null, e);
+        }
+        
+        return null;
     }
 }

@@ -1,6 +1,7 @@
 package kevytlaskutus.ui;
 
 import java.net.URL;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -53,39 +54,41 @@ public class EditInvoiceController extends BaseController implements Initializab
         
         this.form = new Form();
       
+        Date today = new Date(new java.util.Date().getTime());
+        
         if (currentInvoice.getId() == 0) {
-            this.form.addDatePicker("Date");
+            this.form.addDatePicker("Date", today);
             this.form.addTextField("Invoice Number", "" + this.appService.getDefaultInvoiceNumber());
             this.form.addTextField("Reference Number", "");
             this.form.addTextField("Payment due in number of days", "14");
-            this.form.addDatePicker("Due Date");
+            this.form.addDatePicker("Due Date", today);
             this.form.addTextField("Overdue Penalty Interest rate", "10.0");
             this.form.addTextField("Discount", "0.0");
-            this.form.addDropDown("Customer", this.createCustomerNameList());
+            this.form.addDropDown("Customer", this.createCustomerNameList(), currentInvoice.getCustomer());
             this.form.addTextField("Customer Contact Name", "");
             this.form.addTextField("Customer Reference", "");
             this.form.addTextField("Our Reference", "");
             this.form.addTextField("Delivery Terms", "");
-            this.form.addDatePicker("Delivery Date");
+            this.form.addDatePicker("Delivery Date", today);
             this.form.addTextField("Delivery Information", "");
             this.form.addTextField("Additional Information", "");
             this.form.addTextField("Amount", "0.0");
         } else {
             this.form.getForm().getChildren().clear();
         
-            this.form.addTextField("Date", "" + currentInvoice.getCreatedDate().toString());
+            this.form.addDatePicker("Date", currentInvoice.getCreatedDate());
             this.form.addTextField("Invoice Number", "" + currentInvoice.getInvoiceNumber());
             this.form.addTextField("Reference Number", "" + currentInvoice.getReferenceNumber());
             this.form.addTextField("Payment due in number of days", "" + currentInvoice.getPaymentTerm());
-            this.form.addTextField("Due date", "" + currentInvoice.getDueDate().toString());
+            this.form.addDatePicker("Due Date", currentInvoice.getDueDate());
             this.form.addTextField("Overdue Penalty Interest rate", "" + currentInvoice.getPenaltyInterest());
             this.form.addTextField("Discount", "" + currentInvoice.getDiscount());
-            // this.form.addTextField("Customer", "" + currentInvoice.getCustomerId());
+            this.form.addDropDown("Customer", this.createCustomerNameList(), currentInvoice.getCustomer());
             this.form.addTextField("Customer Contact Name", "" + currentInvoice.getCustomerContactName());
             this.form.addTextField("Customer Reference", "" + currentInvoice.getCustomerReference());
             this.form.addTextField("Our Reference", "" + currentInvoice.getCompanyReference());
             this.form.addTextField("Delivery Terms", "" + currentInvoice.getDeliveryTerms());
-            this.form.addTextField("Delivery Date", "" + currentInvoice.getDeliveryDate());
+            this.form.addDatePicker("Delivery Date", currentInvoice.getDeliveryDate());
             this.form.addTextField("Delivery Information", "" + currentInvoice.getDeliveryInfo());
             this.form.addTextField("Additional Information", "" + currentInvoice.getAdditionalInfo());
             this.form.addTextField("Amount", "" + currentInvoice.getAmount());

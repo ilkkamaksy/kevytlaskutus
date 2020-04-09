@@ -6,12 +6,8 @@
 package kevytlaskutus.ui;
 
 import java.math.BigDecimal;
-import java.sql.Date;
 import java.util.HashMap;
 import javafx.scene.Node;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TextField;
 import kevytlaskutus.domain.AppService;
 import kevytlaskutus.domain.CustomerCompany;
 import kevytlaskutus.domain.Invoice;
@@ -20,11 +16,10 @@ import kevytlaskutus.domain.Invoice;
  *
  * @author ilkka
  */
-public class FormActionSaveNewInvoice extends FormAction {
-    
+public class FormActionUpdateInvoice extends FormAction {
     private Invoice invoice; 
    
-    public FormActionSaveNewInvoice(AppService appService) {
+    public FormActionUpdateInvoice(AppService appService) {
         super(appService);
     }
 
@@ -35,7 +30,7 @@ public class FormActionSaveNewInvoice extends FormAction {
     
     @Override
     public boolean execute() {
-        return super.appService.createInvoice(this.invoice);
+        return super.appService.updateInvoice(this.invoice.getId(), this.invoice);
     }
   
     protected void makeInvoiceFromFieldValues(HashMap<String, Node> formFields, int id) {

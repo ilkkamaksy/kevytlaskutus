@@ -12,6 +12,7 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
+import kevytlaskutus.domain.CustomerCompany;
 
 /**
  * Class for creating Forms. 
@@ -29,32 +30,44 @@ public class Form {
       
     public void addTextField(String label, String field) {
         TextField inputField = new TextField(field);
-        form.getChildren().add(new Label(label));
-        form.getChildren().add(inputField);
+        this.addNodesToForm(new Label(label), inputField);
         this.formFields.put(label, inputField);
     }
     
-    public void addDatePicker(String label) {
-        
+    public void addDatePicker(String label, Date presetDate) {
         DatePicker datePicker = new DatePicker();
-        datePicker.setValue(this.getLocalDateForToday());
-        
-        form.getChildren().add(new Label(label));
-        form.getChildren().add(datePicker);
+        datePicker.setValue(getLocalDateForString(presetDate));
+        this.addNodesToForm(new Label(label), datePicker);
         this.formFields.put(label, datePicker);
     }
     
-    public void addDropDown(String label, ObservableList<String> options) {
+    private LocalDate getLocalDateForString(Date date) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        return LocalDate.parse(date.toString());
+    }
+    
+    public void addDropDown(String label, ObservableList<String> options, CustomerCompany selectedCustomer) {
         form.getChildren().add(new Label(label));
         ComboBox dropdown = new ComboBox(options);
-        form.getChildren().add(dropdown);
+        this.setDropDownPresetOption(dropdown, options, selectedCustomer);
+        this.addNodesToForm(dropdown);
         this.formFields.put(label, dropdown);
     }
     
-    private LocalDate getLocalDateForToday() {
-        Date date = new Date(new java.util.Date().getTime());
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        return LocalDate.parse(date.toString());
+    private void setDropDownPresetOption(ComboBox dropdown, ObservableList<String> options, CustomerCompany selectedCustomer) {
+        if (selectedCustomer == null) {
+            return;
+        }
+        System.out.println("sfsafsa " + selectedCustomer.getName());
+        for (int i = 0; i < options.size(); i++) {
+            if (options.get(i).equals(selectedCustomer.getName())) {
+                dropdown.getSelectionModel().select(selectedCustomer.getName());
+            }
+        }
+    }
+    
+    private void addNodesToForm(Node... node) {
+        form.getChildren().addAll(node);
     }
    
     public VBox getForm() {

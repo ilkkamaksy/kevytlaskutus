@@ -24,9 +24,7 @@ public class AppService {
     private CustomerCompanyService customerCompanyService;
     private ProductService productService;
     private InvoiceService invoiceService;
-    
-    private DatabaseUtils databaseUtils;
-    
+   
     private ManagedCompany currentManagedCompany;
     private CustomerCompany currentCustomerCompany;
     private Product currentProduct;
@@ -38,10 +36,9 @@ public class AppService {
             ManagedCompanyDao managedCompanyDao, 
             CustomerCompanyDao customerCompanyDao, 
             ProductDaoImpl productDao,
-            InvoiceDaoImpl invoiceDao
+            InvoiceDaoImpl invoiceDao,
+            DatabaseUtils databaseUtils
     ) {
-        this.databaseUtils = new DatabaseUtils(managedCompanyDao, customerCompanyDao, productDao, invoiceDao);
-        this.databaseUtils.initDb();
         
         this.managedCompanyService = new ManagedCompanyService(managedCompanyDao, databaseUtils);
         this.customerCompanyService = new CustomerCompanyService(customerCompanyDao, databaseUtils);
@@ -87,6 +84,7 @@ public class AppService {
         this.currentProduct = currentProduct;
     }
 
+    
     public boolean createManagedCompany(ManagedCompany company) {
         boolean result = this.managedCompanyService.createManagedCompany(company);
         this.setupNoticeForPreviousAction("createManagedCompany" + result);
@@ -176,7 +174,7 @@ public class AppService {
     }
     
     public Boolean updateInvoice(int id, Invoice invoice) {
-        boolean result = this.invoiceService.updateInvoice(id, invoice);
+        boolean result = this.invoiceService.updateInvoice(id, invoice, currentManagedCompany);
         this.setupNoticeForPreviousAction("updateInvoice" + result);
         return result;
     }
@@ -191,6 +189,10 @@ public class AppService {
         return this.invoiceService.getInvoicesForCompany(this.currentManagedCompany.getId());
     }
    
+    public Invoice getInvoiceById(int id) {
+        return this.invoiceService.getInvoiceById(id);
+    }
+    
     private void setupNoticeForPreviousAction(String action) {
         this.notice.setActive();
         this.notice.setActionType(action);

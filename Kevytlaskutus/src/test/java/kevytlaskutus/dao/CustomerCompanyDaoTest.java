@@ -9,8 +9,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.List;
-import kevytlaskutus.domain.Invoice;
-import kevytlaskutus.domain.Product;
+import kevytlaskutus.domain.CustomerCompany;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -18,63 +17,57 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  *
  * @author ilkka
  */
-public class ProductDaoImplTest {
+public class CustomerCompanyDaoTest {
     
     Connection conn;
-    Product mockProduct;
-    ProductDaoImpl dao;
+    CustomerCompany mockCustomer;
+    CustomerCompanyDao dao;
     
     @Before
     public void setUp() {
-        dao = new ProductDaoImpl();
+        dao = new CustomerCompanyDao();
         try {
             conn = this.getConnection();
             dao.setConnection(conn);
         } catch (SQLException e) {}
         
-        mockProduct = mock(Product.class);
-        
+        mockCustomer = mock(CustomerCompany.class);
+        when(mockCustomer.getId()).thenReturn(1);
+        when(mockCustomer.getName()).thenReturn("Acme");
     }
 
     @Test
-    public void newProductCannotBeCreatedWithNullInvoiceObject() {
+    public void newCustomerCanBeCreated() {
         try {
-            boolean result = dao.create(mockProduct);
-            assertFalse(result);    
-        } catch (SQLException e) {}
-    }
-    
-    @Test
-    public void productCannotBeUpdatedWithNullProductObject() {
-        try {
-            boolean result = dao.update(1, null);
-            assertFalse(result);    
-        } catch (SQLException e) {}
-    }
-    
-    @Test
-    public void productCannotBeUpdatedWithoutValidId() {
-        try {
-            boolean result = dao.update(-1, mockProduct);
-            assertFalse(result);    
-        } catch (SQLException e) {}
-    }
-    
-    @Test
-    public void productCanBeUpdatedWithValidId() {
-        try {
-            boolean result = dao.update(1, mockProduct);
+            boolean result = dao.create(mockCustomer);
             assertTrue(result);    
         } catch (SQLException e) {}
     }
-   
+    
     @Test
-    public void productCannotDeletedWithoutValidId() {
+    public void customerCanBeUpdated() {
+        try {
+            boolean result = dao.update(1, mockCustomer);
+            assertTrue(result);    
+        } catch (SQLException e) {}
+    }
+    
+    @Test
+    public void customerCannotBeUpdatedWithoutValidId() {
+        try {
+            boolean result = dao.update(-1, mockCustomer);
+            assertFalse(result);    
+        } catch (SQLException e) {}
+    }
+  
+    @Test
+    public void customerCannotDeletedWithoutValidId() {
         try {
             boolean result = dao.delete(-1);
             assertFalse(result);    
@@ -82,21 +75,11 @@ public class ProductDaoImplTest {
     }
     
     @Test
-    public void productCanBeSaved() {
-        Product product = new Product("Name", "50", "h", "desc");
+    public void customerCanBeRetrievedById() {
         try {
-            boolean result = this.dao.create(product);
-            assertTrue(result);
-        } catch (SQLException e) {}
-    }
-    
-    @Test
-    public void productCanBeRetrievedById() {
-        Product product = new Product("Name", "50", "h", "desc");
-        try {
-            this.dao.create(product);
-            Product prod = this.dao.getItemById(1);
-            assertEquals(prod.getName(), product.getName());    
+            this.dao.create(mockCustomer);
+            CustomerCompany result = this.dao.getItemById(1);
+            assertEquals(result.getName(), mockCustomer.getName());    
         } catch (SQLException e) {}
     }
     
@@ -112,4 +95,5 @@ public class ProductDaoImplTest {
     public Connection getConnection() throws SQLException {     
         return DriverManager.getConnection("jdbc:h2:mem:testdb", "sa", "");
     }    
+    
 }

@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import kevytlaskutus.dao.Populate;
 import kevytlaskutus.domain.Product;
 
 /**
@@ -14,6 +15,7 @@ import kevytlaskutus.domain.Product;
 public class ProductDaoImpl implements ProductDao<Product, Integer, String> {
 
     Connection conn;
+    static Populate populate;
     
     public void setConnection(Connection conn) {
         this.conn = conn;
@@ -36,10 +38,7 @@ public class ProductDaoImpl implements ProductDao<Product, Integer, String> {
             "INSERT INTO Product (name, price, priceUnit, description) "
             + "VALUES (?, ?, ?, ?)"
         );
-        stmt.setString(1, product.getName());
-        stmt.setString(2, product.getPrice());
-        stmt.setString(3, product.getPriceUnit());
-        stmt.setString(4, product.getDescription());
+        populate.populateCreateStatementData(stmt, product);
         int rows = stmt.executeUpdate();  
 
         conn.close();
@@ -48,38 +47,10 @@ public class ProductDaoImpl implements ProductDao<Product, Integer, String> {
     }
 
     @Override
-    public Product getItemById(Integer id) throws SQLException {
-        Product product = null;
-       
-        PreparedStatement stmt = conn.prepareStatement(
-            "SELECT * FROM Product WHERE id=" + id + " LIMIT 1"
-        );
-        ResultSet rs = stmt.executeQuery();
-
-        while (rs.next()) {
-            product = new Product(
-                rs.getString("name"), 
-                rs.getString("price"), 
-                rs.getString("priceUnit"), 
-                rs.getString("description")
-            );
-            product.setId(rs.getInt("id"));
-        }
-
-        conn.close();
- 
-        return product;
-    }
-
-    @Override
     public boolean update(Integer id, Product product) throws SQLException {
         PreparedStatement stmt = conn.prepareStatement(
             "UPDATE Product SET name=?, price=?, priceUnit=?, description=? WHERE id=?");
-        stmt.setString(1, product.getName());
-        stmt.setString(2, product.getPrice());
-        stmt.setString(3, product.getPriceUnit());
-        stmt.setString(4, product.getDescription());
-        stmt.setInt(5, id);
+        populate.populateUpdateStatementData(stmt, product, id);
         int rows = stmt.executeUpdate();  
 
         conn.close();
@@ -99,26 +70,36 @@ public class ProductDaoImpl implements ProductDao<Product, Integer, String> {
     }
 
     @Override
-    public List<Product> getItems() throws SQLException {
-        List<Product> results = new ArrayList<>(); 
-       
-        PreparedStatement stmt = conn.prepareStatement("SELECT * FROM Product");
+    public Product getItemById(Integer id) throws SQLException {
+
+        PreparedStatement stmt = conn.prepareStatement(
+            "SELECT * FROM Product WHERE id=" + id + " LIMIT 1"
+        );
         ResultSet rs = stmt.executeQuery();
 
+        Product product = null;
         while (rs.next()) {
-            Product product = new Product(
-                rs.getString("name"), 
-                rs.getString("price"), 
-                rs.getString("priceUnit"), 
-                rs.getString("description")
-            );
-            product.setId(rs.getInt("id"));
-            results.add(product);
+            product = populate.populateProduct(rs);
         }
 
         conn.close();
-       
+        return product;
+    }
+
+    @Override
+    public List<Product> getItems() throws SQLException {
+      
+        PreparedStatement stmt = conn.prepareStatement("SELECT * FROM Product");
+        ResultSet rs = stmt.executeQuery();
+
+        List<Product> results = new ArrayList<>(); 
+        while (rs.next()) {
+            results.add(populate.populateProduct(rs));
+        }
+
+        conn.close();
         return results;
     }
+    
     
 }

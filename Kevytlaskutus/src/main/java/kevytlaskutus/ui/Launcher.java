@@ -1,5 +1,7 @@
 package kevytlaskutus.ui;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import kevytlaskutus.dao.CustomerCompanyDao;
@@ -23,12 +25,22 @@ public class Launcher extends Application {
         CustomerCompanyDao customerCompanyDao = new CustomerCompanyDao();
         ProductDaoImpl productDao = new ProductDaoImpl();
         InvoiceDaoImpl invoiceDao = new InvoiceDaoImpl();
-        
+        DatabaseUtils databaseUtils = new DatabaseUtils(
+                managedCompanyDao, 
+                customerCompanyDao, 
+                productDao, 
+                invoiceDao,
+                "jdbc:h2:file:./database/kevytlaskutusdb", 
+                "sa", 
+                ""
+        ); 
+        databaseUtils.initDb();
         this.appService = new AppService(
                 managedCompanyDao, 
                 customerCompanyDao, 
                 productDao, 
-                invoiceDao
+                invoiceDao,
+                databaseUtils
         );
     }
     
