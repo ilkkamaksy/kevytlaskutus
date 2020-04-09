@@ -247,17 +247,16 @@ public class AppServiceTest {
         try {
             when(mockCustomerCompanyDao.create(mockCustomer)).thenReturn(true);      
             boolean result = appService.createCustomerCompany(mockCustomer);
-            assertTrue(appService.isNoticePending());
+            assertTrue(appService.hasNoticePending());
         } catch (SQLException e) {}
     }
     
     @Test
     public void pendingNoticeCanBeRetrieved() {
-        try {
-            when(mockCustomerCompanyDao.create(mockCustomer)).thenReturn(true);      
-            boolean result = appService.createCustomerCompany(mockCustomer);
-            assertEquals(appService.getPendingNotice(), "A new customer has been added");
-        } catch (SQLException e) {}
+        CustomerCompany customer = new CustomerCompany();
+        customer.setName("Acme");
+        boolean result = appService.createCustomerCompany(customer);
+        assertEquals(appService.getPendingNotice().getNoticeMessage(), "A new customer has been added");
     }
     
     @Test
