@@ -13,5 +13,6 @@
 | 7.4. | 8    | Laskuhallintanäkymän työstäminen, testien lisääminen, jacoco-selvittely (dao-testien kattavuus ei näy) ja refaktorointi. Lisäksi arkkitehtuurikuvaus |
 | 8.4. | 4    | Testien lisääminen, service-luokkien refaktorointi |
 | 9.4. | 6    | Testien refaktorointi ja ilmoitukset käyttäjän tekemistä operaatioista |
-| yht   | 63    | | 
+| 12.4. | 2    | Lisätty testejä, korjattu bugeja laskujen lisäyksestä ja muokkauksesta |
+| yht   | 65    | | 
 

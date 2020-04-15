@@ -20,13 +20,13 @@ public class Invoice {
     private Date discountDate;
     private BigDecimal penaltyInterest;
     private BigDecimal amount;
-    private String customerContactName;
-    private String customerReference;
-    private String companyReference;
-    private String deliveryTerms;
+    private String customerContactName = "";
+    private String customerReference = "";
+    private String companyReference = "";
+    private String deliveryTerms = "";
     private Date deliveryDate;
-    private String deliveryInfo;
-    private String additionalInfo;
+    private String deliveryInfo = "";
+    private String additionalInfo = "";
 
     public Invoice() {
         this(new Date(new java.util.Date().getTime()));
@@ -36,6 +36,10 @@ public class Invoice {
         this.createdDate = createdDate;
         this.paymentTerm = 14;
         this.dueDate = this.calculateDueDate(createdDate);
+        this.penaltyInterest = new BigDecimal(10.00);
+        this.amount = new BigDecimal(0.00);
+        this.discount = new BigDecimal(0.00);
+        this.deliveryDate = createdDate;
     }
 
     public CustomerCompany getCustomer() {
@@ -55,7 +59,7 @@ public class Invoice {
     }
 
     private Date calculateDueDate(Date createdDate) {
-        return new Date(createdDate.getTime() + 24 * 60 * 60 * 1000);
+        return new Date(createdDate.getTime() + this.paymentTerm * 24 * 60 * 60 * 1000);
     }
     
     public int getId() {

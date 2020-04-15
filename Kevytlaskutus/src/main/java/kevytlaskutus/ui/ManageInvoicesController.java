@@ -97,7 +97,9 @@ public class ManageInvoicesController extends BaseController implements Initiali
   
     @FXML
     void addNewInvoiceAction() {
-        this.appService.setCurrentInvoice(new Invoice());
+        Invoice invoice = new Invoice();
+        invoice.setInvoiceNumber(this.appService.getDefaultInvoiceNumber());
+        this.appService.setCurrentInvoice(invoice);
         this.viewFactory.showEditInvoiceView();
     }
 

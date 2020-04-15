@@ -49,7 +49,9 @@ public class Form {
     public void addDropDown(String label, ObservableList<String> options, CustomerCompany selectedCustomer) {
         form.getChildren().add(new Label(label));
         ComboBox dropdown = new ComboBox(options);
-        this.setDropDownPresetOption(dropdown, options, selectedCustomer);
+        if (selectedCustomer != null) {
+            this.setDropDownPresetOption(dropdown, options, selectedCustomer);
+        }
         this.addNodesToForm(dropdown);
         this.formFields.put(label, dropdown);
     }

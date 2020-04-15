@@ -23,7 +23,8 @@ import kevytlaskutus.domain.Invoice;
 public class FormActionSaveNewInvoice extends FormAction {
     
     private Invoice invoice; 
-   
+    private static FormFieldDataExtractor dataExtractor;
+    
     public FormActionSaveNewInvoice(AppService appService) {
         super(appService);
     }
@@ -40,40 +41,39 @@ public class FormActionSaveNewInvoice extends FormAction {
   
     protected void makeInvoiceFromFieldValues(HashMap<String, Node> formFields, int id) {
         
-        this.invoice = new Invoice(super.dataExtractor.createDateFromDatePicker("Date", formFields));
+        this.invoice = new Invoice(dataExtractor.createDateFromDatePicker("Date", formFields));
         this.invoice.setId(id);
         
-        String customerName = super.dataExtractor.getSelectedValueFromComboBox("Customer", formFields);
+        String customerName = dataExtractor.getSelectedValueFromComboBox("Customer", formFields);
         CustomerCompany customer = this.appService.getCustomerCompanyByName(customerName);
-        this.invoice.setCustomer(customer);
+        this.invoice.setCustomer(customer);    
         
-        this.invoice.setInvoiceNumber(super.dataExtractor.getIntFromTextField("Invoice Number", formFields));
-        this.invoice.setPaymentTerm(super.dataExtractor.getIntFromTextField("Payment due in number of days", formFields));
-        this.invoice.setDueDate(super.dataExtractor.createDateFromDatePicker("Due Date", formFields));
-        this.invoice.setCustomerContactName(super.dataExtractor.getValueFromTextField("Customer Contact Name", formFields));
-        this.invoice.setCustomerReference(super.dataExtractor.getValueFromTextField("Customer Reference", formFields));
-        this.invoice.setCompanyReference(super.dataExtractor.getValueFromTextField("Our Reference", formFields));
-        this.invoice.setDeliveryTerms(super.dataExtractor.getValueFromTextField("Delivery Terms", formFields));
-        this.invoice.setDeliveryDate(super.dataExtractor.createDateFromDatePicker("Delivery Date", formFields));
-        this.invoice.setDeliveryInfo(super.dataExtractor.getValueFromTextField("Delivery Information", formFields));
-        this.invoice.setAdditionalInfo(super.dataExtractor.getValueFromTextField("Additional Information", formFields));
+        this.invoice.setInvoiceNumber(dataExtractor.getIntFromTextField("Invoice Number", formFields));
+        this.invoice.setReferenceNumber(dataExtractor.getIntFromTextField("Reference Number", formFields));
+        this.invoice.setPaymentTerm(dataExtractor.getIntFromTextField("Payment due in number of days", formFields));
+        this.invoice.setDueDate(dataExtractor.createDateFromDatePicker("Due Date", formFields));
+        this.invoice.setCustomerContactName(dataExtractor.getValueFromTextField("Customer Contact Name", formFields));
+        this.invoice.setCustomerReference(dataExtractor.getValueFromTextField("Customer Reference", formFields));
+        this.invoice.setCompanyReference(dataExtractor.getValueFromTextField("Our Reference", formFields));
+        this.invoice.setDeliveryTerms(dataExtractor.getValueFromTextField("Delivery Terms", formFields));
+        this.invoice.setDeliveryDate(dataExtractor.createDateFromDatePicker("Delivery Date", formFields));
+        this.invoice.setDeliveryInfo(dataExtractor.getValueFromTextField("Delivery Information", formFields));
+        this.invoice.setAdditionalInfo(dataExtractor.getValueFromTextField("Additional Information", formFields));
         
-        BigDecimal overDueInterest = super.dataExtractor.getBigDecimalFromTextField("Overdue Penalty Interest rate", formFields);
+        BigDecimal overDueInterest = dataExtractor.getBigDecimalFromTextField("Overdue Penalty Interest rate", formFields);
         if (overDueInterest != null && isBetween(overDueInterest, new BigDecimal(0), new BigDecimal(100))) {
             this.invoice.setPenaltyInterest(overDueInterest);    
         }
                
-        BigDecimal discount = super.dataExtractor.getBigDecimalFromTextField("Discount", formFields);
+        BigDecimal discount = dataExtractor.getBigDecimalFromTextField("Discount", formFields);
         if (discount != null && isBetween(discount, new BigDecimal(0), new BigDecimal(100))) {
             this.invoice.setDiscount(discount);
         }
         
-        BigDecimal amount = super.dataExtractor.getBigDecimalFromTextField("Amount", formFields);
+        BigDecimal amount = dataExtractor.getBigDecimalFromTextField("Amount", formFields);
         if (amount != null && isBetween(amount, new BigDecimal(0), new BigDecimal(1000000))) {
             this.invoice.setAmount(amount);
         }    
-        
-        System.out.println(invoice.getCreatedDate() + " " + invoice.getDiscount());
     }
     
     public static boolean isBetween(BigDecimal value, BigDecimal start, BigDecimal end) {

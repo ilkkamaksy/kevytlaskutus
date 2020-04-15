@@ -50,6 +50,7 @@ public class AppService {
         this.currentCustomerCompany = new CustomerCompany();
         this.currentProduct = new Product();
         this.currentInvoice = new Invoice();
+        this.currentInvoice.setInvoiceNumber(this.getDefaultInvoiceNumber());
         this.noticeQueue = new NoticeQueue();
     }
     
