@@ -121,8 +121,8 @@ public class InvoiceTest {
     }
 
     @Test
-    public void discountInitiallyNull() {
-        assertEquals(invoice.getDiscount(), null);
+    public void discountInitiallZero() {
+        assertEquals(invoice.getDiscount(), new BigDecimal(0.0));
     }
 
     @Test
@@ -206,8 +206,9 @@ public class InvoiceTest {
     }
 
     @Test
-    public void deliveryDateInitiallyNull() {
-        assertNull(invoice.getDeliveryDate());
+    public void deliveryDateInitiallyToday() {
+        Date today = new Date(new java.util.Date().getTime());
+        assertEquals(invoice.getDeliveryDate().toString(), today.toString());
     }
 
     @Test
