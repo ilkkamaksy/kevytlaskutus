@@ -88,7 +88,7 @@ public class InvoiceDaoImpl implements InvoiceDao<Invoice, Integer, String>  {
         return rows > 0;
     }
 
-@Override
+    @Override
     public boolean update(int id, Invoice invoice) throws SQLException {
         PreparedStatement stmt = conn.prepareStatement(
             "UPDATE Invoice SET "
@@ -121,7 +121,7 @@ public class InvoiceDaoImpl implements InvoiceDao<Invoice, Integer, String>  {
     private int getGeneratedItemKey(PreparedStatement stmt) throws SQLException {
         int id = -1;
         ResultSet generatedKeys = stmt.getGeneratedKeys();
-        if(generatedKeys.next()) {
+        if (generatedKeys.next()) {
             id = generatedKeys.getInt(1);
         }
         
@@ -138,7 +138,8 @@ public class InvoiceDaoImpl implements InvoiceDao<Invoice, Integer, String>  {
 
         for (Product product : invoice.getProducts()) {
             stmt.addBatch(
-            "INSERT INTO Product (invoiceId, name, price, priceUnit, description) VALUES (" + invoiceId + ", '" + product.getName() + "'," + product.getPrice() + ",'" + product.getPriceUnit() + "','" + product.getDescription() + "')");
+                "INSERT INTO Product (invoiceId, name, price, priceUnit, description) VALUES (" + invoiceId + ", '" + product.getName() + "'," + product.getPrice() + ",'" + product.getPriceUnit() + "','" + product.getDescription() + "')"
+            );
         }
 
         int[] updateCounts = stmt.executeBatch();

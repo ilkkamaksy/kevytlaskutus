@@ -43,7 +43,8 @@ public class ProductDaoImpl implements ProductDao<Product, Integer, String> {
 
         for (Product product : products) {
             stmt.addBatch(
-            "INSERT INTO Product (invoiceId, name, price, priceUnit, description) VALUES (" + invoiceId + ", '" + product.getName() + "'," + product.getPrice() + ",'" + product.getPriceUnit() + "','" + product.getDescription() + "')");
+                "INSERT INTO Product (invoiceId, name, price, priceUnit, description) VALUES (" + invoiceId + ", '" + product.getName() + "'," + product.getPrice() + ",'" + product.getPriceUnit() + "','" + product.getDescription() + "')"
+            );
         }
 
         int[] updateCounts = stmt.executeBatch();
