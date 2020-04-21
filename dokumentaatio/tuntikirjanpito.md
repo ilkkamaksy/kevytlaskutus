@@ -15,5 +15,6 @@
 | 9.4. | 6    | Testien refaktorointi ja ilmoitukset käyttäjän tekemistä operaatioista |
 | 12.4. | 2    | Lisätty testejä, korjattu bugeja laskujen lisäyksestä ja muokkauksesta |
 | 20.4. | 8    | Laskujen muokkauksen rakentamista ja debuggaamista |
-| yht   | 73    | | 
+| 21.4. | 4    | Laskujen lisäyksen uudistus |
+| yht   | 77    | | 
 
