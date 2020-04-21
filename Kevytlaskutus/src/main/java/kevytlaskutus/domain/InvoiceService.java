@@ -18,8 +18,11 @@ import kevytlaskutus.dao.InvoiceDaoImpl;
  * @author ilkka
  */
 public class InvoiceService {
+    
     private InvoiceDaoImpl dao;
+    
     private DatabaseUtils databaseUtils;
+    
     private int startInvoiceNumbering = 1001;
     
     public InvoiceService(InvoiceDaoImpl dao, DatabaseUtils databaseUtils) {

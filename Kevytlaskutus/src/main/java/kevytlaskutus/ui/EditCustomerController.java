@@ -49,7 +49,7 @@ public class EditCustomerController extends BaseController implements Initializa
    
         this.form = new Form();
         
-        if (currentCompany.getName().isEmpty()) {
+        if (currentCompany == null) {
             this.form.addTextField("Name", "");
             this.form.addTextField("Register Id", "");
             this.form.addTextField("Phone", "");

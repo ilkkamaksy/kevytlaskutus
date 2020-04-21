@@ -72,7 +72,7 @@ public class AppServiceTest {
     
     @Test
     public void getCurrentManagedCompanyReturnsCompanyObject() {
-        Company company = this.appService.getCurrentManagedCompany();
+        ManagedCompany company = this.appService.getCurrentManagedCompany();
         assertNotNull(company);
     }
     

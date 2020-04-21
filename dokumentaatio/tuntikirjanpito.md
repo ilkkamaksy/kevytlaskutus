@@ -14,5 +14,6 @@
 | 8.4. | 4    | Testien lisääminen, service-luokkien refaktorointi |
 | 9.4. | 6    | Testien refaktorointi ja ilmoitukset käyttäjän tekemistä operaatioista |
 | 12.4. | 2    | Lisätty testejä, korjattu bugeja laskujen lisäyksestä ja muokkauksesta |
-| yht   | 65    | | 
+| 20.4. | 8    | Laskujen muokkauksen rakentamista ja debuggaamista |
+| yht   | 73    | | 
 

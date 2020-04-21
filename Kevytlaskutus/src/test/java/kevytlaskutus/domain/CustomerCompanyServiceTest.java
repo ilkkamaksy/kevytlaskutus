@@ -29,7 +29,6 @@ import static org.mockito.Mockito.when;
 public class CustomerCompanyServiceTest {
  
     CustomerCompanyService service;
-    InvoiceService invoiceService;
     ManagedCompanyDao mockManagedCompanyDao;
     CustomerCompanyDao mockCustomerCompanyDao;
     ProductDaoImpl mockProductDao;

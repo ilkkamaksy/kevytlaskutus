@@ -7,7 +7,9 @@ package kevytlaskutus.ui;
 
 import java.math.BigDecimal;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import javafx.scene.Node;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
@@ -15,6 +17,7 @@ import javafx.scene.control.TextField;
 import kevytlaskutus.domain.AppService;
 import kevytlaskutus.domain.CustomerCompany;
 import kevytlaskutus.domain.Invoice;
+import kevytlaskutus.domain.Product;
 
 /**
  *
@@ -23,10 +26,12 @@ import kevytlaskutus.domain.Invoice;
 public class FormActionSaveNewInvoice extends FormAction {
     
     private Invoice invoice; 
+    private List<Product> products;
     private static FormFieldDataExtractor dataExtractor;
     
     public FormActionSaveNewInvoice(AppService appService) {
         super(appService);
+        this.products = new ArrayList<>();
     }
 
     @Override
@@ -74,6 +79,18 @@ public class FormActionSaveNewInvoice extends FormAction {
         if (amount != null && isBetween(amount, new BigDecimal(0), new BigDecimal(1000000))) {
             this.invoice.setAmount(amount);
         }    
+        
+        int i = 0;
+        for (String fieldLabel : formFields.keySet()) {
+            if (fieldLabel.contains("Select product")) {
+                String productName = dataExtractor.getSelectedValueFromComboBox(fieldLabel, formFields);
+                if (!productName.isEmpty()) {
+                    Product product = this.appService.getProduct(productName);
+                    this.invoice.getProducts().add(product);
+                }
+                i++;
+            }
+        }
     }
     
     public static boolean isBetween(BigDecimal value, BigDecimal start, BigDecimal end) {

@@ -23,7 +23,7 @@ public abstract class FormAction {
     }
     
     public abstract void setData(HashMap<String, Node> formFields, int id);
-    
+   
     public abstract boolean execute();
     
     protected ManagedCompany makeManagedCompanyFromFieldValues(HashMap<String, Node> formFields, int id) {

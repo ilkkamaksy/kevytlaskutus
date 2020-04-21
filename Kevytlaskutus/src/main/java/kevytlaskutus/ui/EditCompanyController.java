@@ -57,7 +57,7 @@ public class EditCompanyController extends BaseController implements Initializab
 
         this.form = new Form();
         
-        if (currentCompany.getName().isEmpty()) {
+        if (currentCompany == null) {
             this.form.addTextField("Name", "");
             this.form.addTextField("Register Id", "");
             this.form.addTextField("Phone", "");

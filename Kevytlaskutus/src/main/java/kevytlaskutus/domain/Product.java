@@ -1,65 +1,32 @@
 package kevytlaskutus.domain;
 
+import java.util.ArrayList;
+import java.util.List;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+
 /**
  * Product object class.
  */
+@NoArgsConstructor
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@Data
 public class Product {
     
     private int id;
+    
+    private List<Invoice> invoices = new ArrayList<>();
+    
     private String name;
     private String price;
     private String priceUnit;
     private String description;
 
-    public Product() {
-        this("", "", "", "");
-    }
-    
     public Product(String name, String price, String priceUnit, String description) {
         this.name = name;
         this.price = price;
         this.priceUnit = priceUnit;
         this.description = description;
     }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getPrice() {
-        return price;
-    }
-
-    public void setPrice(String price) {
-        this.price = price;
-    }
-
-    public String getPriceUnit() {
-        return priceUnit;
-    }
-
-    public void setPriceUnit(String priceUnit) {
-        this.priceUnit = priceUnit;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-   
 }

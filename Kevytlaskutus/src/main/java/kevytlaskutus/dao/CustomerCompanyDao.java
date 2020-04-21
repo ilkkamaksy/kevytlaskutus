@@ -1,5 +1,6 @@
 package kevytlaskutus.dao;
 
+import java.lang.reflect.ParameterizedType;
 import java.sql.*;
 import java.util.List;
 import java.util.ArrayList;

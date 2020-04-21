@@ -87,6 +87,21 @@ public class ProductService {
         return result;
     }
     
+    public Product getProduct(String name) {
+        
+        Product result = null;
+        
+        try {
+            Connection conn = this.databaseUtils.getConnection();
+            dao.setConnection(conn);
+            result = dao.getItemByName(name);
+        } catch (SQLException e) {
+            Logger.getLogger(AppService.class.getName()).log(Level.SEVERE, null, e);
+        }
+        
+        return result;
+    }
+    
     public List<Product> getProducts() {
         
         List<Product> results = new ArrayList<>();

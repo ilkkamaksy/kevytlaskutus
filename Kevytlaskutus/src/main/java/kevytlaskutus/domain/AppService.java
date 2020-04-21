@@ -47,6 +47,7 @@ public class AppService {
         this.invoiceService = new InvoiceService(invoiceDao, databaseUtils);
 
         this.currentManagedCompany = new ManagedCompany();
+        this.currentManagedCompany.setName("");
         this.currentCustomerCompany = new CustomerCompany();
         this.currentProduct = new Product();
         this.currentInvoice = new Invoice();
@@ -77,7 +78,7 @@ public class AppService {
     public void setCurrentInvoice(Invoice currentInvoice) {
         this.currentInvoice = currentInvoice;
     }
-
+   
     public Product getCurrentProduct() {
         return currentProduct;
     }
@@ -158,6 +159,10 @@ public class AppService {
     
     public Product getProduct(int id) {
         return this.productService.getProduct(id);
+    }
+    
+    public Product getProduct(String name) {
+        return this.productService.getProduct(name);
     }
     
     public List<Product> getProducts() {

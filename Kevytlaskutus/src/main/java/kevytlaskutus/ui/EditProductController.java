@@ -50,7 +50,7 @@ public class EditProductController extends BaseController implements Initializab
         
         this.form = new Form();
         
-        if (currentProduct.getName().isEmpty()) {
+        if (currentProduct == null) {
             this.form.addTextField("Name", "");
             this.form.addTextField("Price", "");
             this.form.addTextField("Price Unit", "");

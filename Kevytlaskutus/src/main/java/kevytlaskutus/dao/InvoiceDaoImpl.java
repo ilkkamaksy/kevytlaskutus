@@ -4,16 +4,17 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import kevytlaskutus.domain.CustomerCompany;
 
 import kevytlaskutus.domain.Invoice;
-import kevytlaskutus.domain.ManagedCompany;
+import kevytlaskutus.domain.Product;
 
 public class InvoiceDaoImpl implements InvoiceDao<Invoice, Integer, String>  {
     
     Connection conn;
+    
     static Populate populate;
     
     public void setConnection(Connection conn) {
@@ -44,12 +45,20 @@ public class InvoiceDaoImpl implements InvoiceDao<Invoice, Integer, String>  {
             + "    FOREIGN KEY (customerId) REFERENCES Customer(id), \n"
             + "    FOREIGN KEY (companyId) REFERENCES Company(id) \n"
             + ");").executeUpdate();
+       
+        conn.prepareStatement("CREATE TABLE IF NOT EXISTS InvoiceProduct (\n"
+            + "    id INTEGER AUTO_INCREMENT PRIMARY KEY,\n"
+            + "    invoiceId INTEGER,\n"
+            + "    productId INTEGER,\n"
+            + "    FOREIGN KEY (invoiceId) REFERENCES Invoice(id), \n"
+            + "    FOREIGN KEY (productId) REFERENCES Product(id) \n"
+            + ");").executeUpdate();
     }
     
     @Override
     public boolean create(Invoice invoice) throws SQLException {
    
-        PreparedStatement stmt = conn.prepareStatement(
+        PreparedStatement pstmt = conn.prepareStatement(
             "INSERT INTO Invoice ("
             + "invoiceNumber, \n"
             + "referenceNumber, \n"
@@ -70,37 +79,23 @@ public class InvoiceDaoImpl implements InvoiceDao<Invoice, Integer, String>  {
             + "additionalInfo, \n"
             + "companyId \n"
             + ") "
-            + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+            + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+            Statement.RETURN_GENERATED_KEYS
         );
-        populate.populateCreateStatementData(stmt, invoice);
-        int rows = stmt.executeUpdate();  
+        populate.populateCreateStatementData(pstmt, invoice);
+        int rows = pstmt.executeUpdate();
+        
+        int invoiceId = this.getGeneratedKey(pstmt);
+        
+        if (rows > 0 && invoice.getProducts().size() > 0) {
+            this.saveInvoiceProductsInBatches(invoiceId, invoice);
+        }
+        
         conn.close();
-
         return rows > 0;
     }
-    
-    @Override
-    public Invoice getItemById(Integer id) throws SQLException {
-        PreparedStatement stmt = conn.prepareStatement(
-            "SELECT * FROM Invoice AS Invoice \n"
-            + "LEFT JOIN Customer AS Customer ON Invoice.customerId = Customer.id \n" 
-            + "LEFT JOIN Company AS Company ON Invoice.companyId = Company.id \n" 
-            + "WHERE Invoice.id=" + id + " LIMIT 1"
-        );
-        ResultSet rs = stmt.executeQuery();
 
-        Invoice invoice = null;
-        while (rs.next()) {
-            invoice = populate.populateInvoice(rs);
-            invoice.setCustomer(populate.populateCustomer(rs));
-            invoice.setCompany(populate.populateManagedCompany(rs));
-        }
-
-        conn.close();
-        return invoice;
-    }
-
-    @Override
+@Override
     public boolean update(int id, Invoice invoice) throws SQLException {
         PreparedStatement stmt = conn.prepareStatement(
             "UPDATE Invoice SET "
@@ -130,6 +125,80 @@ public class InvoiceDaoImpl implements InvoiceDao<Invoice, Integer, String>  {
         return rows > 0;
     }
     
+    private int getGeneratedKey(PreparedStatement stmt) throws SQLException {
+        int id = -1;
+        ResultSet generatedKeys = stmt.getGeneratedKeys();
+        if(generatedKeys.next()) {
+            id = generatedKeys.getInt(1);
+        }
+        
+        generatedKeys.close();
+        stmt.close();
+        
+        return id;
+    }
+    
+    private void saveInvoiceProductsInBatches(int invoiceId, Invoice invoice) throws SQLException {
+        Statement stmt = null;    
+        this.conn.setAutoCommit(false);
+        stmt = conn.createStatement();
+
+        for (Product product : invoice.getProducts()) {
+            stmt.addBatch("INSERT INTO InvoiceProduct (invoiceId, productId) VALUES (" + invoiceId + ", " + product.getId() + ")");    
+        }
+
+        int[] updateCounts = stmt.executeBatch();
+        conn.commit();
+        conn.setAutoCommit(true);
+    }
+    
+    @Override
+    public Invoice getItemById(Integer id) throws SQLException {
+        PreparedStatement stmt = conn.prepareStatement(
+            "SELECT * FROM Invoice AS Invoice \n"
+            + "LEFT JOIN Customer AS Customer ON Invoice.customerId = Customer.id \n" 
+            + "LEFT JOIN Company AS Company ON Invoice.companyId = Company.id \n" 
+            + "LEFT JOIN InvoiceProduct AS InvoiceProduct ON Invoice.id = InvoiceProduct.invoiceId \n"
+            + "LEFT JOIN Product AS Product ON InvoiceProduct.productId = Product.id \n"
+            + "WHERE Invoice.id=" + id + " LIMIT 1"
+        );
+        ResultSet rs = stmt.executeQuery();
+
+        Invoice invoice = null;
+        while (rs.next()) {
+            invoice = populate.populateInvoice(rs);
+            invoice.setCustomer(populate.populateCustomer(rs));
+            invoice.setCompany(populate.populateManagedCompany(rs));
+        }
+        stmt.close();
+        
+        this.addProductsToInvoice(invoice);
+        
+        conn.close();
+        
+        for (Product prod : invoice.getProducts()) {
+            System.out.println("prod " + prod.getName() + " " + prod.getId());
+        }
+        
+        return invoice;
+    }
+    
+    private void addProductsToInvoice(Invoice invoice) throws SQLException {
+        PreparedStatement stmt = conn.prepareStatement(
+            "SELECT * FROM Product AS Product \n"
+            + "LEFT JOIN InvoiceProduct AS InvoiceProduct ON Product.id = InvoiceProduct.productId \n"
+            + "WHERE InvoiceProduct.invoiceId=" + invoice.getId()
+        );
+        ResultSet rs = stmt.executeQuery();
+        
+        while (rs.next()) {
+            Product prod = populate.populateProduct(rs);
+            invoice.getProducts().add(prod);
+        }
+        
+        stmt.close();
+    }
+
     @Override
     public boolean delete(Integer id) throws SQLException {
         PreparedStatement stmt = conn.prepareStatement("DELETE FROM Invoice WHERE id=?");

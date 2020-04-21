@@ -8,6 +8,7 @@ package kevytlaskutus.dao;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import kevytlaskutus.domain.CustomerCompany;
 import kevytlaskutus.domain.Invoice;
 import kevytlaskutus.domain.ManagedCompany;
@@ -37,12 +38,12 @@ public class Populate {
     
     public static Product populateProduct(ResultSet rs) throws SQLException {
         Product product = new Product(
-            rs.getString("name"), 
-            rs.getString("price"), 
-            rs.getString("priceUnit"), 
-            rs.getString("description")
+            rs.getString("Product.name"), 
+            rs.getString("Product.price"), 
+            rs.getString("Product.priceUnit"), 
+            rs.getString("Product.description")
         );
-        product.setId(rs.getInt("id"));
+        product.setId(rs.getInt("Product.id"));
         return product;
     }
     
@@ -54,7 +55,7 @@ public class Populate {
         addInvoiceDefaultDataToStatement(stmt, invoice);
         stmt.setInt(19, invoice.getId());
     }
-    
+   
     public static void addInvoiceDefaultDataToStatement(PreparedStatement stmt, Invoice invoice) throws SQLException {
         stmt.setInt(1, invoice.getInvoiceNumber());
         stmt.setInt(2, invoice.getReferenceNumber());

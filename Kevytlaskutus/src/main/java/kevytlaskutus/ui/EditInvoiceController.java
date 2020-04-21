@@ -14,6 +14,7 @@ import javafx.scene.layout.Pane;
 import kevytlaskutus.domain.AppService;
 import kevytlaskutus.domain.CustomerCompany;
 import kevytlaskutus.domain.Invoice;
+import kevytlaskutus.domain.Product;
 
 public class EditInvoiceController extends BaseController implements Initializable {
 
@@ -22,13 +23,18 @@ public class EditInvoiceController extends BaseController implements Initializab
    
     @FXML 
     private Button saveFormButton;
-    
+
+    @FXML 
+    private Button addNewRowButton;
+        
     private Form form;
     
     private String actionType;
    
     private Invoice currentInvoice;
     
+    private List<Product> products;
+   
     private FormActionFactory actionFactory;
     
     public EditInvoiceController(AppService appService, ViewFactory viewFactory, String fxmlName) {
@@ -38,6 +44,8 @@ public class EditInvoiceController extends BaseController implements Initializab
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
         this.currentInvoice = this.appService.getCurrentInvoice();
+        this.products = this.appService.getProducts();
+        
         this.setActionType();
         
         super.primaryNotice.setupNotice();
@@ -45,7 +53,8 @@ public class EditInvoiceController extends BaseController implements Initializab
         
         this.actionFactory = new FormActionFactory(this.appService);
         this.setupForm();
-        this.setButtonAction();
+        this.setSaveButtonAction();
+        this.setAddNewRowButtonAction();
     }
    
     public void setupForm() {
@@ -59,7 +68,13 @@ public class EditInvoiceController extends BaseController implements Initializab
         this.form.addDatePicker("Due Date", this.currentInvoice.getDueDate());
         this.form.addTextField("Overdue Penalty Interest rate", "10.0");
         this.form.addTextField("Discount", "" + this.currentInvoice.getDiscount());
-        this.form.addDropDown("Customer", this.createCustomerNameList(), currentInvoice.getCustomer());
+        
+        String customerName = "";
+        if (currentInvoice.getCustomer() != null) {
+            customerName = currentInvoice.getCustomer().getName();
+        }      
+        this.form.addDropDown("Customer", this.createCustomerNameList(), customerName);
+        
         this.form.addTextField("Customer Contact Name", this.currentInvoice.getCustomerContactName());
         this.form.addTextField("Customer Reference", this.currentInvoice.getCustomerReference());
         this.form.addTextField("Our Reference", this.currentInvoice.getCompanyReference());
@@ -67,9 +82,16 @@ public class EditInvoiceController extends BaseController implements Initializab
         this.form.addDatePicker("Delivery Date", this.currentInvoice.getDeliveryDate());
         this.form.addTextField("Delivery Information", this.currentInvoice.getDeliveryInfo());
         this.form.addTextField("Additional Information", this.currentInvoice.getAdditionalInfo());
+        
+        for (Product product : this.currentInvoice.getProducts()) {
+            this.form.addProductItem(products, product.getName());
+        }
+        this.form.addProductItem(products, "");
+       
         this.form.addTextField("Amount", "" + this.currentInvoice.getAmount());
 
         this.editFormContainerPane.getChildren().add(this.form.getForm());
+       
     }
   
     private ObservableList createCustomerNameList() {
@@ -80,7 +102,7 @@ public class EditInvoiceController extends BaseController implements Initializab
         }
         return customerNames;
     }
-    
+   
     public void setActionType() {
         if (this.currentInvoice.getId() > 0) {
             this.actionType = "UpdateInvoice";
@@ -89,7 +111,13 @@ public class EditInvoiceController extends BaseController implements Initializab
         }
     }
     
-    private void setButtonAction() {
+    private void setAddNewRowButtonAction() {
+        this.addNewRowButton.setOnAction(e-> {
+            this.form.addProductItem(products, "");
+        });
+    }   
+    
+    private void setSaveButtonAction() {
         this.saveFormButton.setOnAction(e-> {
             this.actionFactory.execute(this.actionType, this.form.getFormFields(), this.currentInvoice.getId());
             this.viewFactory.showManageInvoicesView();

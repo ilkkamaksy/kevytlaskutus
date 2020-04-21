@@ -87,6 +87,24 @@ public class ProductDaoImpl implements ProductDao<Product, Integer, String> {
     }
 
     @Override
+    public Product getItemByName(String name) throws SQLException {
+
+        PreparedStatement stmt = conn.prepareStatement(
+            "SELECT * FROM Product WHERE name LIKE ? LIMIT 1"
+        );
+        stmt.setString(1, "%" + name + "%");
+        ResultSet rs = stmt.executeQuery();
+
+        Product product = null;
+        while (rs.next()) {
+            product = populate.populateProduct(rs);
+        }
+
+        conn.close();
+        return product;
+    }
+    
+    @Override
     public List<Product> getItems() throws SQLException {
       
         PreparedStatement stmt = conn.prepareStatement("SELECT * FROM Product");
