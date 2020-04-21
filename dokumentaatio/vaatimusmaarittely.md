@@ -20,12 +20,9 @@ Sovellus koostuu seuraavista näkymistä:
 4. **Hallitse asiakkaita** käyttäjä voi selata, lisätä, muokata ja poistaa asiakkaita.
 5. **Lisää asiakas** käyttäjä voi lisätä uuden asiakkaan.
 6. **Muokkaa asiakasta**: käyttäjä voi muokata asiakkaan tietoja.
-7. **Hallitse tuotteita**: käyttäjä voi selata, lisätä, muokata ja poistaa tuotteita.
-8. **Lisää tuote** käyttäjä voi lisätä uuden tuotteen tai palvelun.
-9. **Muokkaa tuotetta** käyttäjä voi muokata tuotteen tietoja.
-10. **Hallitse yritystä** käyttäjä voi selata, lisätä, muokata ja poistaa yrityksen laskuja.
-11. **Lisää lasku** käyttäjä voi lisätä yritykselle laskun.
-12. **Muokkaa laskua** käyttäjä voi muokata laskua.
+7. **Hallitse yritystä** käyttäjä voi selata, lisätä, muokata ja poistaa yrityksen laskuja.
+8. **Lisää lasku** käyttäjä voi lisätä yritykselle laskun.
+9. **Muokkaa laskua** käyttäjä voi muokata laskua.
 
 Sovellus aukeaa hallintapaneeliin käynnistymisen yhteydessä. 
 
@@ -46,18 +43,11 @@ Sovellus aukeaa hallintapaneeliin käynnistymisen yhteydessä.
 
 - (Tehty) Käyttäjä voi poistaa asiakkaita
 
-- Käyttäjä voi lisätä uuden tuotteen
-  - (Tehty) Tuotteelle annetaan nimi, hinta ja laskutusyksikkö (kpl, tunti, kk) 
-  - tuotenumero luodaan automaattisesti
-
-- (Tehty) Käyttäjä voi muokata tuotteita
-- (Tehty) Käyttäjä voi poistaa tuotteita
-
 - Käyttäjä voi lisätä hallitsemilleen yrityksille laskuja
   - (Tehty) Laskulle valitaan asiakas 
   - (Tehty) Laskulle annetaan laskunumero ja eräpäivä
   - laskun viitenumero luodaan automaattisesti
-  - Laskulle voi lisätä tuotteita
+  - (Tehty) Laskulle voi lisätä tuotteita, tuotteelle lisätään nimi, hinta, laskutusyksikkö ja kuvaus
   - Laskun summa lasketaan automaattisesti 
   - Laskun eräpäivä luodaan automaattisesti
 
@@ -65,7 +55,6 @@ Sovellus aukeaa hallintapaneeliin käynnistymisen yhteydessä.
 
 - (Tehty) Käyttäjä voi tarkastella lisättyjä laskuja
 - (Tehty) Käyttäjä voi tarkastella lisättyjä asiakkaita
-- (Tehty) Käyttäjä voi tarkastella lisättyjä tuotteita
 
 # Toimintaympäristön rajoitteet  
 
