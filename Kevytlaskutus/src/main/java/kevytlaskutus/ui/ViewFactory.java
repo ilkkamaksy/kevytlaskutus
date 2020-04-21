@@ -27,7 +27,7 @@ public class ViewFactory {
     }
     
     public void showEditCompanyView() {
-        BaseController controller = new EditCompanyController(this.appService, this, "/fxml/formEditCompany.fxml");
+        BaseController controller = new EditCompanyController(this.appService, this, "/fxml/editCompany.fxml");
         this.initializeStage(controller);
     }
     
@@ -37,7 +37,7 @@ public class ViewFactory {
     }
     
     public void showEditCustomerView() {
-        BaseController controller = new EditCustomerController(this.appService, this, "/fxml/formEditCustomer.fxml");
+        BaseController controller = new EditCustomerController(this.appService, this, "/fxml/editCustomer.fxml");
         this.initializeStage(controller);
     }
     
@@ -47,12 +47,13 @@ public class ViewFactory {
     }
 
     public void showEditInvoiceView() {
-        BaseController controller = new EditInvoiceController(this.appService, this, "/fxml/formEditInvoice.fxml");
+        BaseController controller = new EditInvoiceController(this.appService, this, "/fxml/editInvoice.fxml");
         this.initializeStage(controller);
     }
     
     private void initializeStage(BaseController controller) {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(controller.getFxmlName()));
+        
+        FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource(controller.getFxmlName()));
         fxmlLoader.setController(controller);
         Parent parent;
         
