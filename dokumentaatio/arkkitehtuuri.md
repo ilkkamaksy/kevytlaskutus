@@ -16,4 +16,4 @@ Pakkaukset:
 
  Ohjelman osien suhdetta kuvaava luokka/pakkauskaavio:
 
- ![pakkausluokkakaavio](pakkausluokkakaavio.png)
+ ![pakkausluokkakaavio](pakkausluokkakaavio-v2.png)
