@@ -12,6 +12,5 @@
       <Button layoutX="14.0" layoutY="360.0" mnemonicParsing="false" onAction="#addNewInvoiceAction" text="Add new invoice" AnchorPane.bottomAnchor="10.0" />
       <Button layoutX="13.0" layoutY="8.0" mnemonicParsing="false" onAction="#manageCompaniesAction" style="-fx-background-color: none; -fx-border-color: none; -fx-padding: 2;" text="My Companies" />
       <Button layoutX="113.0" layoutY="8.0" mnemonicParsing="false" onAction="#manageCustomersAction" style="-fx-background-color: none; -fx-border-color: none; -fx-padding: 2;" text="Customers" />
-      <Button layoutX="192.0" layoutY="8.0" mnemonicParsing="false" onAction="#manageProductsAction" style="-fx-background-color: none; -fx-border-color: none; -fx-padding: 2;" text="Products" />
    </children> 
 </AnchorPane>

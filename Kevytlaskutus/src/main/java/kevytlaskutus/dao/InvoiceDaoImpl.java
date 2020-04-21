@@ -46,13 +46,6 @@ public class InvoiceDaoImpl implements InvoiceDao<Invoice, Integer, String>  {
             + "    FOREIGN KEY (companyId) REFERENCES Company(id) \n"
             + ");").executeUpdate();
        
-        conn.prepareStatement("CREATE TABLE IF NOT EXISTS InvoiceProduct (\n"
-            + "    id INTEGER AUTO_INCREMENT PRIMARY KEY,\n"
-            + "    invoiceId INTEGER,\n"
-            + "    productId INTEGER,\n"
-            + "    FOREIGN KEY (invoiceId) REFERENCES Invoice(id), \n"
-            + "    FOREIGN KEY (productId) REFERENCES Product(id) \n"
-            + ");").executeUpdate();
     }
     
     @Override
@@ -85,7 +78,7 @@ public class InvoiceDaoImpl implements InvoiceDao<Invoice, Integer, String>  {
         populate.populateCreateStatementData(pstmt, invoice);
         int rows = pstmt.executeUpdate();
         
-        int invoiceId = this.getGeneratedKey(pstmt);
+        int invoiceId = this.getGeneratedItemKey(pstmt);
         
         if (rows > 0 && invoice.getProducts().size() > 0) {
             this.saveInvoiceProductsInBatches(invoiceId, invoice);
@@ -125,7 +118,7 @@ public class InvoiceDaoImpl implements InvoiceDao<Invoice, Integer, String>  {
         return rows > 0;
     }
     
-    private int getGeneratedKey(PreparedStatement stmt) throws SQLException {
+    private int getGeneratedItemKey(PreparedStatement stmt) throws SQLException {
         int id = -1;
         ResultSet generatedKeys = stmt.getGeneratedKeys();
         if(generatedKeys.next()) {
@@ -144,7 +137,8 @@ public class InvoiceDaoImpl implements InvoiceDao<Invoice, Integer, String>  {
         stmt = conn.createStatement();
 
         for (Product product : invoice.getProducts()) {
-            stmt.addBatch("INSERT INTO InvoiceProduct (invoiceId, productId) VALUES (" + invoiceId + ", " + product.getId() + ")");    
+            stmt.addBatch(
+            "INSERT INTO Product (invoiceId, name, price, priceUnit, description) VALUES (" + invoiceId + ", '" + product.getName() + "'," + product.getPrice() + ",'" + product.getPriceUnit() + "','" + product.getDescription() + "')");
         }
 
         int[] updateCounts = stmt.executeBatch();
@@ -158,8 +152,6 @@ public class InvoiceDaoImpl implements InvoiceDao<Invoice, Integer, String>  {
             "SELECT * FROM Invoice AS Invoice \n"
             + "LEFT JOIN Customer AS Customer ON Invoice.customerId = Customer.id \n" 
             + "LEFT JOIN Company AS Company ON Invoice.companyId = Company.id \n" 
-            + "LEFT JOIN InvoiceProduct AS InvoiceProduct ON Invoice.id = InvoiceProduct.invoiceId \n"
-            + "LEFT JOIN Product AS Product ON InvoiceProduct.productId = Product.id \n"
             + "WHERE Invoice.id=" + id + " LIMIT 1"
         );
         ResultSet rs = stmt.executeQuery();
@@ -175,19 +167,13 @@ public class InvoiceDaoImpl implements InvoiceDao<Invoice, Integer, String>  {
         this.addProductsToInvoice(invoice);
         
         conn.close();
-        
-        for (Product prod : invoice.getProducts()) {
-            System.out.println("prod " + prod.getName() + " " + prod.getId());
-        }
-        
         return invoice;
     }
     
     private void addProductsToInvoice(Invoice invoice) throws SQLException {
         PreparedStatement stmt = conn.prepareStatement(
             "SELECT * FROM Product AS Product \n"
-            + "LEFT JOIN InvoiceProduct AS InvoiceProduct ON Product.id = InvoiceProduct.productId \n"
-            + "WHERE InvoiceProduct.invoiceId=" + invoice.getId()
+            + "WHERE Product.invoiceId=" + invoice.getId()
         );
         ResultSet rs = stmt.executeQuery();
         

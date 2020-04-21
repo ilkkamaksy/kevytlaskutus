@@ -1,7 +1,5 @@
 package kevytlaskutus.domain;
 
-import java.util.ArrayList;
-import java.util.List;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -16,7 +14,7 @@ public class Product {
     
     private int id;
     
-    private List<Invoice> invoices = new ArrayList<>();
+    private Invoice invoice;
     
     private String name;
     private String price;

@@ -32,9 +32,7 @@ public class EditInvoiceController extends BaseController implements Initializab
     private String actionType;
    
     private Invoice currentInvoice;
-    
-    private List<Product> products;
-   
+  
     private FormActionFactory actionFactory;
     
     public EditInvoiceController(AppService appService, ViewFactory viewFactory, String fxmlName) {
@@ -44,8 +42,7 @@ public class EditInvoiceController extends BaseController implements Initializab
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
         this.currentInvoice = this.appService.getCurrentInvoice();
-        this.products = this.appService.getProducts();
-        
+       
         this.setActionType();
         
         super.primaryNotice.setupNotice();
@@ -82,12 +79,15 @@ public class EditInvoiceController extends BaseController implements Initializab
         this.form.addDatePicker("Delivery Date", this.currentInvoice.getDeliveryDate());
         this.form.addTextField("Delivery Information", this.currentInvoice.getDeliveryInfo());
         this.form.addTextField("Additional Information", this.currentInvoice.getAdditionalInfo());
-        
-        for (Product product : this.currentInvoice.getProducts()) {
-            this.form.addProductItem(products, product.getName());
+  
+        List<Product> products = this.currentInvoice.getProducts();
+        for (Product product : products) {
+            this.form.addProductItem(product);
         }
-        this.form.addProductItem(products, "");
-       
+        if (products.size() == 0) {
+            this.form.addProductItem();
+        }
+        
         this.form.addTextField("Amount", "" + this.currentInvoice.getAmount());
 
         this.editFormContainerPane.getChildren().add(this.form.getForm());
@@ -113,7 +113,7 @@ public class EditInvoiceController extends BaseController implements Initializab
     
     private void setAddNewRowButtonAction() {
         this.addNewRowButton.setOnAction(e-> {
-            this.form.addProductItem(products, "");
+            this.form.addProductItem();
         });
     }   
     

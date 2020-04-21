@@ -4,9 +4,11 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import kevytlaskutus.dao.Populate;
+import kevytlaskutus.domain.Invoice;
 import kevytlaskutus.domain.Product;
 
 /**
@@ -25,11 +27,31 @@ public class ProductDaoImpl implements ProductDao<Product, Integer, String> {
         
         conn.prepareStatement("CREATE TABLE IF NOT EXISTS Product (\n"
             + "    id INTEGER AUTO_INCREMENT PRIMARY KEY,\n"
+            + "    invoiceId INTEGER,\n"
             + "    name VARCHAR(200),\n"
             + "    price VARCHAR(20),\n"
             + "    priceUnit VARCHAR(20),\n"
-            + "    description VARCHAR(50)\n"
+            + "    description VARCHAR(50),\n"
+            + "    FOREIGN KEY (invoiceId) REFERENCES Invoice(id) \n"
             + ");").executeUpdate();
+    }
+    
+    public void saveInBatches(int invoiceId, List<Product> products) throws SQLException {
+        Statement stmt = null;    
+        conn.setAutoCommit(false);
+        stmt = conn.createStatement();
+
+        for (Product product : products) {
+            stmt.addBatch(
+            "INSERT INTO Product (invoiceId, name, price, priceUnit, description) VALUES (" + invoiceId + ", '" + product.getName() + "'," + product.getPrice() + ",'" + product.getPriceUnit() + "','" + product.getDescription() + "')");
+        }
+
+        int[] updateCounts = stmt.executeBatch();
+        conn.commit();
+        conn.setAutoCommit(true);
+        
+        stmt.close();
+        conn.close();
     }
     
     @Override

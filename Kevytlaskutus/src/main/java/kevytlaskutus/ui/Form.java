@@ -30,23 +30,30 @@ public class Form {
     
     private HashMap<String, Node> formFields;
     
-    private int productRowCount = 0;
+    private int productRowCount = 1;
   
     public Form() {
         this.formFields = new HashMap<>();
         form = new VBox(10);
     }
    
-    public void addProductItem(List<Product> products, Product selectedProduct) {
-        this.addProductItem(products, selectedProduct.getName());
+    public void addProductItem() {
+        Product product = new Product();
+        product.setName("");
+        product.setPrice("");
+        product.setPriceUnit("");
+        product.setDescription("");
+        this.addProductItem(product);
     }
     
-    public void addProductItem(List<Product> products, String selectedProductName) {
-        ObservableList<String> productNames = this.createNameList(products);
-        this.addDropDown("Select product " + this.productRowCount, productNames, selectedProductName);
+    public void addProductItem(Product selectedProduct) {
+        this.addTextField("Product Name #" + this.productRowCount, selectedProduct.getName());
+        this.addTextField("Product Price #" + this.productRowCount, selectedProduct.getPrice());
+        this.addTextField("Product Price Unit #" + this.productRowCount, selectedProduct.getPriceUnit());
+        this.addTextField("Product Description #" + this.productRowCount, selectedProduct.getDescription());
         this.productRowCount++;
     }
-
+    
     public void addTextField(String label, String field) {
         TextField inputField = new TextField(field);
         this.addNodesToForm(new Label(label), inputField);

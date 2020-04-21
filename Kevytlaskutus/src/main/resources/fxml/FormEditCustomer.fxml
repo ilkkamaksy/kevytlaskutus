@@ -10,7 +10,6 @@
    <children>
       <Button layoutX="13.0" layoutY="8.0" mnemonicParsing="false" onAction="#manageCompaniesAction" style="-fx-background-color: none; -fx-border-color: none; -fx-padding: 2;" text="My Companies" />
       <Button layoutX="113.0" layoutY="8.0" mnemonicParsing="false" onAction="#manageCustomersAction" style="-fx-background-color: none; -fx-border-color: none; -fx-padding: 2;" text="Customers" />
-      <Button layoutX="192.0" layoutY="8.0" mnemonicParsing="false" onAction="#manageProductsAction" style="-fx-background-color: none; -fx-border-color: none; -fx-padding: 2;" text="Products" />
       <Button fx:id="saveFormButton" layoutX="13.0" layoutY="367.0" mnemonicParsing="false" text="Save Customer" AnchorPane.bottomAnchor="10.0" />
       <Pane fx:id="noticePane" minHeight="0.0" minWidth="0.0" prefWidth="554.0" AnchorPane.topAnchor="36.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" style="-fx-background-color: #FFFFFF;"></Pane>
       <ScrollPane layoutY="37.0" prefHeight="321.0" prefWidth="600.0" AnchorPane.bottomAnchor="43.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="70.0">

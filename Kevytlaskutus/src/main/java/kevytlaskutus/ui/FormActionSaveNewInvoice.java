@@ -80,14 +80,15 @@ public class FormActionSaveNewInvoice extends FormAction {
             this.invoice.setAmount(amount);
         }    
         
-        int i = 0;
+        int i = 1;
         for (String fieldLabel : formFields.keySet()) {
-            if (fieldLabel.contains("Select product")) {
-                String productName = dataExtractor.getSelectedValueFromComboBox(fieldLabel, formFields);
-                if (!productName.isEmpty()) {
-                    Product product = this.appService.getProduct(productName);
-                    this.invoice.getProducts().add(product);
-                }
+            if (fieldLabel.contains("Product Name #" + i)) {
+                Product product = new Product();
+                product.setName(dataExtractor.getValueFromTextField("Product Name #" + i, formFields));
+                product.setPrice(dataExtractor.getValueFromTextField("Product Price #" + i, formFields));
+                product.setPriceUnit(dataExtractor.getValueFromTextField("Product Price Unit #" + i, formFields));
+                product.setDescription(dataExtractor.getValueFromTextField("Product Description #" + i, formFields));
+                this.invoice.getProducts().add(product);
                 i++;
             }
         }

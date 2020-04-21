@@ -41,16 +41,6 @@ public class ViewFactory {
         this.initializeStage(controller);
     }
     
-    public void showManageProductsView() {
-        BaseController controller = new ManageProductsController(this.appService, this, "/fxml/manageProducts.fxml");
-        this.initializeStage(controller);
-    }
-
-    public void showEditProductView() {
-        BaseController controller = new EditProductController(this.appService, this, "/fxml/formEditProduct.fxml");
-        this.initializeStage(controller);
-    }
-    
     public void showManageInvoicesView() {
         BaseController controller = new ManageInvoicesController(this.appService, this, "/fxml/manageInvoices.fxml");
         this.initializeStage(controller);

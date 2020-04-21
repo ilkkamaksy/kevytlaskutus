@@ -1,13 +1,8 @@
 package kevytlaskutus.ui;
 
 import javafx.fxml.FXML;
-import javafx.geometry.Insets;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Text;
 import kevytlaskutus.domain.AppService;
-import kevytlaskutus.domain.Notice;
 
 /**
  * Base controller class for views.
@@ -43,9 +38,4 @@ public abstract class BaseController {
     void manageCustomersAction() {
         this.viewFactory.showManageCustomerView();
     }
-
-    @FXML
-    void manageProductsAction() {
-        this.viewFactory.showManageProductsView();
-    }        
 }
