@@ -16,10 +16,10 @@ Pakkaukset:
 
  Ohjelman osien suhdetta kuvaava luokka/pakkauskaavio:
 
- ![pakkausluokkakaavio](pakkausluokkakaavio-v2.png)
+ ![pakkausluokkakaavio](pakkausluokkakaavio-revisio.png)
 
 ## Päätoiminnallisuudet
 
 Alla oleva sekvenssikaavio kuvaa, miten sovelluksen kontrolli etenee kun käyttäjä lisää uuden hallittavan yrityksen.
 
-![sekvenssikaavio yrityksen tallennus](sekvenssikaavio-save-managed-company.png)
+![sekvenssikaavio yrityksen tallennus](sekvenssikaavio-savemanagedcompany.png)
