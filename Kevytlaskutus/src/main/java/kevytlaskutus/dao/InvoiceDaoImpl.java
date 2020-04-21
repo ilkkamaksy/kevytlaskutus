@@ -45,7 +45,16 @@ public class InvoiceDaoImpl implements InvoiceDao<Invoice, Integer, String>  {
             + "    FOREIGN KEY (customerId) REFERENCES Customer(id), \n"
             + "    FOREIGN KEY (companyId) REFERENCES Company(id) \n"
             + ");").executeUpdate();
-       
+        
+        conn.prepareStatement("CREATE TABLE IF NOT EXISTS Product (\n"
+            + "    id INTEGER AUTO_INCREMENT PRIMARY KEY,\n"
+            + "    invoiceId INTEGER,\n"
+            + "    name VARCHAR(200),\n"
+            + "    price VARCHAR(20),\n"
+            + "    priceUnit VARCHAR(20),\n"
+            + "    description VARCHAR(50),\n"
+            + "    FOREIGN KEY (invoiceId) REFERENCES Invoice(id) \n"
+            + ");").executeUpdate();
     }
     
     @Override

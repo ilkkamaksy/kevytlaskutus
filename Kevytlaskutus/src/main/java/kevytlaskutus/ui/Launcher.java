@@ -23,12 +23,10 @@ public class Launcher extends Application {
     public void init() throws Exception {
         ManagedCompanyDao managedCompanyDao = new ManagedCompanyDao();
         CustomerCompanyDao customerCompanyDao = new CustomerCompanyDao();
-        ProductDaoImpl productDao = new ProductDaoImpl();
         InvoiceDaoImpl invoiceDao = new InvoiceDaoImpl();
         DatabaseUtils databaseUtils = new DatabaseUtils(
                 managedCompanyDao, 
                 customerCompanyDao, 
-                productDao, 
                 invoiceDao,
                 "jdbc:h2:file:./database/kevytlaskutusdb", 
                 "sa", 
@@ -38,7 +36,6 @@ public class Launcher extends Application {
         this.appService = new AppService(
                 managedCompanyDao, 
                 customerCompanyDao, 
-                productDao, 
                 invoiceDao,
                 databaseUtils
         );

@@ -1,15 +1,6 @@
 package kevytlaskutus.domain;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.List;
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import kevytlaskutus.dao.ManagedCompanyDao;
 import kevytlaskutus.dao.CustomerCompanyDao;
 import kevytlaskutus.dao.InvoiceDaoImpl;
@@ -22,12 +13,10 @@ public class AppService {
     
     private ManagedCompanyService managedCompanyService; 
     private CustomerCompanyService customerCompanyService;
-    private ProductService productService;
     private InvoiceService invoiceService;
    
     private ManagedCompany currentManagedCompany;
     private CustomerCompany currentCustomerCompany;
-    private Product currentProduct;
     private Invoice currentInvoice;
     
     private NoticeMessages noticeMessages = new NoticeMessages();
@@ -36,22 +25,18 @@ public class AppService {
     public AppService(
             ManagedCompanyDao managedCompanyDao, 
             CustomerCompanyDao customerCompanyDao, 
-            ProductDaoImpl productDao,
             InvoiceDaoImpl invoiceDao,
             DatabaseUtils databaseUtils
     ) {
         
         this.managedCompanyService = new ManagedCompanyService(managedCompanyDao, databaseUtils);
         this.customerCompanyService = new CustomerCompanyService(customerCompanyDao, databaseUtils);
-        this.productService = new ProductService(productDao, databaseUtils);
         this.invoiceService = new InvoiceService(invoiceDao, databaseUtils);
 
         this.currentManagedCompany = new ManagedCompany();
         this.currentManagedCompany.setName("");
         this.currentCustomerCompany = new CustomerCompany();
-        this.currentProduct = new Product();
         this.currentInvoice = new Invoice();
-        this.currentInvoice.setInvoiceNumber(this.getDefaultInvoiceNumber());
         this.noticeQueue = new NoticeQueue();
     }
     
@@ -79,14 +64,6 @@ public class AppService {
         this.currentInvoice = currentInvoice;
     }
    
-    public Product getCurrentProduct() {
-        return currentProduct;
-    }
-
-    public void setCurrentProduct(Product currentProduct) {
-        this.currentProduct = currentProduct;
-    }
-
     public boolean createManagedCompany(ManagedCompany company) {
         boolean result = this.managedCompanyService.createManagedCompany(company);
         this.addNoticeToQueue(result, "create" + company.getClass().getSimpleName());
@@ -138,37 +115,7 @@ public class AppService {
     public CustomerCompany getCustomerCompanyByName(String name) {
         return this.customerCompanyService.getCustomerCompanyByName(name);
     }
-    
-    public boolean createProduct(Product product) {
-        boolean result = this.productService.createProduct(product);
-        this.addNoticeToQueue(result, "create" + product.getClass().getSimpleName());
-        return result;
-    }
-    
-    public Boolean updateProduct(int id, Product product) {
-        boolean result = this.productService.updateProduct(id, product);
-        this.addNoticeToQueue(result, "update" + product.getClass().getSimpleName());
-        return result;
-    }
-    
-    public Boolean deleteProduct(int id) {
-        boolean result = this.productService.deleteProduct(id);
-        this.addNoticeToQueue(result, "delete");
-        return result;
-    }
-    
-    public Product getProduct(int id) {
-        return this.productService.getProduct(id);
-    }
-    
-    public Product getProduct(String name) {
-        return this.productService.getProduct(name);
-    }
-    
-    public List<Product> getProducts() {
-        return this.productService.getProducts();
-    }
-    
+        
     public int getDefaultInvoiceNumber() {
         return this.invoiceService.getDefaultInvoiceNumber();
     }

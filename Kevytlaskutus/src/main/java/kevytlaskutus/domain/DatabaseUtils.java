@@ -13,7 +13,6 @@ import java.util.logging.Logger;
 import kevytlaskutus.dao.CustomerCompanyDao;
 import kevytlaskutus.dao.InvoiceDaoImpl;
 import kevytlaskutus.dao.ManagedCompanyDao;
-import kevytlaskutus.dao.ProductDaoImpl;
 
 /**
  *
@@ -23,7 +22,6 @@ public class DatabaseUtils {
     
     private ManagedCompanyDao managedCompanyDao;
     private CustomerCompanyDao customerCompanyDao;
-    private ProductDaoImpl productDao;
     private InvoiceDaoImpl invoiceDao;
     
     private String dbOption;
@@ -33,7 +31,6 @@ public class DatabaseUtils {
     public DatabaseUtils(
         ManagedCompanyDao managedCompanyDao, 
         CustomerCompanyDao customerCompanyDao, 
-        ProductDaoImpl productDao,
         InvoiceDaoImpl invoiceDao,
         String dbOption,
         String dbUser,
@@ -41,7 +38,6 @@ public class DatabaseUtils {
     ) {
         this.managedCompanyDao = managedCompanyDao;
         this.customerCompanyDao = customerCompanyDao;
-        this.productDao = productDao;
         this.invoiceDao = invoiceDao;
         this.dbOption = dbOption;
         this.dbUser = dbUser;
@@ -55,11 +51,9 @@ public class DatabaseUtils {
             this.prepareCustomerCompanyDaoConnection(conn);
             this.prepareInvoiceDaoConnection(conn);
             this.prepareManagedCompanyDaoConnection(conn);
-            this.prepareProductDaoConnection(conn);
             
             managedCompanyDao.initDb();
             customerCompanyDao.initDb();
-            productDao.initDb();
             invoiceDao.initDb();
             
             conn.close();
@@ -81,11 +75,7 @@ public class DatabaseUtils {
     public void prepareCustomerCompanyDaoConnection(Connection conn) {
         this.customerCompanyDao.setConnection(conn);
     }
-    
-    public void prepareProductDaoConnection(Connection conn) {
-        this.productDao.setConnection(conn);
-    }
-    
+   
     public Connection getConnection() throws SQLException {     
         return DriverManager.getConnection(this.dbOption, this.dbUser, this.dbPassword);
     }

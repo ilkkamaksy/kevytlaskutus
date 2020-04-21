@@ -22,8 +22,6 @@ public class FormActionFactory {
         this.commands.put("UpdateManagedCompany", new FormActionUpdateManagedCompany(appService));
         this.commands.put("NewCustomerCompany", new FormActionSaveNewCustomerCompany(appService));
         this.commands.put("UpdateCustomerCompany", new FormActionUpdateCustomerCompany(appService));
-        this.commands.put("NewProduct", new FormActionSaveNewProduct(appService));
-        this.commands.put("UpdateProduct", new FormActionUpdateProduct(appService));
         this.commands.put("NewInvoice", new FormActionSaveNewInvoice(appService));
         this.commands.put("UpdateInvoice", new FormActionUpdateInvoice(appService));
     }

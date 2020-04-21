@@ -11,7 +11,6 @@ import java.util.List;
 import kevytlaskutus.dao.CustomerCompanyDao;
 import kevytlaskutus.dao.InvoiceDaoImpl;
 import kevytlaskutus.dao.ManagedCompanyDao;
-import kevytlaskutus.dao.ProductDaoImpl;
 import kevytlaskutus.domain.InvoiceService;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -34,7 +33,6 @@ public class InvoiceServiceTest {
 
     ManagedCompanyDao mockManagedCompanyDao;
     CustomerCompanyDao mockCustomerCompanyDao;
-    ProductDaoImpl mockProductDao;
     InvoiceDaoImpl mockInvoiceDao;
 
     InvoiceService invoiceService;
@@ -48,12 +46,10 @@ public class InvoiceServiceTest {
         mockManagedCompanyDao = mock(ManagedCompanyDao.class);       
         mockCustomerCompanyDao = mock(CustomerCompanyDao.class);
         mockInvoiceDao = mock(InvoiceDaoImpl.class);
-        mockProductDao = mock(ProductDaoImpl.class);  
         
         databaseUtils = new DatabaseUtils(
                 mockManagedCompanyDao, 
                 mockCustomerCompanyDao, 
-                mockProductDao, 
                 mockInvoiceDao,
                 "jdbc:h2:mem:testdb", 
                 "sa", 
