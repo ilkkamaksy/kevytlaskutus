@@ -22,4 +22,4 @@ Pakkaukset:
 
 Alla oleva sekvenssikaavio kuvaa, miten sovelluksen kontrolli etenee kun käyttäjä lisää uuden hallittavan yrityksen.
 
-![sekvenssikaavio1](sekvenssikaavio-save-managed-company.png)
+![sekvenssikaavio yrityksen tallennus](sekvenssikaavio-save-managed-company.png)
