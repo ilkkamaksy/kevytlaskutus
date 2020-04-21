@@ -8,6 +8,7 @@ Sovelluksen avulla freelancerit ja pienyrittäjät voivat hallita yhden tai usea
 
 ## Dokumentaatio
 
+- [1. Release](/releases/tag/viikko5)
 - [Vaatimusmäärittely](/dokumentaatio/vaatimusmaarittely.md)
 - [Työaikakirjanpito](/dokumentaatio/tuntikirjanpito.md)
 - [Arkkitehtuurikuvaus](/dokumentaatio/arkkitehtuuri.md)
