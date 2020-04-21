@@ -9,9 +9,9 @@ Sovelluksen avulla freelancerit ja pienyrittäjät voivat hallita yhden tai usea
 ## Dokumentaatio
 
 - [1. Release](https://github.com/ilkkamaksy/ot-harjoitustyo/releases/tag/viikko5)
-- [Vaatimusmäärittely](/dokumentaatio/vaatimusmaarittely.md)
-- [Työaikakirjanpito](/dokumentaatio/tuntikirjanpito.md)
-- [Arkkitehtuurikuvaus](/dokumentaatio/arkkitehtuuri.md)
+- [Vaatimusmäärittely](/documentation/vaatimusmaarittely.md)
+- [Työaikakirjanpito](/documentation/tuntikirjanpito.md)
+- [Arkkitehtuurikuvaus](/documentation/arkkitehtuuri.md)
 
 ## Komentorivitoiminnot
 
