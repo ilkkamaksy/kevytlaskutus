@@ -6,14 +6,10 @@
 package kevytlaskutus.ui;
 
 import java.math.BigDecimal;
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import javafx.scene.Node;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TextField;
 import kevytlaskutus.domain.AppService;
 import kevytlaskutus.domain.CustomerCompany;
 import kevytlaskutus.domain.Invoice;
@@ -88,7 +84,9 @@ public class FormActionSaveNewInvoice extends FormAction {
                 product.setPrice(dataExtractor.getValueFromTextField("Product Price #" + i, formFields));
                 product.setPriceUnit(dataExtractor.getValueFromTextField("Product Price Unit #" + i, formFields));
                 product.setDescription(dataExtractor.getValueFromTextField("Product Description #" + i, formFields));
-                this.invoice.getProducts().add(product);
+                if (!product.getName().isEmpty()) {
+                    this.invoice.getProducts().add(product);
+                }
                 i++;
             }
         }
