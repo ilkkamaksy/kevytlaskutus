@@ -102,8 +102,5 @@ public class ManagedCompanyService {
         
         return results;
     }
-    
-    public void prepareManagedCompanyDaoConnection(Connection conn) {
-        this.dao.setConnection(conn);
-    }
+
 }

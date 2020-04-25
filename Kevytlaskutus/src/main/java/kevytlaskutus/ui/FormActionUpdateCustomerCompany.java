@@ -4,24 +4,17 @@ import java.util.HashMap;
 import javafx.scene.Node;
 import kevytlaskutus.domain.*;
 
-public class FormActionUpdateCustomerCompany extends FormAction {
+public class FormActionUpdateCustomerCompany extends FormCustomerCompanyAction {
     
     private CustomerCompany company;
     
-    public FormActionUpdateCustomerCompany(
-            AppService appService
-    ) {
+    public FormActionUpdateCustomerCompany(AppService appService) {
         super(appService);
-    }
-
-    @Override
-    public void setData(HashMap<String, Node> formFields, int id) {
-        this.company = super.makeCustomerCompanyFromFieldValues(formFields, id);
     }
     
     @Override
     public boolean execute() {
-        return super.appService.updateCustomerCompany(company.getId(), this.company);
+        return super.appService.updateCurrentCustomerCompany();
     }
 
 }

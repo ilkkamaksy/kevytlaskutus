@@ -41,12 +41,12 @@ public class InvoiceService {
         return startInvoiceNumbering;
     }
     
-    public boolean createInvoiceForCompany(Invoice invoice, ManagedCompany managedCompany) {
+    public Integer createInvoiceForCompany(Invoice invoice, ManagedCompany managedCompany) {
         if (invoice == null || managedCompany == null || managedCompany.getId() < 1) {
-            return false;
+            return -1;
         }
         
-        Boolean result = false;
+        Integer result = -1;
         
         try {    
             Connection conn = this.databaseUtils.getConnection();

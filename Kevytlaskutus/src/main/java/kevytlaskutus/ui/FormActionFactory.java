@@ -28,13 +28,11 @@ public class FormActionFactory {
     
     public boolean execute(String actionType, HashMap<String, Node> formFields, int id) {        
         FormAction action = this.commands.get(actionType); 
-        action.setData(formFields, id);
         return action.execute();
     }
     
     public boolean execute(String actionType, HashMap<String, Node> formFields, int id, List<Product> products) {        
         FormAction action = this.commands.get(actionType); 
-        action.setData(formFields, id);
         return action.execute();
     }
     

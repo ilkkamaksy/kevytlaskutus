@@ -11,6 +11,7 @@ import java.util.List;
 import kevytlaskutus.dao.CustomerCompanyDao;
 import kevytlaskutus.dao.InvoiceDaoImpl;
 import kevytlaskutus.dao.ManagedCompanyDao;
+import kevytlaskutus.dao.ProductDaoImpl;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -32,6 +33,7 @@ public class AppServiceTest {
     ManagedCompanyDao mockManagedCompanyDao;
     CustomerCompanyDao mockCustomerCompanyDao;
     InvoiceDaoImpl mockInvoiceDao;
+    ProductDaoImpl mockProductDao;
     
     ManagedCompany mockManagedCompany;
     CustomerCompany mockCustomer;
@@ -42,18 +44,20 @@ public class AppServiceTest {
         mockManagedCompanyDao = mock(ManagedCompanyDao.class);       
         mockCustomerCompanyDao = mock(CustomerCompanyDao.class);
         mockInvoiceDao = mock(InvoiceDaoImpl.class);
+        mockProductDao = mock(ProductDaoImpl.class);
         
         DatabaseUtils databaseUtils = new DatabaseUtils(
                 mockManagedCompanyDao, 
                 mockCustomerCompanyDao, 
                 mockInvoiceDao,
+                mockProductDao,
                 "jdbc:h2:mem:testdb", 
                 "sa", 
                 ""
         );
         databaseUtils.initDb();
         
-        appService = new AppService(mockManagedCompanyDao, mockCustomerCompanyDao, mockInvoiceDao, databaseUtils);
+        appService = new AppService(mockManagedCompanyDao, mockCustomerCompanyDao, mockInvoiceDao, mockProductDao, databaseUtils);
         
         mockInvoice = mock(Invoice.class);
         
@@ -76,7 +80,7 @@ public class AppServiceTest {
     public void newManagedCompanyCanBeCreatedWithValidCompanyObject() {
         try {
             when(mockManagedCompanyDao.create(mockManagedCompany)).thenReturn(true);      
-            boolean result = appService.createManagedCompany(mockManagedCompany);
+            boolean result = appService.saveCurrentManagedCompany();
             verify(mockManagedCompanyDao).create(mockManagedCompany); 
             assertTrue(result);
         } catch (SQLException e) {}
@@ -86,7 +90,7 @@ public class AppServiceTest {
     public void newManagedCompanyCanNotBeCreatedWithEmptyCompanyObject() {
         try {
             when(mockManagedCompanyDao.create(mockManagedCompany)).thenReturn(false);    
-            boolean result = appService.createManagedCompany(mockManagedCompany);
+            boolean result = appService.saveCurrentManagedCompany();
             verify(mockManagedCompanyDao).create(mockManagedCompany); 
             assertFalse(result);
         } catch (SQLException e) {}
@@ -96,7 +100,7 @@ public class AppServiceTest {
     public void existingManagedCompanyCanBeUpdated() {
         try {
             when(mockManagedCompanyDao.update(1, mockManagedCompany)).thenReturn(true);    
-            boolean result = appService.updateManagedCompany(1, mockManagedCompany); 
+            boolean result = appService.updateCurrentManagedCompany(); 
             verify(mockManagedCompanyDao).update(1, mockManagedCompany); 
             assertTrue(result);
         } catch (SQLException e) {}
@@ -106,7 +110,7 @@ public class AppServiceTest {
     public void updatingNonExistingManagedCompanyReturnsFalse() {
         try {
             when(mockManagedCompanyDao.update(1, mockManagedCompany)).thenReturn(false);    
-            boolean result = appService.updateManagedCompany(1, mockManagedCompany); 
+            boolean result = appService.updateCurrentManagedCompany(); 
             verify(mockManagedCompanyDao).update(1, mockManagedCompany); 
             assertFalse(result);
         } catch (SQLException e) {}
@@ -159,7 +163,7 @@ public class AppServiceTest {
     public void newCustomerCanBeCreatedWithValidCompanyObject() {
         try {
             when(mockCustomerCompanyDao.create(mockCustomer)).thenReturn(true);      
-            boolean result = appService.createCustomerCompany(mockCustomer);
+            boolean result = appService.saveCurrentCustomerCompany();
             verify(mockCustomerCompanyDao).create(mockCustomer); 
             assertTrue(result);
         } catch (SQLException e) {}
@@ -169,7 +173,7 @@ public class AppServiceTest {
     public void newCustomerCanNotBeCreatedWithEmptyCustomer() {
         try {
             when(mockCustomerCompanyDao.create(mockCustomer)).thenReturn(false);    
-            boolean result = appService.createCustomerCompany(mockCustomer);
+            boolean result = appService.saveCurrentCustomerCompany();
             verify(mockCustomerCompanyDao).create(mockCustomer); 
             assertFalse(result);
         } catch (SQLException e) {}
@@ -179,7 +183,7 @@ public class AppServiceTest {
     public void existingCustomerCanBeUpdated() {
         try {
             when(mockCustomerCompanyDao.update(1, mockCustomer)).thenReturn(true);    
-            boolean result = appService.updateCustomerCompany(1, mockCustomer); 
+            boolean result = appService.updateCurrentCustomerCompany(); 
             verify(mockCustomerCompanyDao).update(1, mockCustomer); 
             assertTrue(result);
         } catch (SQLException e) {}
@@ -189,7 +193,7 @@ public class AppServiceTest {
     public void updatingNonExistingCustomerReturnsFalse() {
         try {
             when(mockCustomerCompanyDao.update(1, mockCustomer)).thenReturn(false);    
-            boolean result = appService.updateCustomerCompany(1, mockCustomer); 
+            boolean result = appService.updateCurrentCustomerCompany(); 
             verify(mockCustomerCompanyDao).update(1, mockCustomer); 
             assertFalse(result);
         } catch (SQLException e) {}
@@ -242,7 +246,7 @@ public class AppServiceTest {
     public void afterAddingNewItemThereAreNotificationsPending() {
         try {
             when(mockCustomerCompanyDao.create(mockCustomer)).thenReturn(true);      
-            boolean result = appService.createCustomerCompany(mockCustomer);
+            boolean result = appService.saveCurrentCustomerCompany();
             assertTrue(appService.hasNoticePending());
         } catch (SQLException e) {}
     }
@@ -251,7 +255,7 @@ public class AppServiceTest {
     public void pendingNoticeCanBeRetrieved() {
         CustomerCompany customer = new CustomerCompany();
         customer.setName("Acme");
-        boolean result = appService.createCustomerCompany(customer);
+        boolean result = appService.saveCurrentCustomerCompany();
         assertEquals(appService.getPendingNotice().getNoticeMessage(), "A new customer has been added");
     }
     

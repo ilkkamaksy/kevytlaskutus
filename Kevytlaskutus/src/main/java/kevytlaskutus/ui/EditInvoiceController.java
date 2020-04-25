@@ -28,7 +28,7 @@ public class EditInvoiceController extends BaseController implements Initializab
     private Button addNewRowButton;
         
     private Form form;
-    
+   
     private String actionType;
    
     private Invoice currentInvoice;
@@ -56,40 +56,38 @@ public class EditInvoiceController extends BaseController implements Initializab
    
     public void setupForm() {
         
-        this.form = new Form();
-                
-        this.form.addDatePicker("Date", currentInvoice.getCreatedDate());
-        this.form.addTextField("Invoice Number", "" + "" + this.currentInvoice.getInvoiceNumber());
-        this.form.addTextField("Reference Number", "" + currentInvoice.getReferenceNumber());
-        this.form.addTextField("Payment due in number of days", "" + this.currentInvoice.getPaymentTerm());
-        this.form.addDatePicker("Due Date", this.currentInvoice.getDueDate());
-        this.form.addTextField("Overdue Penalty Interest rate", "10.0");
-        this.form.addTextField("Discount", "" + this.currentInvoice.getDiscount());
-        
+        this.form = new Form(this.appService);        
+        this.form.addDatePicker("Date", currentInvoice.getCreatedDate(), currentInvoice, "CreatedDate");
+        this.form.addIntegerField("Invoice Number", "" + "" + this.currentInvoice.getInvoiceNumber(), this.currentInvoice, "InvoiceNumber");
+        this.form.addIntegerField("Reference Number", "" + currentInvoice.getReferenceNumber(), this.currentInvoice, "ReferenceNumber");
+        this.form.addIntegerField("Payment due in number of days", "" + this.currentInvoice.getPaymentTerm(), this.currentInvoice, "PaymentTerm");
+        this.form.addDatePicker("Due Date", this.currentInvoice.getDueDate(), currentInvoice, "DueDate");
+        this.form.addDecimalField("Overdue Penalty Interest rate", "" + this.currentInvoice.getPenaltyInterest(), this.currentInvoice, "PenaltyInterest");
+        this.form.addDecimalField("Discount", "" + this.currentInvoice.getDiscount(), this.currentInvoice, "Discount");
+       
         String customerName = "";
         if (currentInvoice.getCustomer() != null) {
             customerName = currentInvoice.getCustomer().getName();
         }      
-        this.form.addDropDown("Customer", this.createCustomerNameList(), customerName);
-        
-        this.form.addTextField("Customer Contact Name", this.currentInvoice.getCustomerContactName());
-        this.form.addTextField("Customer Reference", this.currentInvoice.getCustomerReference());
-        this.form.addTextField("Our Reference", this.currentInvoice.getCompanyReference());
-        this.form.addTextField("Delivery Terms", this.currentInvoice.getDeliveryTerms());
-        this.form.addDatePicker("Delivery Date", this.currentInvoice.getDeliveryDate());
-        this.form.addTextField("Delivery Information", this.currentInvoice.getDeliveryInfo());
-        this.form.addTextField("Additional Information", this.currentInvoice.getAdditionalInfo());
+        this.form.addDropDown("Customer", this.createCustomerNameList(), customerName, currentInvoice, "Customer");
+       
+        this.form.addTextField("Customer Contact Name", this.currentInvoice.getCustomerContactName(), this.currentInvoice, "CustomerContactName");
+        this.form.addTextField("Customer Reference", this.currentInvoice.getCustomerReference(), this.currentInvoice, "CustomerReference");
+        this.form.addTextField("Our Reference", this.currentInvoice.getCompanyReference(), this.currentInvoice, "CompanyReference");
+        this.form.addTextField("Delivery Terms", this.currentInvoice.getDeliveryTerms(), this.currentInvoice, "DeliveryTerms");
+        this.form.addDatePicker("Delivery Date", this.currentInvoice.getDeliveryDate(), currentInvoice, "DeliveryDate");
+        this.form.addTextField("Delivery Information", this.currentInvoice.getDeliveryInfo(), this.currentInvoice, "DeliveryInfo");
+        this.form.addTextField("Additional Information", this.currentInvoice.getAdditionalInfo(), this.currentInvoice, "AdditionalInfo");
   
         List<Product> products = this.currentInvoice.getProducts();
         for (Product product : products) {
-            this.form.addProductItem(product);
+            this.form.setLineItem(product);
         }
         if (products.size() == 0) {
-            this.form.addProductItem();
+            this.form.addLineItem();
         }
         
-        this.form.addTextField("Amount", "" + this.currentInvoice.getAmount());
-
+        this.form.addTextField("Amount", "" + this.currentInvoice.getAmount(), this.currentInvoice, "Amount");
         this.editFormContainerPane.getChildren().add(this.form.getForm());
        
     }
@@ -113,7 +111,7 @@ public class EditInvoiceController extends BaseController implements Initializab
     
     private void setAddNewRowButtonAction() {
         this.addNewRowButton.setOnAction(e-> {
-            this.form.addProductItem();
+            this.form.addLineItem();
         });
     }   
     

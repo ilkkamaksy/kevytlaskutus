@@ -48,8 +48,9 @@ public class InvoiceDaoImplTest {
         Invoice invoice = new Invoice();
         invoice.setInvoiceNumber(1001);
         try {
-            boolean result = dao.create(invoice);
+            Integer id = dao.create(invoice);
             verify(mockInvoice).getAmount();
+            boolean result = id > -1 ? true : false;
             assertTrue(result);
         } catch (SQLException e) {}
     }

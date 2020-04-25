@@ -35,7 +35,7 @@ public class FormFieldDataExtractor {
     public static BigDecimal getBigDecimalFromTextField(String fieldName, HashMap<String, Node> formFields) {
         String value = getValueFromTextField(fieldName, formFields);
         if (value.isEmpty() || !isNumeric(value)) {
-            return null;
+            return new BigDecimal(0);
         }
         return new BigDecimal(value);
     }
@@ -43,7 +43,7 @@ public class FormFieldDataExtractor {
     public static int getIntFromTextField(String fieldName, HashMap<String, Node> formFields) {
         String value = getValueFromTextField(fieldName, formFields);
         if (value.isEmpty() || !isNumeric(value)) {
-            return -1;
+            return 0;
         }
         return Integer.valueOf(value);
     }

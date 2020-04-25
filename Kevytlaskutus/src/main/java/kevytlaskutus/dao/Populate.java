@@ -31,7 +31,7 @@ public class Populate {
     
     public static void addProductDefaultDataToStatement(PreparedStatement stmt, Product product) throws SQLException {
         stmt.setString(1, product.getName());
-        stmt.setString(2, product.getPrice());
+        stmt.setBigDecimal(2, product.getPrice());
         stmt.setString(3, product.getPriceUnit());
         stmt.setString(4, product.getDescription());
     }
@@ -39,7 +39,7 @@ public class Populate {
     public static Product populateProduct(ResultSet rs) throws SQLException {
         Product product = new Product(
             rs.getString("Product.name"), 
-            rs.getString("Product.price"), 
+            rs.getBigDecimal("Product.price"), 
             rs.getString("Product.priceUnit"), 
             rs.getString("Product.description")
         );

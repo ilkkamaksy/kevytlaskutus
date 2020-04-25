@@ -24,19 +24,24 @@ public class Launcher extends Application {
         ManagedCompanyDao managedCompanyDao = new ManagedCompanyDao();
         CustomerCompanyDao customerCompanyDao = new CustomerCompanyDao();
         InvoiceDaoImpl invoiceDao = new InvoiceDaoImpl();
+        ProductDaoImpl productDao = new ProductDaoImpl();
+       
         DatabaseUtils databaseUtils = new DatabaseUtils(
                 managedCompanyDao, 
                 customerCompanyDao, 
                 invoiceDao,
+                productDao,
                 "jdbc:h2:file:./database/kevytlaskutusdb", 
                 "sa", 
                 ""
         ); 
         databaseUtils.initDb();
+        
         this.appService = new AppService(
                 managedCompanyDao, 
                 customerCompanyDao, 
                 invoiceDao,
+                productDao,
                 databaseUtils
         );
     }

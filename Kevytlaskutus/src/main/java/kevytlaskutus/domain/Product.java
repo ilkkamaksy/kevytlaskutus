@@ -1,5 +1,6 @@
 package kevytlaskutus.domain;
 
+import java.math.BigDecimal;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -17,11 +18,11 @@ public class Product {
     private Invoice invoice;
     
     private String name;
-    private String price;
+    private BigDecimal price;
     private String priceUnit;
     private String description;
 
-    public Product(String name, String price, String priceUnit, String description) {
+    public Product(String name, BigDecimal price, String priceUnit, String description) {
         this.name = name;
         this.price = price;
         this.priceUnit = priceUnit;

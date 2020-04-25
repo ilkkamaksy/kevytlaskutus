@@ -5,23 +5,14 @@ import javafx.scene.Node;
 import kevytlaskutus.domain.*;
 
 public class FormActionUpdateManagedCompany extends FormAction {
-    
-    private ManagedCompany company;
-    
-    public FormActionUpdateManagedCompany(
-            AppService appService
-    ) {
+   
+    public FormActionUpdateManagedCompany(AppService appService) {
         super(appService);
     }
-
-    @Override
-    public void setData(HashMap<String, Node> formFields, int id) {
-        this.company = super.makeManagedCompanyFromFieldValues(formFields, id);
-    }
-        
+    
     @Override
     public boolean execute() {    
-        return super.appService.updateManagedCompany(this.company.getId(), this.company);
+        return super.appService.updateCurrentManagedCompany();
     }
     
 }

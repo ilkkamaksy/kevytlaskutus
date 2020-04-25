@@ -55,33 +55,22 @@ public class EditCompanyController extends BaseController implements Initializab
    
     public void setupForm() {
 
-        this.form = new Form();
-        
-        if (currentCompany == null) {
-            this.form.addTextField("Name", "");
-            this.form.addTextField("Register Id", "");
-            this.form.addTextField("Phone", "");
-            this.form.addTextField("Street address", "");
-            this.form.addTextField("Postcode", "");
-            this.form.addTextField("Commune/City", "");
-            this.form.addTextField("OVT", "");
-            this.form.addTextField("Provider", "");
-            this.form.addTextField("BIC", "");
-            this.form.addTextField("IBAN", "");
-        } else {
-            this.form.getForm().getChildren().clear();
-        
-            this.form.addTextField("Name", currentCompany.getName());
-            this.form.addTextField("Register Id", currentCompany.getRegId());
-            this.form.addTextField("Phone", currentCompany.getPhone());
-            this.form.addTextField("Street address", currentCompany.getStreet());
-            this.form.addTextField("Postcode", currentCompany.getPostcode());
-            this.form.addTextField("Commune/City", currentCompany.getCommune());
-            this.form.addTextField("OVT", currentCompany.getOvtId());
-            this.form.addTextField("Provider", currentCompany.getProvider());
-            this.form.addTextField("IBAN", currentCompany.getIban());
-            this.form.addTextField("BIC", currentCompany.getBic());
+        this.form = new Form(this.appService);
+
+        if (this.appService.getCurrentManagedCompany() == null) {
+            this.appService.setCurrentManagedCompany(new ManagedCompany());
         }
+        
+        this.form.addTextField("Name", currentCompany.getName(), currentCompany, "Name");
+        this.form.addTextField("Register Id", currentCompany.getRegId(), currentCompany, "RegId");
+        this.form.addTextField("Phone", currentCompany.getPhone(), currentCompany, "Phone");
+        this.form.addTextField("Street address", currentCompany.getStreet(), currentCompany, "Street");
+        this.form.addTextField("Postcode", currentCompany.getPostcode(), currentCompany, "Postcode");
+        this.form.addTextField("Commune/City", currentCompany.getCommune(), currentCompany, "Commune");
+        this.form.addTextField("OVT", currentCompany.getOvtId(), currentCompany, "OvtId");
+        this.form.addTextField("Provider", currentCompany.getProvider(), currentCompany, "Provider");
+        this.form.addTextField("IBAN", currentCompany.getIban(), currentCompany, "Iban");
+        this.form.addTextField("BIC", currentCompany.getBic(), currentCompany, "Bic");
    
         this.editFormContainerPane.getChildren().add(this.form.getForm());
     }

@@ -19,10 +19,10 @@ public class Invoice {
     
     private List<Product> products;
     
-    private int invoiceNumber;
-    private int referenceNumber;
+    private Integer invoiceNumber;
+    private Integer referenceNumber;
     private Date createdDate;
-    private int paymentTerm;
+    private Integer paymentTerm;
     private Date dueDate;
     private BigDecimal discount;
     private Date discountDate;
@@ -53,5 +53,9 @@ public class Invoice {
 
     private Date calculateDueDate(Date createdDate) {
         return new Date(createdDate.getTime() + this.paymentTerm * 24 * 60 * 60 * 1000);
+    }
+    
+    public void setReferenceNumber(Integer value) {
+        this.referenceNumber = value;
     }
 }

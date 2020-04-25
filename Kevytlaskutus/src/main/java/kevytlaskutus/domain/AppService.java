@@ -1,5 +1,7 @@
 package kevytlaskutus.domain;
 
+import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 import kevytlaskutus.dao.ManagedCompanyDao;
 import kevytlaskutus.dao.CustomerCompanyDao;
@@ -14,6 +16,7 @@ public class AppService {
     private ManagedCompanyService managedCompanyService; 
     private CustomerCompanyService customerCompanyService;
     private InvoiceService invoiceService;
+    private ProductService productService;
    
     private ManagedCompany currentManagedCompany;
     private CustomerCompany currentCustomerCompany;
@@ -26,12 +29,14 @@ public class AppService {
             ManagedCompanyDao managedCompanyDao, 
             CustomerCompanyDao customerCompanyDao, 
             InvoiceDaoImpl invoiceDao,
+            ProductDaoImpl productDao,
             DatabaseUtils databaseUtils
     ) {
         
         this.managedCompanyService = new ManagedCompanyService(managedCompanyDao, databaseUtils);
         this.customerCompanyService = new CustomerCompanyService(customerCompanyDao, databaseUtils);
         this.invoiceService = new InvoiceService(invoiceDao, databaseUtils);
+        this.productService = new ProductService(productDao, databaseUtils);
 
         this.currentManagedCompany = new ManagedCompany();
         this.currentManagedCompany.setName("");
@@ -64,15 +69,15 @@ public class AppService {
         this.currentInvoice = currentInvoice;
     }
    
-    public boolean createManagedCompany(ManagedCompany company) {
-        boolean result = this.managedCompanyService.createManagedCompany(company);
-        this.addNoticeToQueue(result, "create" + company.getClass().getSimpleName());
+    public boolean saveCurrentManagedCompany() {
+        boolean result = this.managedCompanyService.createManagedCompany(this.currentManagedCompany);
+        this.addNoticeToQueue(result, "create" + this.currentManagedCompany.getClass().getSimpleName());
         return result;
     }
-  
-    public Boolean updateManagedCompany(int id, ManagedCompany company) {
-        boolean result = this.managedCompanyService.updateManagedCompany(id, company);
-        this.addNoticeToQueue(result, "update" + company.getClass().getSimpleName());
+ 
+    public Boolean updateCurrentManagedCompany() {
+        boolean result = this.managedCompanyService.updateManagedCompany(this.currentManagedCompany.getId(), this.currentManagedCompany);
+        this.addNoticeToQueue(result, "update" + this.currentManagedCompany.getClass().getSimpleName());
         return result;
     }
     
@@ -90,15 +95,15 @@ public class AppService {
         return this.managedCompanyService.getManagedCompanies();
     }
     
-    public boolean createCustomerCompany(CustomerCompany company) {
-        boolean result = this.customerCompanyService.createCustomerCompany(company);
-        this.addNoticeToQueue(result, "create" + company.getClass().getSimpleName());
+    public boolean saveCurrentCustomerCompany() {
+        boolean result = this.customerCompanyService.createCustomerCompany(this.currentCustomerCompany);
+        this.addNoticeToQueue(result, "create" + this.currentCustomerCompany.getClass().getSimpleName());
         return result;
     }
     
-    public Boolean updateCustomerCompany(int id, CustomerCompany company) {
-        boolean result = this.customerCompanyService.updateCustomerCompany(id, company);
-        this.addNoticeToQueue(result, "update" + company.getClass().getSimpleName());
+    public Boolean updateCurrentCustomerCompany() {
+        boolean result = this.customerCompanyService.updateCustomerCompany(this.currentCustomerCompany.getId(), this.currentCustomerCompany);
+        this.addNoticeToQueue(result, "update" + this.currentCustomerCompany.getClass().getSimpleName());
         return result;
     }
   
@@ -120,15 +125,37 @@ public class AppService {
         return this.invoiceService.getDefaultInvoiceNumber();
     }
     
-    public boolean createInvoice(Invoice invoice) {
-        boolean result = this.invoiceService.createInvoiceForCompany(invoice, currentManagedCompany);
-        this.addNoticeToQueue(result, "create" + invoice.getClass().getSimpleName());
+    public boolean saveCurrentInvoice() {
+        Integer invoiceId = this.invoiceService.createInvoiceForCompany(this.currentInvoice, currentManagedCompany);
+        boolean result = invoiceId > -1 ? true : false;
+        
+        if (result && this.currentInvoice.getProducts().size() > 0) {
+            this.productService.saveProductsInBatches(invoiceId, this.currentInvoice.getProducts());
+        } 
+        
+        this.addNoticeToQueue(result, "create" + this.currentInvoice.getClass().getSimpleName());
         return result;
     }
     
-    public Boolean updateInvoice(int id, Invoice invoice) {
-        boolean result = this.invoiceService.updateInvoice(id, invoice, currentManagedCompany);
-        this.addNoticeToQueue(result, "update" + invoice.getClass().getSimpleName());
+    
+    public Boolean updateCurrentInvoice() {
+        boolean result = this.invoiceService.updateInvoice(this.currentInvoice.getId(), this.currentInvoice, currentManagedCompany);
+
+        if (result && this.currentInvoice.getProducts().size() > 0) {          
+            this.productService.updateProductsInBatches(this.currentInvoice.getId(), this.currentInvoice.getProducts());
+           
+            List<Product> newProds = new ArrayList<>();
+            for (Product prod : this.currentInvoice.getProducts()) {
+                if (prod.getId() == 0) {
+                    newProds.add(prod);
+                }
+            }
+            if (newProds.size() > 0) {
+                this.productService.saveProductsInBatches(this.currentInvoice.getId(), newProds);
+            }
+        }
+
+        this.addNoticeToQueue(result, "update" + this.currentInvoice.getClass().getSimpleName());
         return result;
     }
   

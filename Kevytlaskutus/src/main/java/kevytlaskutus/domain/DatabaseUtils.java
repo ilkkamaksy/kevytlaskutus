@@ -13,6 +13,7 @@ import java.util.logging.Logger;
 import kevytlaskutus.dao.CustomerCompanyDao;
 import kevytlaskutus.dao.InvoiceDaoImpl;
 import kevytlaskutus.dao.ManagedCompanyDao;
+import kevytlaskutus.dao.ProductDaoImpl;
 
 /**
  *
@@ -23,6 +24,7 @@ public class DatabaseUtils {
     private ManagedCompanyDao managedCompanyDao;
     private CustomerCompanyDao customerCompanyDao;
     private InvoiceDaoImpl invoiceDao;
+    private ProductDaoImpl productDao;
     
     private String dbOption;
     private String dbUser;
@@ -32,6 +34,7 @@ public class DatabaseUtils {
         ManagedCompanyDao managedCompanyDao, 
         CustomerCompanyDao customerCompanyDao, 
         InvoiceDaoImpl invoiceDao,
+        ProductDaoImpl productDao,
         String dbOption,
         String dbUser,
         String dbPassword
@@ -39,6 +42,7 @@ public class DatabaseUtils {
         this.managedCompanyDao = managedCompanyDao;
         this.customerCompanyDao = customerCompanyDao;
         this.invoiceDao = invoiceDao;
+        this.productDao = productDao;
         this.dbOption = dbOption;
         this.dbUser = dbUser;
         this.dbPassword = dbPassword;
@@ -51,10 +55,12 @@ public class DatabaseUtils {
             this.prepareCustomerCompanyDaoConnection(conn);
             this.prepareInvoiceDaoConnection(conn);
             this.prepareManagedCompanyDaoConnection(conn);
+            this.prepareProductDaoConnection(conn);
             
             managedCompanyDao.initDb();
             customerCompanyDao.initDb();
             invoiceDao.initDb();
+            productDao.initDb();
             
             conn.close();
             
@@ -74,6 +80,10 @@ public class DatabaseUtils {
     
     public void prepareCustomerCompanyDaoConnection(Connection conn) {
         this.customerCompanyDao.setConnection(conn);
+    }
+    
+    public void prepareProductDaoConnection(Connection conn) {
+        this.productDao.setConnection(conn);
     }
    
     public Connection getConnection() throws SQLException {     

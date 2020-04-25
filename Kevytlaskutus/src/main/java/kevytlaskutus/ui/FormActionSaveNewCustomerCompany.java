@@ -7,24 +7,15 @@ import kevytlaskutus.domain.*;
 /**
  * Action to execute a new customer.
  */
-public class FormActionSaveNewCustomerCompany extends FormAction {
-    
-    private CustomerCompany company; 
-    
-    public FormActionSaveNewCustomerCompany(
-            AppService appService
-    ) {
+public class FormActionSaveNewCustomerCompany extends FormCustomerCompanyAction {
+   
+    public FormActionSaveNewCustomerCompany(AppService appService) {
         super(appService);
     }
 
     @Override
-    public void setData(HashMap<String, Node> formFields, int id) {
-        this.company = super.makeCustomerCompanyFromFieldValues(formFields, id);
-    }
-    
-    @Override
     public boolean execute() {
-        return super.appService.createCustomerCompany(this.company);
+        return super.appService.saveCurrentCustomerCompany();
     }
 
 }

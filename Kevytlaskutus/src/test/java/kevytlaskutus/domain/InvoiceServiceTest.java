@@ -11,6 +11,7 @@ import java.util.List;
 import kevytlaskutus.dao.CustomerCompanyDao;
 import kevytlaskutus.dao.InvoiceDaoImpl;
 import kevytlaskutus.dao.ManagedCompanyDao;
+import kevytlaskutus.dao.ProductDaoImpl;
 import kevytlaskutus.domain.InvoiceService;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -34,7 +35,8 @@ public class InvoiceServiceTest {
     ManagedCompanyDao mockManagedCompanyDao;
     CustomerCompanyDao mockCustomerCompanyDao;
     InvoiceDaoImpl mockInvoiceDao;
-
+    ProductDaoImpl mockProductDao;
+    
     InvoiceService invoiceService;
     
     Invoice mockInvoice;
@@ -46,11 +48,13 @@ public class InvoiceServiceTest {
         mockManagedCompanyDao = mock(ManagedCompanyDao.class);       
         mockCustomerCompanyDao = mock(CustomerCompanyDao.class);
         mockInvoiceDao = mock(InvoiceDaoImpl.class);
+        mockProductDao = mock(ProductDaoImpl.class);
         
         databaseUtils = new DatabaseUtils(
                 mockManagedCompanyDao, 
                 mockCustomerCompanyDao, 
                 mockInvoiceDao,
+                mockProductDao,
                 "jdbc:h2:mem:testdb", 
                 "sa", 
                 ""
@@ -70,29 +74,34 @@ public class InvoiceServiceTest {
     @Test
     public void newInvoiceCanBeCreatedWithValidInvoiceObject() {
         try {
-            when(mockInvoiceDao.create(mockInvoice)).thenReturn(true);
-            boolean result = invoiceService.createInvoiceForCompany(mockInvoice, mockCompany);
+            when(mockInvoiceDao.create(mockInvoice)).thenReturn(1);
+            Integer invoiceId = invoiceService.createInvoiceForCompany(mockInvoice, mockCompany);
             verify(mockInvoiceDao).create(mockInvoice); 
+            
+            boolean result = invoiceId > -1 ? true : false;
             assertTrue(result);
         } catch (SQLException e) {}
     }
     
     @Test
     public void newInvoiceCannotBeCreatedWithNullInvoiceObject() {
-        boolean result = invoiceService.createInvoiceForCompany(null, mockCompany); 
+        Integer invoiceId = invoiceService.createInvoiceForCompany(null, mockCompany); 
+        boolean result = invoiceId > -1 ? true : false;
         assertFalse(result);
     }
     
     @Test
     public void invoiceCannotBeCreatedWithoutManagedCompany() {
-        boolean result = invoiceService.createInvoiceForCompany(mockInvoice, null);
+        Integer invoiceId = invoiceService.createInvoiceForCompany(mockInvoice, null);
+        boolean result = invoiceId > -1 ? true : false;
         assertFalse(result);
     }
     
     @Test
     public void invoiceCannotBeCreatedWithoutValidManagedCompany() {
         when(mockCompany.getId()).thenReturn(-1);
-        boolean result = invoiceService.createInvoiceForCompany(mockInvoice, mockCompany);
+        Integer invoiceId = invoiceService.createInvoiceForCompany(mockInvoice, mockCompany);
+        boolean result = invoiceId > -1 ? true : false;
         assertFalse(result);
     }
     
