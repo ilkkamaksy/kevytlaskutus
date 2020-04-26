@@ -42,11 +42,12 @@ public class Invoice {
     
     public Invoice(Date createdDate) {
         this.createdDate = createdDate;
+        this.referenceNumber = 0;
         this.paymentTerm = 14;
         this.dueDate = this.calculateDueDate(createdDate);
         this.penaltyInterest = new BigDecimal(10.00);
-        this.amount = new BigDecimal(0.00);
-        this.discount = new BigDecimal(0.00);
+        this.amount = new BigDecimal(0);
+        this.discount = new BigDecimal(0);
         this.deliveryDate = createdDate;
         this.products = new ArrayList<>();
     }

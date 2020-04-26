@@ -54,9 +54,10 @@ public class Form {
     public void addLineItem() {
         Product product = new Product();
         product.setName("");
-        product.setPrice(new BigDecimal(0.0));
+        product.setPrice(new BigDecimal(0));
         product.setPriceUnit("");
         product.setDescription("");
+        product.setInvoiceId(this.appService.getCurrentInvoice().getId());
         this.appService.getCurrentInvoice().getProducts().add(product);
         this.setLineItem(product);
     }
@@ -76,7 +77,6 @@ public class Form {
     public void addRemoveProductItemButton(int index, Product product) {
         Button button = new Button("Remove");
         button.setOnAction(e-> {
-
             for (int i = 0; i < this.form.getChildren().size(); i++) {
                 if(this.form.getChildren().get(i).toString().contains("Product Name #" + index)) {
                     for (int j = i+9; j >= i; j--) {
@@ -86,15 +86,7 @@ public class Form {
                 }
                 i++;
             }
-            
-            for (int i = 0; i < this.appService.getCurrentInvoice().getProducts().size(); i++) {
-                Product prod = this.appService.getCurrentInvoice().getProducts().get(i);
-                if (prod.equals(product)) {
-                    this.appService.getCurrentInvoice().getProducts().remove(i);
-                    break;
-                }
-                i++;
-            }
+            product.setInvoiceId(0);
             this.productRowCount--;
         });
         
@@ -111,7 +103,6 @@ public class Form {
                 method.invoke(object, newValue);
                 
                 method = object.getClass().getDeclaredMethod("get" + property);
-                System.out.println("after " + method.invoke(object));
             } catch (NoSuchMethodException ex) {
                 Logger.getLogger(Form.class.getName()).log(Level.SEVERE, null, ex);
             } catch (IllegalAccessException ex) {

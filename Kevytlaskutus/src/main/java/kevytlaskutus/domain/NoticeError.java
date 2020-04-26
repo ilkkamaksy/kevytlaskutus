@@ -16,7 +16,7 @@ public class NoticeError implements Notice {
     public NoticeError(String message) {
         this.message = message;
     }
-    
+   
     @Override
     public String getNoticeMessage() {
         return this.message;

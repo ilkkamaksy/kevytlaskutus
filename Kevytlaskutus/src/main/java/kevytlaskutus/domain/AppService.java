@@ -71,19 +71,19 @@ public class AppService {
    
     public boolean saveCurrentManagedCompany() {
         boolean result = this.managedCompanyService.createManagedCompany(this.currentManagedCompany);
-        this.addNoticeToQueue(result, "create" + this.currentManagedCompany.getClass().getSimpleName());
+        this.addNoticeToQueue(result, noticeMessages.getNoticeMessage("create" + this.currentManagedCompany.getClass().getSimpleName()));
         return result;
     }
  
     public Boolean updateCurrentManagedCompany() {
         boolean result = this.managedCompanyService.updateManagedCompany(this.currentManagedCompany.getId(), this.currentManagedCompany);
-        this.addNoticeToQueue(result, "update" + this.currentManagedCompany.getClass().getSimpleName());
+        this.addNoticeToQueue(result, noticeMessages.getNoticeMessage("update" + this.currentManagedCompany.getClass().getSimpleName()));
         return result;
     }
     
     public Boolean deleteManagedCompany(int id) {
         boolean result = this.managedCompanyService.deleteManagedCompany(id);
-        this.addNoticeToQueue(result, "delete");
+        this.addNoticeToQueue(result, noticeMessages.getNoticeMessage("delete"));
         return result;
     }
     
@@ -97,19 +97,19 @@ public class AppService {
     
     public boolean saveCurrentCustomerCompany() {
         boolean result = this.customerCompanyService.createCustomerCompany(this.currentCustomerCompany);
-        this.addNoticeToQueue(result, "create" + this.currentCustomerCompany.getClass().getSimpleName());
+        this.addNoticeToQueue(result, noticeMessages.getNoticeMessage("create" + this.currentCustomerCompany.getClass().getSimpleName()));
         return result;
     }
     
     public Boolean updateCurrentCustomerCompany() {
         boolean result = this.customerCompanyService.updateCustomerCompany(this.currentCustomerCompany.getId(), this.currentCustomerCompany);
-        this.addNoticeToQueue(result, "update" + this.currentCustomerCompany.getClass().getSimpleName());
+        this.addNoticeToQueue(result, noticeMessages.getNoticeMessage("update" + this.currentCustomerCompany.getClass().getSimpleName()));
         return result;
     }
   
     public Boolean deleteCustomerCompany(int id) {
         boolean result = this.customerCompanyService.deleteCustomerCompany(id);
-        this.addNoticeToQueue(result, "delete");
+        this.addNoticeToQueue(result, noticeMessages.getNoticeMessage("delete"));
         return result;
     }
     
@@ -126,42 +126,71 @@ public class AppService {
     }
     
     public boolean saveCurrentInvoice() {
-        Integer invoiceId = this.invoiceService.createInvoiceForCompany(this.currentInvoice, currentManagedCompany);
-        boolean result = invoiceId > -1 ? true : false;
+        if (!this.invoiceHasCustomer()) {
+            return false;
+        }
         
-        if (result && this.currentInvoice.getProducts().size() > 0) {
-            this.productService.saveProductsInBatches(invoiceId, this.currentInvoice.getProducts());
+        Integer invoiceId = this.invoiceService.createInvoiceForCompany(this.currentInvoice, currentManagedCompany);
+        boolean success = invoiceId > -1 ? true : false;
+        
+        if (success && this.currentInvoice.getProducts().size() > 0 && !this.currentInvoice.getProducts().get(0).getName().isEmpty()) {
+            this.saveProductsInBatches(this.currentInvoice.getProducts());
         } 
         
-        this.addNoticeToQueue(result, "create" + this.currentInvoice.getClass().getSimpleName());
-        return result;
+        this.addNoticeToQueue(success, noticeMessages.getNoticeMessage("create" + this.currentInvoice.getClass().getSimpleName()));
+        return success;
     }
-    
-    
+   
     public Boolean updateCurrentInvoice() {
+        if (!this.invoiceHasCustomer()) {
+            return false;
+        }
+        
         boolean result = this.invoiceService.updateInvoice(this.currentInvoice.getId(), this.currentInvoice, currentManagedCompany);
 
-        if (result && this.currentInvoice.getProducts().size() > 0) {          
-            this.productService.updateProductsInBatches(this.currentInvoice.getId(), this.currentInvoice.getProducts());
-           
-            List<Product> newProds = new ArrayList<>();
-            for (Product prod : this.currentInvoice.getProducts()) {
-                if (prod.getId() == 0) {
-                    newProds.add(prod);
-                }
-            }
-            if (newProds.size() > 0) {
-                this.productService.saveProductsInBatches(this.currentInvoice.getId(), newProds);
-            }
-        }
-
-        this.addNoticeToQueue(result, "update" + this.currentInvoice.getClass().getSimpleName());
+        this.updateProductsInBatches(result);
+        
+        this.addNoticeToQueue(result, noticeMessages.getNoticeMessage("update" + this.currentInvoice.getClass().getSimpleName()));
         return result;
     }
   
+    private void updateProductsInBatches(boolean success) {
+        if (success && this.currentInvoice.getProducts().size() > 0) {          
+            this.productService.updateProductsInBatches(this.currentInvoice.getId(), this.currentInvoice.getProducts());
+           
+            List<Product> newProducts = this.getNewProductsFromCurrentInvoice();
+            if (newProducts.size() > 0) {
+                this.saveProductsInBatches(newProducts);
+            }
+        }
+    }
+    
+    private List<Product> getNewProductsFromCurrentInvoice() {
+        List<Product> products = new ArrayList<>();
+        for (Product prod : this.currentInvoice.getProducts()) {
+            if (prod.getId() == 0) {
+                products.add(prod);
+            }
+        }
+        return products;
+    }
+    
+    private void saveProductsInBatches(List<Product> products) {
+        this.productService.saveProductsInBatches(this.currentInvoice.getId(), products);
+    }
+    
+    private boolean invoiceHasCustomer() {
+        if (this.currentInvoice.getCustomer() == null) {
+            this.addNoticeToQueue(false, "Please select a customer for the invoice first.");
+            return false;
+        }
+        
+        return true;
+    }
+    
     public Boolean deleteInvoice(int id) {
         boolean result = this.invoiceService.deleteInvoice(id);
-        this.addNoticeToQueue(result, "delete");
+        this.addNoticeToQueue(result, noticeMessages.getNoticeMessage("delete"));
         return result;
     }
     
@@ -181,12 +210,12 @@ public class AppService {
         return this.noticeQueue.getPendingNotice();
     }
     
-    private void addNoticeToQueue(boolean success, String eventType) {
+    private void addNoticeToQueue(boolean success, String message) {
         Notice notice = null;
         if (success) {
-            notice = new NoticeSuccess(noticeMessages.getNoticeMessage(eventType));
+            notice = new NoticeSuccess(message);
         } else {
-            notice = new NoticeError(noticeMessages.getNoticeMessage(eventType));
+            notice = new NoticeError(message);
         }
         this.noticeQueue.addNotice(notice);
     }

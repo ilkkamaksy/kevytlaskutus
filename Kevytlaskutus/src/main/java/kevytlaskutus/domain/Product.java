@@ -15,7 +15,7 @@ public class Product {
     
     private int id;
     
-    private Invoice invoice;
+    private Integer invoiceId;
     
     private String name;
     private BigDecimal price;
@@ -28,4 +28,6 @@ public class Product {
         this.priceUnit = priceUnit;
         this.description = description;
     }
+    
+    
 }

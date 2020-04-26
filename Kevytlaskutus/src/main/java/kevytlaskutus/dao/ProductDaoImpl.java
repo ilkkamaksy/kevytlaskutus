@@ -31,7 +31,7 @@ public class ProductDaoImpl implements ProductDao<Product, Integer, String> {
     public void initDb() throws SQLException {
         conn.prepareStatement("CREATE TABLE IF NOT EXISTS Product (\n"
             + "    id INTEGER AUTO_INCREMENT PRIMARY KEY,\n"
-            + "    invoiceId INTEGER,\n"
+            + "    invoiceId INTEGER NULL,\n"
             + "    modifiedTime TIMESTAMP,\n"
             + "    name VARCHAR(200),\n"
             + "    price DECIMAL,\n"
@@ -47,7 +47,7 @@ public class ProductDaoImpl implements ProductDao<Product, Integer, String> {
     @Override
     public void updateProductsInBatches(Integer invoiceId, List<Product> products) throws SQLException {
         String sql = "UPDATE Product "
-                +   "SET name=?, price=?, priceUnit=?, description=?, modifiedTime=? \n" 
+                +   "SET name=?, price=?, priceUnit=?, description=?, invoiceId=?, modifiedTime=? \n" 
                 +   "WHERE id=?";
                 
         PreparedStatement stmt = null;    
@@ -58,13 +58,17 @@ public class ProductDaoImpl implements ProductDao<Product, Integer, String> {
         java.sql.Timestamp ts = new java.sql.Timestamp(timeNow);
 
         for (Product product : products) {
-            System.out.println("looppu " + product.getId() + " " + product.getName());
             stmt.setString(1, product.getName());
             stmt.setBigDecimal(2, product.getPrice());
             stmt.setString(3, product.getPriceUnit());
             stmt.setString(4, product.getDescription());
-            stmt.setTimestamp(5, ts);
-            stmt.setInt(6, product.getId());
+            if (product.getInvoiceId() > 0) {
+                stmt.setInt(5, product.getInvoiceId());    
+            } else {
+                stmt.setNull(5, java.sql.Types.INTEGER);
+            }
+            stmt.setTimestamp(6, ts);
+            stmt.setInt(7, product.getId());
             stmt.addBatch();
         }
 
@@ -72,18 +76,15 @@ public class ProductDaoImpl implements ProductDao<Product, Integer, String> {
         
         conn.commit();
         conn.setAutoCommit(true);
-       
-        this.deleteObsolete(ts, invoiceId);
+            
+        this.deleteObsolete(ts, 0);
     }
     
     public void deleteObsolete(Timestamp ts, Integer id) throws SQLException {
-        System.out.println("timestamp " + ts.toString());
-        String sql = "DELETE FROM Product WHERE invoiceId=? AND modifiedTime < ?";
+        String sql = "DELETE FROM Product WHERE invoiceId=?";
         PreparedStatement stmt = conn.prepareStatement(sql);
         stmt.setInt(1, id);
-        stmt.setTimestamp(2, ts);
-        int rows = stmt.executeUpdate();
-        System.out.println("rows " + rows);
+        stmt.executeUpdate();
     }
     
     @Override
@@ -128,21 +129,5 @@ public class ProductDaoImpl implements ProductDao<Product, Integer, String> {
         conn.close();
         return results;
     }
-    
-    public void getAll() throws SQLException {
-        PreparedStatement stmt = conn.prepareStatement(
-            "SELECT * FROM Product AS Product"
-        );
-        ResultSet rs = stmt.executeQuery();
-        
-        while (rs.next()) {
-            Product prod = populate.populateProduct(rs);
-            System.out.println("getall " + prod.getName());
-            System.out.println("time " + rs.getTimestamp("modifiedTime"));
-        }
-        
-        stmt.close();
-        conn.close();
-    }
-    
+   
 }

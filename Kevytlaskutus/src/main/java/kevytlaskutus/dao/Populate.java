@@ -44,6 +44,7 @@ public class Populate {
             rs.getString("Product.description")
         );
         product.setId(rs.getInt("Product.id"));
+        
         return product;
     }
     

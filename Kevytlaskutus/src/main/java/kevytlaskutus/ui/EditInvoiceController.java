@@ -47,6 +47,7 @@ public class EditInvoiceController extends BaseController implements Initializab
         
         super.primaryNotice.setupNotice();
         super.noticePane.getChildren().add(super.primaryNotice.notice);
+        super.primaryNotice.showPendingNoticeMessage();
         
         this.actionFactory = new FormActionFactory(this.appService);
         this.setupForm();
@@ -87,7 +88,6 @@ public class EditInvoiceController extends BaseController implements Initializab
             this.form.addLineItem();
         }
         
-        this.form.addTextField("Amount", "" + this.currentInvoice.getAmount(), this.currentInvoice, "Amount");
         this.editFormContainerPane.getChildren().add(this.form.getForm());
        
     }
@@ -117,8 +117,12 @@ public class EditInvoiceController extends BaseController implements Initializab
     
     private void setSaveButtonAction() {
         this.saveFormButton.setOnAction(e-> {
-            this.actionFactory.execute(this.actionType, this.form.getFormFields(), this.currentInvoice.getId());
-            this.viewFactory.showManageInvoicesView();
+            boolean success = this.actionFactory.execute(this.actionType, this.form.getFormFields(), this.currentInvoice.getId());
+            if (success) {
+                this.viewFactory.showManageInvoicesView();
+            } else {
+                this.viewFactory.showEditInvoiceView();
+            }
         });
     }
 

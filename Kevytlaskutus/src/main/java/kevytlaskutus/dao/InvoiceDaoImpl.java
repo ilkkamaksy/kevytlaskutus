@@ -23,7 +23,7 @@ public class InvoiceDaoImpl implements InvoiceDao<Invoice, Integer, String>  {
     
     public void initDb() throws SQLException {
         conn.prepareStatement("CREATE TABLE IF NOT EXISTS Invoice (\n"
-            + "    id INTEGER AUTO_INCREMENT PRIMARY KEY,\n"
+            + "    id INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,\n"
             + "    invoiceNumber INTEGER,\n"
             + "    referenceNumber INTEGER,\n"
             + "    createdDate DATE,\n"
@@ -140,40 +140,36 @@ public class InvoiceDaoImpl implements InvoiceDao<Invoice, Integer, String>  {
         PreparedStatement stmt = conn.prepareStatement(
             "SELECT * FROM Invoice AS Invoice \n"
             + "LEFT JOIN Customer AS Customer ON Invoice.customerId = Customer.id \n" 
-            + "LEFT JOIN Company AS Company ON Invoice.companyId = Company.id \n" 
-            + "WHERE Invoice.id=" + id + " LIMIT 1"
+            + "LEFT JOIN Company AS Company ON Invoice.companyId = Company.id \n"
+            + "LEFT JOIN Product AS Product ON Invoice.id = Product.invoiceId \n" 
+            + "WHERE Invoice.id=? \n"
+            + "GROUP BY Invoice.id, Product.id"
         );
+        stmt.setInt(1, id);
         ResultSet rs = stmt.executeQuery();
 
         Invoice invoice = null;
+        
+        int i = 0;
         while (rs.next()) {
-            invoice = populate.populateInvoice(rs);
-            invoice.setCustomer(populate.populateCustomer(rs));
-            invoice.setCompany(populate.populateManagedCompany(rs));
+            if (i == 0) {
+                invoice = populate.populateInvoice(rs);
+                invoice.setCustomer(populate.populateCustomer(rs));
+                invoice.setCompany(populate.populateManagedCompany(rs));    
+            }
+            
+            Product prod = populate.populateProduct(rs);
+            prod.setInvoiceId(invoice.getId());
+            invoice.getProducts().add(prod);
+            
+            i++;
         }
+       
         stmt.close();
-        
-        this.addProductsToInvoice(invoice);
-        
         conn.close();
         return invoice;
     }
     
-    private void addProductsToInvoice(Invoice invoice) throws SQLException {
-        PreparedStatement stmt = conn.prepareStatement(
-            "SELECT * FROM Product AS Product \n"
-            + "WHERE Product.invoiceId=" + invoice.getId()
-        );
-        ResultSet rs = stmt.executeQuery();
-        
-        while (rs.next()) {
-            Product prod = populate.populateProduct(rs);
-            invoice.getProducts().add(prod);
-        }
-        
-        stmt.close();
-    }
-
     @Override
     public boolean delete(Integer id) throws SQLException {
         PreparedStatement stmt = conn.prepareStatement("DELETE FROM Invoice WHERE id=?");

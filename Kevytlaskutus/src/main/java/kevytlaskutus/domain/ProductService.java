@@ -35,8 +35,6 @@ public class ProductService {
             Connection conn = this.databaseUtils.getConnection();
             dao.setConnection(conn);
             dao.saveProductsInBatches(invoiceId, products);
-            
-            dao.getAll();
         } catch (SQLException e) {
             Logger.getLogger(AppService.class.getName()).log(Level.SEVERE, null, e);
         }
@@ -47,8 +45,6 @@ public class ProductService {
             Connection conn = this.databaseUtils.getConnection();
             dao.setConnection(conn);
             dao.updateProductsInBatches(invoiceId, products);
-            
-            dao.getAll();
         } catch (SQLException e) {
             Logger.getLogger(AppService.class.getName()).log(Level.SEVERE, null, e);
         }

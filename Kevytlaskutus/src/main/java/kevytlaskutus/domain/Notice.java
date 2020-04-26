@@ -9,6 +9,7 @@ package kevytlaskutus.domain;
  *
  * @author ilkka
  */
+
 public interface Notice {
     String getNoticeMessage();
     String getNoticeType();
