@@ -39,6 +39,7 @@ public class EditCustomerController extends BaseController implements Initializa
         
         super.primaryNotice.setupNotice();
         super.noticePane.getChildren().add(super.primaryNotice.notice);
+        super.primaryNotice.showPendingNoticeMessage();
         
         this.actionFactory = new FormActionFactory(this.appService);
         this.setupForm();
@@ -75,8 +76,12 @@ public class EditCustomerController extends BaseController implements Initializa
     
     private void setButtonAction() {
         this.saveFormButton.setOnAction(e-> {
-            this.actionFactory.execute(this.actionType, this.form.getFormFields(), this.currentCompany.getId());
-            this.viewFactory.showManageCustomerView();
+            boolean success = this.actionFactory.execute(this.actionType, this.form.getFormFields(), this.currentCompany.getId());
+            if (success) {
+                this.viewFactory.showManageCustomerView();
+            } else {
+                this.viewFactory.showEditCustomerView();
+            }
         });
     }
 }

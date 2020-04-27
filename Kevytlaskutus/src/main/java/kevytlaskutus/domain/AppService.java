@@ -70,15 +70,30 @@ public class AppService {
     }
    
     public boolean saveCurrentManagedCompany() {
+        if (!this.currentManagedCompanyHasName()) {
+            return false;
+        }
         boolean result = this.managedCompanyService.createManagedCompany(this.currentManagedCompany);
         this.addNoticeToQueue(result, noticeMessages.getNoticeMessage("create" + this.currentManagedCompany.getClass().getSimpleName()));
         return result;
     }
  
     public Boolean updateCurrentManagedCompany() {
+        if (!this.currentManagedCompanyHasName()) {
+            return false;
+        }
         boolean result = this.managedCompanyService.updateManagedCompany(this.currentManagedCompany.getId(), this.currentManagedCompany);
         this.addNoticeToQueue(result, noticeMessages.getNoticeMessage("update" + this.currentManagedCompany.getClass().getSimpleName()));
         return result;
+    }
+    
+    public boolean currentManagedCompanyHasName() {
+        if (this.currentManagedCompany.getName() == null || this.currentManagedCompany.getName().isEmpty()) {
+            this.addNoticeToQueue(false, "Please add a name for the company before saving.");
+            return false;
+        }
+        
+        return true;
     }
     
     public Boolean deleteManagedCompany(int id) {
@@ -96,17 +111,31 @@ public class AppService {
     }
     
     public boolean saveCurrentCustomerCompany() {
+        if(!this.currentCustomerCompanyHasName()) {
+            return false;
+        }
         boolean result = this.customerCompanyService.createCustomerCompany(this.currentCustomerCompany);
         this.addNoticeToQueue(result, noticeMessages.getNoticeMessage("create" + this.currentCustomerCompany.getClass().getSimpleName()));
         return result;
     }
     
     public Boolean updateCurrentCustomerCompany() {
+        if(!this.currentCustomerCompanyHasName()) {
+            return false;
+        }
         boolean result = this.customerCompanyService.updateCustomerCompany(this.currentCustomerCompany.getId(), this.currentCustomerCompany);
         this.addNoticeToQueue(result, noticeMessages.getNoticeMessage("update" + this.currentCustomerCompany.getClass().getSimpleName()));
         return result;
     }
-  
+    
+    public boolean currentCustomerCompanyHasName() {
+        if (this.currentCustomerCompany.getName() == null || this.currentCustomerCompany.getName().isEmpty()) {
+            this.addNoticeToQueue(false, "Please add a name for the customer before saving.");
+            return false;
+        }
+        return true;
+    }
+ 
     public Boolean deleteCustomerCompany(int id) {
         boolean result = this.customerCompanyService.deleteCustomerCompany(id);
         this.addNoticeToQueue(result, noticeMessages.getNoticeMessage("delete"));

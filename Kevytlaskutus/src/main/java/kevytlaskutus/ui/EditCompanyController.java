@@ -48,6 +48,7 @@ public class EditCompanyController extends BaseController implements Initializab
         
         super.primaryNotice.setupNotice();
         super.noticePane.getChildren().add(super.primaryNotice.notice);
+        super.primaryNotice.showPendingNoticeMessage();
        
         this.setupForm();
         this.setButtonAction();
@@ -85,8 +86,13 @@ public class EditCompanyController extends BaseController implements Initializab
     
     private void setButtonAction() {
         this.saveFormButton.setOnAction(e-> {
-            this.actionFactory.execute(this.actionType, this.form.getFormFields(), this.currentCompany.getId());
-            this.viewFactory.showDashBoard();
+            boolean success = this.actionFactory.execute(this.actionType, this.form.getFormFields(), this.currentCompany.getId());
+            if (success) {
+                this.viewFactory.showDashBoard();
+            } else {
+                this.viewFactory.showEditCompanyView();
+            }
+            
         });
     }
     
