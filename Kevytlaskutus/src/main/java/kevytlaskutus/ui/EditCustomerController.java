@@ -20,6 +20,9 @@ public class EditCustomerController extends BaseController implements Initializa
     @FXML 
     private Button saveFormButton;
     
+    @FXML 
+    private Button cancelButton;
+    
     private Form form;
     
     private String actionType;
@@ -44,6 +47,7 @@ public class EditCustomerController extends BaseController implements Initializa
         this.actionFactory = new FormActionFactory(this.appService);
         this.setupForm();
         this.setButtonAction();
+        this.setCancelButtonAction();
     }
    
     public void setupForm() {
@@ -82,6 +86,12 @@ public class EditCustomerController extends BaseController implements Initializa
             } else {
                 this.viewFactory.showEditCustomerView();
             }
+        });
+    }
+    
+    private void setCancelButtonAction() {
+        this.cancelButton.setOnAction(e-> {
+            this.viewFactory.showDashBoard();
         });
     }
 }

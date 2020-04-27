@@ -26,7 +26,10 @@ public class EditInvoiceController extends BaseController implements Initializab
 
     @FXML 
     private Button addNewRowButton;
-        
+    
+    @FXML 
+    private Button cancelButton;
+
     private Form form;
    
     private String actionType;
@@ -53,6 +56,7 @@ public class EditInvoiceController extends BaseController implements Initializab
         this.setupForm();
         this.setSaveButtonAction();
         this.setAddNewRowButtonAction();
+        this.setCancelButtonAction();
     }
    
     public void setupForm() {
@@ -124,6 +128,12 @@ public class EditInvoiceController extends BaseController implements Initializab
             } else {
                 this.viewFactory.showEditInvoiceView();
             }
+        });
+    }
+    
+    private void setCancelButtonAction() {
+        this.cancelButton.setOnAction(e-> {
+            this.viewFactory.showManageInvoicesView();
         });
     }
 

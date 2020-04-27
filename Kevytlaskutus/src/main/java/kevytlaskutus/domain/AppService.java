@@ -155,7 +155,7 @@ public class AppService {
     }
     
     public boolean saveCurrentInvoice() {
-        if (!this.invoiceHasCustomer()) {
+        if (!this.invoiceHasCustomer() || !this.allProductsHaveNames()) {
             return false;
         }
         
@@ -171,7 +171,7 @@ public class AppService {
     }
    
     public Boolean updateCurrentInvoice() {
-        if (!this.invoiceHasCustomer()) {
+        if (!this.invoiceHasCustomer() || !this.allProductsHaveNames()) {
             return false;
         }
         
@@ -192,6 +192,17 @@ public class AppService {
                 this.productService.saveProductsInBatches(this.currentInvoice.getId(), newProducts);
             }
         }
+    }
+    
+    private boolean allProductsHaveNames() {
+        for (Product product : this.currentInvoice.getProducts()) {
+            if (product.getName() == null || product.getName().isBlank()) {
+                this.addNoticeToQueue(false, "Please make sure all products have at least a name.");
+                return false;
+            }
+        }
+        
+        return true;
     }
     
     private List<Product> getNewProductsFromCurrentInvoice() {

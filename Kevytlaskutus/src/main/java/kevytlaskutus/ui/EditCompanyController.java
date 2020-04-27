@@ -28,6 +28,9 @@ public class EditCompanyController extends BaseController implements Initializab
     @FXML 
     private Button saveFormButton;
     
+    @FXML 
+    private Button cancelButton;
+    
     private Form form;
     
     private String actionType;
@@ -52,6 +55,7 @@ public class EditCompanyController extends BaseController implements Initializab
        
         this.setupForm();
         this.setButtonAction();
+        this.setCancelButtonAction();
     }
    
     public void setupForm() {
@@ -96,5 +100,9 @@ public class EditCompanyController extends BaseController implements Initializab
         });
     }
     
-    
+    private void setCancelButtonAction() {
+        this.cancelButton.setOnAction(e-> {
+            this.viewFactory.showDashBoard();
+        });
+    }
 }
