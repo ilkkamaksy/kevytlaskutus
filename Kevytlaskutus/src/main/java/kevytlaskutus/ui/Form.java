@@ -54,7 +54,6 @@ public class Form {
     public void addLineItem() {
         Product product = new Product();
         product.setName("");
-        product.setPrice(new BigDecimal(0));
         product.setPriceUnit("");
         product.setDescription("");
         product.setInvoiceId(this.appService.getCurrentInvoice().getId());
@@ -64,7 +63,12 @@ public class Form {
     
     public void setLineItem(Product selectedProduct) {
         this.addTextField("Product Name #" + this.productRowCount, selectedProduct.getName(), selectedProduct, "Name");
-        this.addDecimalField("Product Price #" + this.productRowCount, "" + selectedProduct.getPrice(), selectedProduct, "Price");
+        
+        String price = "";
+        if (selectedProduct.getPrice() != null) {
+            price = "" + selectedProduct.getPrice();
+        }
+        this.addDecimalField("Product Price #" + this.productRowCount, price, selectedProduct, "Price");
         this.addTextField("Product Price Unit #" + this.productRowCount, selectedProduct.getPriceUnit(), selectedProduct, "PriceUnit");
         this.addTextField("Product Description #" + this.productRowCount, selectedProduct.getDescription(), selectedProduct, "Description");
         this.addHiddenField("Product ID #" + this.productRowCount, "" + selectedProduct.getId());
