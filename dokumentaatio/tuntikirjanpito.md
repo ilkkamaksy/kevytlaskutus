@@ -18,5 +18,6 @@
 | 21.4. | 6    | Laskujen lisäyksen uudistus, releasen julkaisu, dokumentaation päivitys |
 | 25.4. | 4    | Tuotteiden muokkaus laskulla, dao- ja serviceluokkien muokkausta |
 | 26.4. | 4    | Tuotteiden muokkaus laskulla, dao- ja serviceluokkien muokkausta, virheilmoituksien muokkausta |
-| yht   | 87    | | 
+| 28.4. | 4    | Testien korjaus ja lisäys, navigoinnin parannus ja virheilmoitusten parantelua |
+| yht   | 91    | | 
 

@@ -29,7 +29,8 @@ import static org.mockito.Mockito.when;
 public class AppServiceTest {
     
     AppService appService;
-    InvoiceService invoiceService;
+    
+    InvoiceService mockInvoiceService;
     ManagedCompanyDao mockManagedCompanyDao;
     CustomerCompanyDao mockCustomerCompanyDao;
     InvoiceDaoImpl mockInvoiceDao;
@@ -68,6 +69,8 @@ public class AppServiceTest {
         mockCustomer = mock(CustomerCompany.class); 
         when(mockCustomer.getId()).thenReturn(1);
         when(mockCustomer.getName()).thenReturn("Acme");
+        
+        mockInvoiceService = mock(InvoiceService.class);
     }
     
     @Test
@@ -89,6 +92,14 @@ public class AppServiceTest {
     @Test
     public void newManagedCompanyCanNotBeCreatedWithEmptyCompanyObject() {
         this.appService.setCurrentManagedCompany(null);
+        boolean result = appService.saveCurrentManagedCompany();
+        assertFalse(result);
+    }
+    
+    @Test
+    public void newManagedCompanyCanNotBeCreatedWithoutName() {
+        when(this.mockManagedCompany.getName()).thenReturn("");
+        this.appService.setCurrentManagedCompany(this.mockManagedCompany);
         boolean result = appService.saveCurrentManagedCompany();
         assertFalse(result);
     }
@@ -259,6 +270,77 @@ public class AppServiceTest {
         assertNotNull(this.appService.getCurrentInvoice());
     }
     
+    
+    @Test
+    public void newInvoiceCanBeCreatedWithValidInvoiceObject() {
+
+        CustomerCompany customer = new CustomerCompany();
+        customer.setName("Acme");
+
+        Product product = new Product();
+        product.setName("Acme");
+
+        Invoice invoice = new Invoice();
+        invoice.setCustomer(customer);
+        invoice.getProducts().add(product);
+
+        when(mockInvoiceService.createInvoiceForCompany(invoice, mockManagedCompany)).thenReturn(1);
+
+        this.appService.setCurrentManagedCompany(mockManagedCompany);
+        this.appService.setCurrentCustomerCompany(customer);
+        this.appService.setCurrentInvoice(invoice);
+        boolean result = this.appService.saveCurrentInvoice();
+
+        assertTrue(result);   
+    }
+    
+
+    @Test
+    public void newInvoiceCannotBeCreatedWithoutACustomer() {
+        try {
+            when(mockInvoiceDao.create(mockInvoice)).thenReturn(0);
+            this.appService.setCurrentInvoice(mockInvoice);
+            boolean result = this.appService.saveCurrentInvoice();
+            assertFalse(result);
+        } catch (SQLException e) {}
+    }
+    
+   
+    @Test
+    public void invoiceCanNotBeDeletedWithInvalidId() {
+        CustomerCompany customer = new CustomerCompany();
+        customer.setName("Acme");
+        try {
+            when(mockInvoiceDao.delete(Integer.valueOf(1))).thenReturn(false);
+            boolean result = this.appService.deleteInvoice(1);
+            assertFalse(result);
+        } catch (SQLException e) {}
+    }
+
+    public void invoiceCanBeUpdatedWithValidInvoiceObject() {
+
+        CustomerCompany customer = new CustomerCompany();
+        customer.setName("Acme");
+
+        Product product = new Product();
+        product.setName("Acme");
+
+        Invoice invoice = new Invoice();
+        invoice.setCustomer(customer);
+        invoice.getProducts().add(product);
+
+        when(mockInvoiceService.updateInvoice(1, invoice, mockManagedCompany)).thenReturn(true);
+
+        this.appService.setCurrentManagedCompany(mockManagedCompany);
+        this.appService.setCurrentCustomerCompany(customer);
+        this.appService.setCurrentInvoice(invoice);
+        boolean result = this.appService.updateCurrentInvoice();
+
+        assertTrue(result);
+        
+    }   
+    
+   
     @After
     public void tearDown() {
         
