@@ -58,6 +58,13 @@ public class EditInvoiceController extends BaseController implements Initializab
     public void setupForm() {
         
         this.form = new Form(this.appService);        
+        
+        String customerName = "";
+        if (currentInvoice.getCustomer() != null) {
+            customerName = currentInvoice.getCustomer().getName();
+        }      
+        this.form.addDropDown("Customer", this.createCustomerNameList(), customerName, currentInvoice, "Customer");
+        
         this.form.addDatePicker("Date", currentInvoice.getCreatedDate(), currentInvoice, "CreatedDate");
         this.form.addIntegerField("Invoice Number", "" + "" + this.currentInvoice.getInvoiceNumber(), this.currentInvoice, "InvoiceNumber");
         this.form.addIntegerField("Reference Number", "" + currentInvoice.getReferenceNumber(), this.currentInvoice, "ReferenceNumber");
@@ -65,13 +72,7 @@ public class EditInvoiceController extends BaseController implements Initializab
         this.form.addDatePicker("Due Date", this.currentInvoice.getDueDate(), currentInvoice, "DueDate");
         this.form.addDecimalField("Overdue Penalty Interest rate", "" + this.currentInvoice.getPenaltyInterest(), this.currentInvoice, "PenaltyInterest");
         this.form.addDecimalField("Discount", "" + this.currentInvoice.getDiscount(), this.currentInvoice, "Discount");
-       
-        String customerName = "";
-        if (currentInvoice.getCustomer() != null) {
-            customerName = currentInvoice.getCustomer().getName();
-        }      
-        this.form.addDropDown("Customer", this.createCustomerNameList(), customerName, currentInvoice, "Customer");
-       
+      
         this.form.addTextField("Customer Contact Name", this.currentInvoice.getCustomerContactName(), this.currentInvoice, "CustomerContactName");
         this.form.addTextField("Customer Reference", this.currentInvoice.getCustomerReference(), this.currentInvoice, "CustomerReference");
         this.form.addTextField("Our Reference", this.currentInvoice.getCompanyReference(), this.currentInvoice, "CompanyReference");

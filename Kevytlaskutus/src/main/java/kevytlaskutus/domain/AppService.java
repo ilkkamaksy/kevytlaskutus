@@ -134,7 +134,7 @@ public class AppService {
         boolean success = invoiceId > -1 ? true : false;
         
         if (success && this.currentInvoice.getProducts().size() > 0 && !this.currentInvoice.getProducts().get(0).getName().isEmpty()) {
-            this.saveProductsInBatches(this.currentInvoice.getProducts());
+            this.productService.saveProductsInBatches(invoiceId, this.currentInvoice.getProducts());
         } 
         
         this.addNoticeToQueue(success, noticeMessages.getNoticeMessage("create" + this.currentInvoice.getClass().getSimpleName()));
@@ -160,7 +160,7 @@ public class AppService {
            
             List<Product> newProducts = this.getNewProductsFromCurrentInvoice();
             if (newProducts.size() > 0) {
-                this.saveProductsInBatches(newProducts);
+                this.productService.saveProductsInBatches(this.currentInvoice.getId(), newProducts);
             }
         }
     }
@@ -174,11 +174,7 @@ public class AppService {
         }
         return products;
     }
-    
-    private void saveProductsInBatches(List<Product> products) {
-        this.productService.saveProductsInBatches(this.currentInvoice.getId(), products);
-    }
-    
+   
     private boolean invoiceHasCustomer() {
         if (this.currentInvoice.getCustomer() == null) {
             this.addNoticeToQueue(false, "Please select a customer for the invoice first.");

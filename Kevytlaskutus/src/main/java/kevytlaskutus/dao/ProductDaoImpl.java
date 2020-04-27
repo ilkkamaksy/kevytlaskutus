@@ -94,6 +94,8 @@ public class ProductDaoImpl implements ProductDao<Product, Integer, String> {
         this.conn.setAutoCommit(false);
         stmt = conn.prepareStatement(sql);
         
+        
+        
         long timeNow = Calendar.getInstance().getTimeInMillis();
         java.sql.Timestamp ts = new java.sql.Timestamp(timeNow);
        

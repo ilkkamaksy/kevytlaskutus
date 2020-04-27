@@ -119,7 +119,6 @@ public class Form {
         TextField inputField = new TextField(field);
         inputField.setVisible(false);
         this.addNodesToForm(inputField);
-        this.formFields.put(label, inputField);
     }
     
     public void addDecimalField(String label, String field) { 
@@ -137,7 +136,6 @@ public class Form {
         inputField.setTextFormatter(formatter);
         
         this.addNodesToForm(new Label(label), inputField);
-        this.formFields.put(label, inputField);
     }
     
     public void addDecimalField(String label, String field, Object object, String property) { 
@@ -161,6 +159,8 @@ public class Form {
                 
                 if (isNotEmpty(newValue) && isNumeric(newValue)) {
                     method.invoke(object, new BigDecimal(newValue));
+                } else {
+                    method.invoke(object, new BigDecimal(0));
                 }
                 
             } catch (NoSuchMethodException ex) {
