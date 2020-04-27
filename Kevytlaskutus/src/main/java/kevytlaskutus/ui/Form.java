@@ -82,8 +82,8 @@ public class Form {
         Button button = new Button("Remove");
         button.setOnAction(e-> {
             for (int i = 0; i < this.form.getChildren().size(); i++) {
-                if(this.form.getChildren().get(i).toString().contains("Product Name #" + index)) {
-                    for (int j = i+9; j >= i; j--) {
+                if (this.form.getChildren().get(i).toString().contains("Product Name #" + index)) {
+                    for (int j = i + 9; j >= i; j--) {
                         this.form.getChildren().remove(this.form.getChildren().get(j));
                     }
                     break;

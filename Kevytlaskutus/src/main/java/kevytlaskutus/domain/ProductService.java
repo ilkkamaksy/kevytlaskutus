@@ -25,7 +25,7 @@ public class ProductService {
     
     private DatabaseUtils databaseUtils;
     
-     public ProductService(ProductDaoImpl dao, DatabaseUtils databaseUtils) {
+    public ProductService(ProductDaoImpl dao, DatabaseUtils databaseUtils) {
         this.databaseUtils = databaseUtils;
         this.dao = dao;
     }    

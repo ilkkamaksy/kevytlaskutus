@@ -111,7 +111,7 @@ public class AppService {
     }
     
     public boolean saveCurrentCustomerCompany() {
-        if(this.currentCustomerCompany == null || !this.currentCustomerCompanyHasName()) {
+        if (this.currentCustomerCompany == null || !this.currentCustomerCompanyHasName()) {
             return false;
         }
         boolean result = this.customerCompanyService.createCustomerCompany(this.currentCustomerCompany);
@@ -120,7 +120,7 @@ public class AppService {
     }
     
     public Boolean updateCurrentCustomerCompany() {
-        if(this.currentCustomerCompany == null ||!this.currentCustomerCompanyHasName()) {
+        if (this.currentCustomerCompany == null || !this.currentCustomerCompanyHasName()) {
             return false;
         }
         boolean result = this.customerCompanyService.updateCustomerCompany(this.currentCustomerCompany.getId(), this.currentCustomerCompany);
