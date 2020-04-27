@@ -79,41 +79,36 @@ public class AppServiceTest {
     @Test
     public void newManagedCompanyCanBeCreatedWithValidCompanyObject() {
         try {
-            when(mockManagedCompanyDao.create(mockManagedCompany)).thenReturn(true);      
-            boolean result = appService.saveCurrentManagedCompany();
-            verify(mockManagedCompanyDao).create(mockManagedCompany); 
+            when(mockManagedCompanyDao.create(mockManagedCompany)).thenReturn(true);
+            this.appService.setCurrentManagedCompany(mockManagedCompany);
+            boolean result = appService.saveCurrentManagedCompany();  
             assertTrue(result);
-        } catch (SQLException e) {}
+        } catch (SQLException ex) {}
     }
     
     @Test
     public void newManagedCompanyCanNotBeCreatedWithEmptyCompanyObject() {
-        try {
-            when(mockManagedCompanyDao.create(mockManagedCompany)).thenReturn(false);    
-            boolean result = appService.saveCurrentManagedCompany();
-            verify(mockManagedCompanyDao).create(mockManagedCompany); 
-            assertFalse(result);
-        } catch (SQLException e) {}
+        this.appService.setCurrentManagedCompany(null);
+        boolean result = appService.saveCurrentManagedCompany();
+        assertFalse(result);
     }
     
     @Test
     public void existingManagedCompanyCanBeUpdated() {
         try {
-            when(mockManagedCompanyDao.update(1, mockManagedCompany)).thenReturn(true);    
-            boolean result = appService.updateCurrentManagedCompany(); 
-            verify(mockManagedCompanyDao).update(1, mockManagedCompany); 
+            when(mockManagedCompanyDao.update(1, mockManagedCompany)).thenReturn(true);
+            this.appService.setCurrentManagedCompany(mockManagedCompany);
+            boolean result = appService.updateCurrentManagedCompany();  
             assertTrue(result);
-        } catch (SQLException e) {}
+        } catch (SQLException ex) {}
+       
     }
     
     @Test
     public void updatingNonExistingManagedCompanyReturnsFalse() {
-        try {
-            when(mockManagedCompanyDao.update(1, mockManagedCompany)).thenReturn(false);    
-            boolean result = appService.updateCurrentManagedCompany(); 
-            verify(mockManagedCompanyDao).update(1, mockManagedCompany); 
-            assertFalse(result);
-        } catch (SQLException e) {}
+        this.appService.setCurrentManagedCompany(null);
+        boolean result = appService.updateCurrentManagedCompany(); 
+        assertFalse(result);
     }
     
     @Test
@@ -162,11 +157,11 @@ public class AppServiceTest {
     @Test
     public void newCustomerCanBeCreatedWithValidCompanyObject() {
         try {
-            when(mockCustomerCompanyDao.create(mockCustomer)).thenReturn(true);      
-            boolean result = appService.saveCurrentCustomerCompany();
-            verify(mockCustomerCompanyDao).create(mockCustomer); 
+            when(mockCustomerCompanyDao.create(mockCustomer)).thenReturn(true);
+            this.appService.setCurrentCustomerCompany(mockCustomer);
+            boolean result = appService.saveCurrentCustomerCompany();  
             assertTrue(result);
-        } catch (SQLException e) {}
+        } catch (SQLException ex) {}
     }
     
     @Test
@@ -174,7 +169,6 @@ public class AppServiceTest {
         try {
             when(mockCustomerCompanyDao.create(mockCustomer)).thenReturn(false);    
             boolean result = appService.saveCurrentCustomerCompany();
-            verify(mockCustomerCompanyDao).create(mockCustomer); 
             assertFalse(result);
         } catch (SQLException e) {}
     }
@@ -182,21 +176,18 @@ public class AppServiceTest {
     @Test
     public void existingCustomerCanBeUpdated() {
         try {
-            when(mockCustomerCompanyDao.update(1, mockCustomer)).thenReturn(true);    
+            when(this.mockCustomerCompanyDao.update(1, mockCustomer)).thenReturn(true);    
+            this.appService.setCurrentCustomerCompany(mockCustomer);
             boolean result = appService.updateCurrentCustomerCompany(); 
-            verify(mockCustomerCompanyDao).update(1, mockCustomer); 
             assertTrue(result);
         } catch (SQLException e) {}
     }
     
     @Test
-    public void updatingNonExistingCustomerReturnsFalse() {
-        try {
-            when(mockCustomerCompanyDao.update(1, mockCustomer)).thenReturn(false);    
-            boolean result = appService.updateCurrentCustomerCompany(); 
-            verify(mockCustomerCompanyDao).update(1, mockCustomer); 
-            assertFalse(result);
-        } catch (SQLException e) {}
+    public void updatingNonExistingCustomerReturnsFalse() {    
+        this.appService.setCurrentCustomerCompany(null);
+        boolean result = appService.updateCurrentCustomerCompany(); 
+        assertFalse(result);
     }
     
     @Test
@@ -204,7 +195,6 @@ public class AppServiceTest {
         try {
             when(mockCustomerCompanyDao.delete(1)).thenReturn(true);    
             boolean result = appService.deleteCustomerCompany(1); 
-            verify(mockCustomerCompanyDao).delete(1); 
             assertTrue(result);
         } catch (SQLException e) {}
     }
@@ -255,8 +245,13 @@ public class AppServiceTest {
     public void pendingNoticeCanBeRetrieved() {
         CustomerCompany customer = new CustomerCompany();
         customer.setName("Acme");
-        boolean result = appService.saveCurrentCustomerCompany();
-        assertEquals(appService.getPendingNotice().getNoticeMessage(), "A new customer has been added");
+        try {
+            when(this.mockCustomerCompanyDao.create(customer)).thenReturn(true);
+            this.appService.setCurrentCustomerCompany(customer);
+            boolean result = appService.saveCurrentCustomerCompany();
+            assertTrue(result);
+            assertEquals("A new customer has been added", appService.getPendingNotice().getNoticeMessage());
+        } catch (SQLException ex) {}
     }
     
     @Test

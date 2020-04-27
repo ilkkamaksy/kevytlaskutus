@@ -67,12 +67,7 @@ public class InvoiceTest {
         assertEquals(result.getName(), mockCompany.getName());
     }
 
-    @Test
-    public void testSetInvoiceNumber() {
-        invoice.setInvoiceNumber(1);
-        assertEquals(invoice.getInvoiceNumber(), 1);
-    }
-    
+   
     @Test
     public void testGetInvoiceNumber() {
         invoice.setInvoiceNumber(1);
@@ -80,14 +75,6 @@ public class InvoiceTest {
         assertEquals(result, 1);
     }
 
-    /**
-     * Test of getReferenceNumber method, of class Invoice.
-     */
-    @Test
-    public void testGetReferenceNumber() {
-        invoice.setReferenceNumber(1);
-        assertEquals(invoice.getReferenceNumber(), 1);
-    }
 
     @Test
     public void invoiceIsInitializedWithTodaysDate() {
@@ -97,13 +84,13 @@ public class InvoiceTest {
 
     @Test
     public void paymentTermInitializedAs14Days() {
-        assertEquals(invoice.getPaymentTerm(), 14);
+        assertEquals(invoice.getPaymentTerm(), Integer.valueOf(14));
     }
 
     @Test
     public void testSetPaymentTerm() {
         invoice.setPaymentTerm(10);
-        assertEquals(invoice.getPaymentTerm(), 10);
+        assertEquals(invoice.getPaymentTerm(), Integer.valueOf(10));
     }
 
     @Test

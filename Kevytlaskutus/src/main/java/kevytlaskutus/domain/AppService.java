@@ -70,7 +70,7 @@ public class AppService {
     }
    
     public boolean saveCurrentManagedCompany() {
-        if (!this.currentManagedCompanyHasName()) {
+        if (this.currentManagedCompany == null || !this.currentManagedCompanyHasName()) {
             return false;
         }
         boolean result = this.managedCompanyService.createManagedCompany(this.currentManagedCompany);
@@ -79,7 +79,7 @@ public class AppService {
     }
  
     public Boolean updateCurrentManagedCompany() {
-        if (!this.currentManagedCompanyHasName()) {
+        if (this.currentManagedCompany == null || !this.currentManagedCompanyHasName()) {
             return false;
         }
         boolean result = this.managedCompanyService.updateManagedCompany(this.currentManagedCompany.getId(), this.currentManagedCompany);
@@ -111,7 +111,7 @@ public class AppService {
     }
     
     public boolean saveCurrentCustomerCompany() {
-        if(!this.currentCustomerCompanyHasName()) {
+        if(this.currentCustomerCompany == null || !this.currentCustomerCompanyHasName()) {
             return false;
         }
         boolean result = this.customerCompanyService.createCustomerCompany(this.currentCustomerCompany);
@@ -120,7 +120,7 @@ public class AppService {
     }
     
     public Boolean updateCurrentCustomerCompany() {
-        if(!this.currentCustomerCompanyHasName()) {
+        if(this.currentCustomerCompany == null ||!this.currentCustomerCompanyHasName()) {
             return false;
         }
         boolean result = this.customerCompanyService.updateCustomerCompany(this.currentCustomerCompany.getId(), this.currentCustomerCompany);
