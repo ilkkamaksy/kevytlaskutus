@@ -24,7 +24,7 @@ Näitä ovat esim.
 - boolean updateCurrentManagedCompany()
 - boolean deleteManagedCompany(int id)
 
-ja vastaavat metodit myös muille Invoice ja CustomerCompany-olioille. Lisäksi luokka tarjoaa toiminnot:
+ja vastaavat metodit myös Invoice ja CustomerCompany-olioille. Lisäksi luokka tarjoaa toiminnot:
 
 - boolean hasNoticePending()
 - Notice getPendingNotice() 

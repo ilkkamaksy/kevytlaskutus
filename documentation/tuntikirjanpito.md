@@ -16,5 +16,8 @@
 | 12.4. | 2    | Lisätty testejä, korjattu bugeja laskujen lisäyksestä ja muokkauksesta |
 | 20.4. | 8    | Laskujen muokkauksen rakentamista ja debuggaamista |
 | 21.4. | 6    | Laskujen lisäyksen uudistus, releasen julkaisu, dokumentaation päivitys |
-| yht   | 79    | | 
+| 25.4. | 4    | Tuotteiden muokkaus laskulla, dao- ja serviceluokkien muokkausta |
+| 26.4. | 4    | Tuotteiden muokkaus laskulla, dao- ja serviceluokkien muokkausta, virheilmoituksien muokkausta |
+| 28.4. | 6    | JavaDoc-päivityksiä ja testien lisäämistä |
+| yht   | 93    | | 
 
