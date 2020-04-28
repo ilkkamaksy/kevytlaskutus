@@ -47,11 +47,19 @@ Sovellus aukeaa hallintapaneeliin käynnistymisen yhteydessä.
   - (Tehty) Laskulle valitaan asiakas 
   - (Tehty) Laskulle annetaan laskunumero ja eräpäivä
   - laskun viitenumero luodaan automaattisesti
-  - (Tehty) Laskulle voi lisätä tuotteita, tuotteelle lisätään nimi, hinta, laskutusyksikkö ja kuvaus
   - Laskun summa lasketaan automaattisesti 
   - Laskun eräpäivä luodaan automaattisesti
+  - (Tehty) käyttäjälle ilmoitetaan, jos laskulta puuttuu tarvittavia tietoja
+
+- Käyttäjä voi lisätä ja muokata laskujen tuotteita
+  - (Tehty) Laskulle voi lisätä tuotteita, tuotteelle lisätään nimi, hinta, laskutusyksikkö ja kuvaus
+  - (Tehty) Laskulla olevien tuotteiden tietoja voi muokata
+  - (Tehty) Laskulla olevien tuotteiden tietoja voi muokata
+  - (Tehty) Laskusta voi poistaa tuotteita
+  - (Tehty) Käyttäjälle ilmoitetaan, jos tarvittavia tietoja puuttuu tuotteista
 
 - Käyttäjä voi navigoida näkymien välillä helposti
+ - (Tehty) muokkausnäkymistä pääsee palaamaan takaisin hallintanäkymään cancel- tai save-napeilla
 
 - (Tehty) Käyttäjä voi tarkastella lisättyjä laskuja
 - (Tehty) Käyttäjä voi tarkastella lisättyjä asiakkaita
