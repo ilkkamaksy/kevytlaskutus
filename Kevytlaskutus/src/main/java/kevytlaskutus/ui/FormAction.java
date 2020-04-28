@@ -14,8 +14,7 @@ import kevytlaskutus.domain.Product;
 public abstract class FormAction {
     
     AppService appService;
-    FormFieldDataExtractor dataExtractor = new FormFieldDataExtractor();
-    
+   
     public FormAction(AppService appService) {
         this.appService = appService;
     }

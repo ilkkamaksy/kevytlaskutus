@@ -7,7 +7,10 @@ import java.util.List;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-
+/**
+ * The Invoice data entity class. 
+ * 
+ */
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Invoice {

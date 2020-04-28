@@ -14,8 +14,8 @@ import java.util.logging.Logger;
 import kevytlaskutus.dao.InvoiceDaoImpl;
 
 /**
- *
- * @author ilkka
+ * Service class responsible for dispatching requests for InvoiceDao and returning Invoice entities from database.
+ * 
  */
 public class InvoiceService {
     
@@ -30,6 +30,12 @@ public class InvoiceService {
         this.dao = dao;
     }
     
+    /**
+     * Retrieves a default invoice number
+     *
+     * @return integer
+     * @see Invoice
+     */
     public int getDefaultInvoiceNumber() {
         try {
             Connection conn = this.databaseUtils.getConnection();
@@ -41,6 +47,14 @@ public class InvoiceService {
         return startInvoiceNumbering;
     }
     
+    /**
+     * Save an Invoice object in database. 
+     * 
+     * @param invoice the Invoice to be saved
+     * @param managedCompany the ManagedCompany to be attached to the invoice
+     * @return invoice id
+     * @see Invoice
+     */
     public Integer createInvoiceForCompany(Invoice invoice, ManagedCompany managedCompany) {
         if (invoice == null || managedCompany == null || managedCompany.getId() < 1) {
             return -1;
@@ -60,6 +74,15 @@ public class InvoiceService {
         return result;
     }
     
+    /**
+     * Update an Invoice object in database. 
+     * 
+     * @param id the id of the Invoice to be updated
+     * @param invoice the Invoice to be updated
+     * @param managedCompany the ManagedCompany to be attached to the invoice
+     * @return boolean
+     * @see Invoice
+     */
     public Boolean updateInvoice(int id, Invoice invoice, ManagedCompany managedCompany) {
         Boolean result = false;
         
@@ -75,6 +98,13 @@ public class InvoiceService {
         return result;
     }
   
+    /**
+     * Delete an Invoice entity in database. 
+     *
+     * @param id the id of the Invoice to be updated
+     * @return boolean
+     * @see Invoice
+     */
     public Boolean deleteInvoice(int id) {
         Boolean result = false;
         
@@ -89,6 +119,13 @@ public class InvoiceService {
         return result;
     }
     
+    /**
+     * Retrieves all Invoice entities attached to a ManagedCompany from the database.
+     *
+     * @param managedCompanyId the id of the ManagedCompany 
+     * @return List of Invoice objects.
+     * @see Invoice
+     */
     public List<Invoice> getInvoicesForCompany(int managedCompanyId) {
         List<Invoice> results = new ArrayList<>();
         
@@ -103,6 +140,13 @@ public class InvoiceService {
         return results;
     }
     
+    /**
+     * Retrieve an Invoice entity from the database by id. 
+     *
+     * @param id the id of the Invoice to be fetched.
+     * @return Invoice
+     * @see Invoice
+     */
     public Invoice getInvoiceById(int id) {
         
         try {

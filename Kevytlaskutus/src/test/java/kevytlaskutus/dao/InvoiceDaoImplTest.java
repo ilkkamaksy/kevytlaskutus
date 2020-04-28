@@ -11,8 +11,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import kevytlaskutus.dao.InvoiceDaoImpl;
+import kevytlaskutus.domain.CustomerCompany;
 import kevytlaskutus.domain.DatabaseUtils;
 import kevytlaskutus.domain.Invoice;
+import kevytlaskutus.domain.ManagedCompany;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -92,6 +94,48 @@ public class InvoiceDaoImplTest {
         try {
             List<Invoice> results = dao.getItems(1);
             assertEquals(results.size(), 0);    
+        } catch (SQLException e) {}
+    }
+    
+    @Test
+    public void invoiceCanBeRetrievedById() {
+        try {
+            
+            CustomerCompany customer = new CustomerCompany(
+                "Acme",
+                "regid",
+                "09123123",
+                "Katuosoite",
+                "postikoodi",
+                "toimipaikka",
+                "ovt",
+                "provider"
+            );
+            
+            ManagedCompany company = new ManagedCompany(
+                "Acme",
+                "regid",
+                "09123123",
+                "Katuosoite",
+                "postikoodi",
+                "toimipaikka",
+                "ovt",
+                "provider"
+            );
+            
+            Invoice invoice = new Invoice();
+            invoice.setReferenceNumber(1);
+            invoice.setCustomer(customer);
+            invoice.setCompany(company);
+            
+            Integer id = this.dao.create(invoice);
+            
+            Invoice result = dao.getItemById(id);
+            assertTrue(result.equals(invoice));
+            assertFalse(result.equals(this.mockInvoice));
+            Integer refNo = result.getReferenceNumber();
+            assertEquals(Integer.valueOf(1), refNo);
+            
         } catch (SQLException e) {}
     }
    

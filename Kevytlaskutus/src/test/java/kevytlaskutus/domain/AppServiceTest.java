@@ -5,6 +5,7 @@
  */
 package kevytlaskutus.domain;
 
+import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -81,9 +82,31 @@ public class AppServiceTest {
     
     @Test
     public void newManagedCompanyCanBeCreatedWithValidCompanyObject() {
+        ManagedCompany company = new ManagedCompany(
+                "Acme",
+                "regid",
+                "09123123",
+                "Katuosoite",
+                "postikoodi",
+                "toimipaikka",
+                "ovt",
+                "provider"
+        );
+       
         try {
-            when(mockManagedCompanyDao.create(mockManagedCompany)).thenReturn(true);
-            this.appService.setCurrentManagedCompany(mockManagedCompany);
+            when(mockManagedCompanyDao.create(company)).thenReturn(true);
+            this.appService.setCurrentManagedCompany(company);
+            assertEquals("Acme", this.appService.getCurrentManagedCompany().getName());
+            assertEquals("regid", this.appService.getCurrentManagedCompany().getRegId());
+            assertEquals("09123123", this.appService.getCurrentManagedCompany().getPhone());
+            assertEquals("Katuosoite", this.appService.getCurrentManagedCompany().getStreet());
+            assertEquals("postikoodi", this.appService.getCurrentManagedCompany().getPostcode());
+            assertEquals("toimipaikka", this.appService.getCurrentManagedCompany().getCommune());
+            assertEquals("ovt", this.appService.getCurrentManagedCompany().getOvtId());
+            assertEquals("provider", this.appService.getCurrentManagedCompany().getProvider());
+            assertTrue(this.appService.getCurrentManagedCompany().equals(company));
+            assertFalse(company.equals(this.mockManagedCompany));    
+            
             boolean result = appService.saveCurrentManagedCompany();  
             assertTrue(result);
         } catch (SQLException ex) {}
@@ -98,8 +121,24 @@ public class AppServiceTest {
     
     @Test
     public void newManagedCompanyCanNotBeCreatedWithoutName() {
-        when(this.mockManagedCompany.getName()).thenReturn("");
-        this.appService.setCurrentManagedCompany(this.mockManagedCompany);
+        
+        ManagedCompany company = new ManagedCompany();
+        company.setName("");
+        company.setRegId("regid");
+        company.setPhone("phone");
+        company.setStreet("street");
+        company.setPostcode("postcode");
+        company.setCommune("commune");
+        company.setBic("bic");
+        company.setIban("iban");
+        company.setProvider("provider");
+        company.setOvtId("ovt");
+       
+        this.appService.setCurrentManagedCompany(company);
+        assertEquals("iban", this.appService.getCurrentManagedCompany().getIban());
+        assertEquals("bic", this.appService.getCurrentManagedCompany().getBic());
+        assertTrue(this.appService.getCurrentManagedCompany().getName().isEmpty());
+        
         boolean result = appService.saveCurrentManagedCompany();
         assertFalse(result);
     }
@@ -254,11 +293,32 @@ public class AppServiceTest {
     
     @Test
     public void pendingNoticeCanBeRetrieved() {
-        CustomerCompany customer = new CustomerCompany();
-        customer.setName("Acme");
+        CustomerCompany customer = new CustomerCompany(
+                "Acme",
+                "regid",
+                "09123123",
+                "Katuosoite",
+                "postikoodi",
+                "toimipaikka",
+                "ovt",
+                "provider"
+        );
+       
         try {
             when(this.mockCustomerCompanyDao.create(customer)).thenReturn(true);
             this.appService.setCurrentCustomerCompany(customer);
+            
+            assertEquals("Acme", this.appService.getCurrentCustomerCompany().getName());
+            assertEquals("regid", this.appService.getCurrentCustomerCompany().getRegId());
+            assertEquals("09123123", this.appService.getCurrentCustomerCompany().getPhone());
+            assertEquals("Katuosoite", this.appService.getCurrentCustomerCompany().getStreet());
+            assertEquals("postikoodi", this.appService.getCurrentCustomerCompany().getPostcode());
+            assertEquals("toimipaikka", this.appService.getCurrentCustomerCompany().getCommune());
+            assertEquals("ovt", this.appService.getCurrentCustomerCompany().getOvtId());
+            assertEquals("provider", this.appService.getCurrentCustomerCompany().getProvider());
+            assertTrue(this.appService.getCurrentCustomerCompany().equals(customer));
+            assertFalse(this.appService.getCurrentCustomerCompany().equals(this.mockCustomer));
+            
             boolean result = appService.saveCurrentCustomerCompany();
             assertTrue(result);
             assertEquals("A new customer has been added", appService.getPendingNotice().getNoticeMessage());
@@ -276,6 +336,13 @@ public class AppServiceTest {
 
         CustomerCompany customer = new CustomerCompany();
         customer.setName("Acme");
+        customer.setRegId("regid");
+        customer.setOvtId("ovt");
+        customer.setProvider("provider");
+        customer.setStreet("katu");
+        customer.setPostcode("postcode");
+        customer.setCommune("commune");
+        customer.setPhone("phone");
 
         Product product = new Product();
         product.setName("Acme");
@@ -324,9 +391,20 @@ public class AppServiceTest {
 
         Product product = new Product();
         product.setName("Acme");
+        product.setPrice(BigDecimal.ONE);
+        product.setPriceUnit("kpl");
+        product.setDescription("kuvaus");
 
+        assertEquals("Acme", product.getName());
+        assertEquals(BigDecimal.ONE, product.getPrice());
+        assertEquals("kpl", product.getPriceUnit());
+        assertEquals("kuvaus", product.getDescription());
+        assertTrue(product.equals(product));
+        assertFalse(product.equals(this.mockCustomer));
+        
         Invoice invoice = new Invoice();
         invoice.setCustomer(customer);
+        invoice.setReferenceNumber(Integer.valueOf(0));
         invoice.getProducts().add(product);
 
         when(mockInvoiceService.updateInvoice(1, invoice, mockManagedCompany)).thenReturn(true);
@@ -334,6 +412,10 @@ public class AppServiceTest {
         this.appService.setCurrentManagedCompany(mockManagedCompany);
         this.appService.setCurrentCustomerCompany(customer);
         this.appService.setCurrentInvoice(invoice);
+        this.appService.getCurrentInvoice().setReferenceNumber(Integer.valueOf(1));
+        
+        assertEquals(Integer.valueOf(1), this.appService.getCurrentInvoice().getReferenceNumber());
+        
         boolean result = this.appService.updateCurrentInvoice();
 
         assertTrue(result);

@@ -21,24 +21,5 @@ public abstract class FormManagedCompanyAction extends FormAction {
     }
     
     public abstract boolean execute();
-    
-    protected ManagedCompany makeManagedCompanyFromFieldValues(HashMap<String, Node> formFields, int id) {
 
-        ManagedCompany result = new ManagedCompany(
-            this.dataExtractor.getValueFromTextField("Name", formFields), 
-            this.dataExtractor.getValueFromTextField("Register Id", formFields),
-            this.dataExtractor.getValueFromTextField("Phone", formFields),
-            this.dataExtractor.getValueFromTextField("Street address", formFields),
-            this.dataExtractor.getValueFromTextField("Postcode", formFields),
-            this.dataExtractor.getValueFromTextField("Commune/City", formFields),
-            this.dataExtractor.getValueFromTextField("OVT", formFields),
-            this.dataExtractor.getValueFromTextField("Provider", formFields)
-        );
-        
-        result.setBic(this.dataExtractor.getValueFromTextField("BIC", formFields));
-        result.setIban(this.dataExtractor.getValueFromTextField("IBAN", formFields));
-        result.setId(id);
-       
-        return result;
-    }
 }

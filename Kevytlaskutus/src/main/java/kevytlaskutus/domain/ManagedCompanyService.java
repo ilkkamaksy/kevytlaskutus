@@ -14,8 +14,8 @@ import java.util.logging.Logger;
 import kevytlaskutus.dao.ManagedCompanyDao;
 
 /**
- *
- * @author ilkka
+ * Service class responsible for dispatching requests for ManagedCompanyDao and returning ManagedCompany entities from database.
+ * 
  */
 public class ManagedCompanyService {
     
@@ -28,6 +28,13 @@ public class ManagedCompanyService {
         this.dao = dao;
     }    
     
+    /**
+     * Save a ManagedCompany object in database. 
+     * 
+     * @param company the ManagedCompany to be saved
+     * @return boolean
+     * @see ManagedCompany
+     */
     public boolean createManagedCompany(ManagedCompany company) {
         
         Boolean result = false;
@@ -43,6 +50,14 @@ public class ManagedCompanyService {
         return result;
     }
     
+    /**
+     * Update a ManagedCompany object in database. 
+     *
+     * @param id the id of the ManagedCompany to be updated
+     * @param company the ManagedCompany to be updated
+     * @return boolean
+     * @see ManagedCompany
+     */
     public Boolean updateManagedCompany(int id, ManagedCompany company) {
         
         Boolean result = false;
@@ -58,6 +73,13 @@ public class ManagedCompanyService {
         return result;
     }
     
+    /**
+     * Delete a ManagedCompany entity in database. 
+     *
+     * @param id the id of the ManagedCompany to be updated
+     * @return boolean
+     * @see ManagedCompany
+     */
     public Boolean deleteManagedCompany(int id) {
         
         Boolean result = false;
@@ -73,6 +95,13 @@ public class ManagedCompanyService {
         return result;
     }
     
+    /**
+     * Retrieve a ManagedCompany object from the database by id. 
+     *
+     * @param id the id of the ManagedCompany to be fetched.
+     * @return ManagedCompany
+     * @see ManagedCompany
+     */
     public ManagedCompany getManagedCompany(int id) {
         
         ManagedCompany result = null;
@@ -88,6 +117,12 @@ public class ManagedCompanyService {
         return result;
     }
     
+    /**
+     * Retrieves all ManagedCompany entities from the database.
+     *
+     * @return List of ManagedCompany objects.
+     * @see ManagedCompany
+     */
     public List<ManagedCompany> getManagedCompanies() {
         
         List<ManagedCompany> results = new ArrayList<>();

@@ -21,23 +21,5 @@ public abstract class FormCustomerCompanyAction extends FormAction {
     }
     
     public abstract boolean execute();
-    
-    public CustomerCompany makeCustomerCompanyFromFieldValues(HashMap<String, Node> formFields, int id) {
-
-        CustomerCompany result = new CustomerCompany(
-            this.dataExtractor.getValueFromTextField("Name", formFields), 
-            this.dataExtractor.getValueFromTextField("Register Id", formFields),
-            this.dataExtractor.getValueFromTextField("Phone", formFields),
-            this.dataExtractor.getValueFromTextField("Street address", formFields),
-            this.dataExtractor.getValueFromTextField("Postcode", formFields),
-            this.dataExtractor.getValueFromTextField("Commune/City", formFields),
-            this.dataExtractor.getValueFromTextField("OVT", formFields),
-            this.dataExtractor.getValueFromTextField("Provider", formFields)
-        );
-        
-        result.setId(id);
-       
-        return result;
-    }
-    
+   
 }

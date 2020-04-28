@@ -14,8 +14,8 @@ import java.util.logging.Logger;
 import kevytlaskutus.dao.CustomerCompanyDao;
 
 /**
- *
- * @author ilkka
+ * Service class responsible for dispatching requests for CustomerCompanyDao and returning Customer entities from database.
+ * 
  */
 public class CustomerCompanyService {
     
@@ -28,6 +28,13 @@ public class CustomerCompanyService {
         this.dao = dao;
     }    
     
+    /**
+     * Save a CustomerCompany object in database. 
+     * 
+     * @param company the CustomerCompany to be saved
+     * @return boolean
+     * @see CustomerCompany
+     */
     public boolean createCustomerCompany(CustomerCompany company) {
         
         Boolean result = false;
@@ -43,7 +50,15 @@ public class CustomerCompanyService {
         return result;
     }
     
-    public Boolean updateCustomerCompany(int id, CustomerCompany company) {
+    /**
+     * Update a CustomerCompany object in database. 
+     *
+     * @param id the id of the CustomerCompany to be updated
+     * @param company the CustomerCompany to be updated
+     * @return boolean
+     * @see CustomerCompany
+     */
+    public boolean updateCustomerCompany(int id, CustomerCompany company) {
         
         Boolean result = false;
         
@@ -58,7 +73,14 @@ public class CustomerCompanyService {
         return result;
     }
   
-    public Boolean deleteCustomerCompany(int id) {
+    /**
+     * Delete a CustomerCompany entity in database. 
+     *
+     * @param id the id of the CustomerCompany to be updated
+     * @return boolean
+     * @see CustomerCompany
+     */
+    public boolean deleteCustomerCompany(int id) {
         
         Boolean result = false;
         
@@ -73,6 +95,12 @@ public class CustomerCompanyService {
         return result;
     }
     
+    /**
+     * Retrieves all CustomerCompany entities from the database.
+     *
+     * @return List of CustomerCompany objects.
+     * @see CustomerCompany
+     */
     public List<CustomerCompany> getCustomerCompanies() {
         
         List<CustomerCompany> results = new ArrayList<>();
@@ -88,6 +116,13 @@ public class CustomerCompanyService {
         return results;
     }
     
+    /**
+     * Retrieve a CustomerCompany object from the database by name. 
+     *
+     * @param name the name of the CustomerCompany to be fetched.
+     * @return CustomerCompany
+     * @see CustomerCompany
+     */
     public CustomerCompany getCustomerCompanyByName(String name) {
         
         CustomerCompany result = null;

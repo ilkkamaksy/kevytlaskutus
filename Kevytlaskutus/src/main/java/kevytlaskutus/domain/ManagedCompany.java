@@ -5,7 +5,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 /**
- * Managed company object class.
+ * The ManagedCompany data entity class.
  */
 @NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
