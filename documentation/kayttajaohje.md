@@ -26,7 +26,7 @@ Lisää tämän jälkeen asiakas, jolle luomasi yritys voi lisätä laskuja:
 
 Lisää asiakkaalle tiedot ja tallenna:
 
-![Tallenna asiakas](ohje-save-asiakas.jpg)
+![Tallenna asiakas](ohje-tallenna-asiakas.jpg)
 
 Siirry sitten näkymään My Companies ja klikkaa sen yrityksen kohdalla "manage", jolle haluat lisätä uuden laskun:
 

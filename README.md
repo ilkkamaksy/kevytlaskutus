@@ -13,6 +13,7 @@ Sovelluksen avulla freelancerit ja pienyrittäjät voivat hallita yhden tai usea
 - [Vaatimusmäärittely](/documentation/vaatimusmaarittely.md)
 - [Työaikakirjanpito](/documentation/tuntikirjanpito.md)
 - [Arkkitehtuurikuvaus](/documentation/arkkitehtuuri.md)
+- [Käyttöohje](/documentation/kayttajaohje.md)
 
 ## Komentorivitoiminnot
 
