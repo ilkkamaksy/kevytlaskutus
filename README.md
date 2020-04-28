@@ -8,7 +8,8 @@ Sovelluksen avulla freelancerit ja pienyrittäjät voivat hallita yhden tai usea
 
 ## Dokumentaatio
 
-- [1. Release](https://github.com/ilkkamaksy/ot-harjoitustyo/releases/tag/viikko5)
+- [Viikko 6 -release](https://github.com/ilkkamaksy/ot-harjoitustyo/releases/tag/viikko6)
+- [Viikko 5 -release](https://github.com/ilkkamaksy/ot-harjoitustyo/releases/tag/viikko5)
 - [Vaatimusmäärittely](/documentation/vaatimusmaarittely.md)
 - [Työaikakirjanpito](/documentation/tuntikirjanpito.md)
 - [Arkkitehtuurikuvaus](/documentation/arkkitehtuuri.md)
