@@ -20,5 +20,5 @@
 | 26.4. | 4    | Tuotteiden muokkaus laskulla, dao- ja serviceluokkien muokkausta, virheilmoituksien muokkausta |
 | 28.4. | 6    | JavaDoc-päivityksiä ja testien lisäämistä |
 | 3.5. | 4    | Laskun tuotteiden summan, verojen ja verollisen summan lisäys lomakkeelle |
-| yht   | 93    | | 
+| yht   | 97    | | 
 
