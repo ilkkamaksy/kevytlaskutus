@@ -29,6 +29,7 @@ public class InvoiceDaoImpl implements InvoiceDao<Invoice, Integer, String>  {
             + "    createdDate DATE,\n"
             + "    paymentTerm INTEGER,\n"
             + "    dueDate DATE,\n"
+            + "    vatPercentage DECIMAL,\n"
             + "    discount DECIMAL,\n"
             + "    discountDate DATE,\n"
             + "    penaltyInterest DECIMAL,\n"
@@ -77,9 +78,10 @@ public class InvoiceDaoImpl implements InvoiceDao<Invoice, Integer, String>  {
             + "deliveryDate, \n"
             + "deliveryInfo, \n"
             + "additionalInfo, \n"
-            + "companyId \n"
+            + "companyId, \n"
+            + "vatPercentage \n"
             + ") "
-            + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+            + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
             Statement.RETURN_GENERATED_KEYS
         );
         populate.populateCreateStatementData(pstmt, invoice);
@@ -125,7 +127,8 @@ public class InvoiceDaoImpl implements InvoiceDao<Invoice, Integer, String>  {
                 + "deliveryDate=?, "
                 + "deliveryInfo=?, "
                 + "additionalInfo=?, "
-                + "companyId=? "
+                + "companyId=?, "
+                + "vatPercentage=? "
                 + "WHERE id=?");
         populate.populateUpdateStatementData(stmt, invoice);
         int rows = stmt.executeUpdate();

@@ -1,6 +1,7 @@
 package kevytlaskutus.domain;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +28,7 @@ public class Invoice {
     private Date createdDate;
     private Integer paymentTerm;
     private Date dueDate;
+    private BigDecimal vatPercentage;
     private BigDecimal discount;
     private Date discountDate;
     private BigDecimal penaltyInterest;
@@ -48,9 +50,10 @@ public class Invoice {
         this.referenceNumber = 0;
         this.paymentTerm = 14;
         this.dueDate = this.calculateDueDate(createdDate);
-        this.penaltyInterest = new BigDecimal(10.00);
-        this.amount = new BigDecimal(0);
-        this.discount = new BigDecimal(0);
+        this.penaltyInterest = BigDecimal.valueOf(10);
+        this.vatPercentage = BigDecimal.ZERO;
+        this.amount = BigDecimal.ZERO;
+        this.discount = BigDecimal.ZERO;
         this.deliveryDate = createdDate;
         this.products = new ArrayList<>();
     }
@@ -61,5 +64,9 @@ public class Invoice {
     
     public void setReferenceNumber(Integer value) {
         this.referenceNumber = value;
+    }
+    
+    public BigDecimal getAmount() {
+        return this.amount.setScale(2, RoundingMode.CEILING);
     }
 }

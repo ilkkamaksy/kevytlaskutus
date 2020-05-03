@@ -4,19 +4,39 @@
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane id="AnchorPane" prefHeight="559.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <Button layoutX="13.0" layoutY="8.0" mnemonicParsing="false" onAction="#manageCompaniesAction" style="-fx-background-color: none; -fx-border-color: none; -fx-padding: 2;" text="My Companies" />
       <Button layoutX="113.0" layoutY="8.0" mnemonicParsing="false" onAction="#manageCustomersAction" style="-fx-background-color: none; -fx-border-color: none; -fx-padding: 2;" text="Customers" />
-      <Button fx:id="saveFormButton" layoutX="13.0" layoutY="367.0" mnemonicParsing="false" text="Save invoice" AnchorPane.bottomAnchor="10.0" />
-      <Button fx:id="addNewRowButton" layoutX="106.0" layoutY="364.0" mnemonicParsing="false" text="Add new product to invoice" AnchorPane.bottomAnchor="10.399999999999977" />
       <Pane fx:id="noticePane" minHeight="0.0" minWidth="0.0" prefWidth="554.0" style="-fx-background-color: #FFFFFF;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="36.0" />
-      <ScrollPane layoutY="37.0" prefHeight="321.0" prefWidth="600.0" AnchorPane.bottomAnchor="43.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="70.0">
+      <ScrollPane layoutY="37.0" prefHeight="392.0" prefWidth="601.0" AnchorPane.bottomAnchor="43.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="199.0" AnchorPane.topAnchor="70.0">
         <content>
           <Pane fx:id="editFormContainerPane" minHeight="0.0" minWidth="0.0" prefWidth="554.0" />
         </content>
       </ScrollPane>
-      <Button fx:id="cancelButton" layoutX="534.0" layoutY="364.0" mnemonicParsing="false" text="Cancel" />
+      <Button fx:id="saveFormButton" layoutX="13.0" layoutY="367.0" mnemonicParsing="false" text="Save invoice" AnchorPane.bottomAnchor="10.0" />
+      <Button fx:id="addNewRowButton" layoutX="106.0" layoutY="364.0" mnemonicParsing="false" text="Add new product to invoice" AnchorPane.bottomAnchor="10.0" />
+      <Button fx:id="cancelButton" layoutX="734.0" layoutY="523.0" mnemonicParsing="false" text="Cancel" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0" />
+      <Text fx:id="totalAmountIncludingTaxes" layoutX="618.0" layoutY="215.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0,00 €" AnchorPane.topAnchor="215.0" AnchorPane.leftAnchor="618.0">
+         <font>
+            <Font size="17.0" />
+         </font>
+      </Text>
+      <Text layoutX="618.0" layoutY="197.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Total incl. Taxes" AnchorPane.topAnchor="197.0" AnchorPane.leftAnchor="618.0" />
+      <Text fx:id="totalTaxesAmount" layoutX="618.0" layoutY="158.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0,00 €" AnchorPane.topAnchor="158.0" AnchorPane.leftAnchor="618.0">
+         <font>
+            <Font size="17.0" />
+         </font>
+      </Text>
+      <Text layoutX="618.0" layoutY="139.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Total Tax" AnchorPane.topAnchor="139.0" AnchorPane.leftAnchor="618.0" />
+      <Text fx:id="totalAmountExcludingTaxes" layoutX="618.0" layoutY="102.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0,00 €" AnchorPane.topAnchor="102.0" AnchorPane.leftAnchor="618.0">
+         <font>
+            <Font size="17.0" />
+         </font>
+      </Text>
+      <Text layoutX="618.0" layoutY="83.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Total excl. Taxes" AnchorPane.topAnchor="83.0" AnchorPane.leftAnchor="618.0" />
    </children> 
 </AnchorPane>

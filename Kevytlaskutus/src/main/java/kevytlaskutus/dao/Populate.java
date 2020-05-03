@@ -54,7 +54,7 @@ public class Populate {
     
     public static void populateUpdateStatementData(PreparedStatement stmt, Invoice invoice) throws SQLException {
         addInvoiceDefaultDataToStatement(stmt, invoice);
-        stmt.setInt(19, invoice.getId());
+        stmt.setInt(20, invoice.getId());
     }
    
     public static void addInvoiceDefaultDataToStatement(PreparedStatement stmt, Invoice invoice) throws SQLException {
@@ -76,6 +76,7 @@ public class Populate {
         stmt.setString(16, invoice.getDeliveryInfo());
         stmt.setString(17, invoice.getAdditionalInfo());
         stmt.setInt(18, invoice.getCompany().getId());
+        stmt.setBigDecimal(19, invoice.getVatPercentage());
     }
     
     public static Invoice populateInvoice(ResultSet rs) throws SQLException {
@@ -97,6 +98,7 @@ public class Populate {
         invoice.setDeliveryDate(rs.getDate("deliveryDate"));
         invoice.setDeliveryInfo(rs.getString("deliveryInfo"));
         invoice.setAdditionalInfo(rs.getString("additionalInfo"));
+        invoice.setVatPercentage(rs.getBigDecimal("vatPercentage"));
         return invoice;
     }
     

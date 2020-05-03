@@ -1,5 +1,7 @@
 package kevytlaskutus.domain;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
@@ -263,7 +265,31 @@ public class AppService {
     public int getDefaultInvoiceNumber() {
         return this.invoiceService.getDefaultInvoiceNumber();
     }
-
+    
+    public BigDecimal updateCurrentInvoiceTotal() {
+        BigDecimal totalAmount = new BigDecimal(0);
+        for (Product product : this.currentInvoice.getProducts()) {
+            totalAmount = totalAmount.add(product.getPrice());
+        }
+        totalAmount = this.calculateCurrentInvoiceDiscountAmount(totalAmount);
+        this.currentInvoice.setAmount(totalAmount.setScale(2, RoundingMode.CEILING));
+        
+        return totalAmount;
+    }
+    
+    private BigDecimal calculateCurrentInvoiceDiscountAmount(BigDecimal totalAmount) {
+        BigDecimal discountAmount = totalAmount.multiply(this.currentInvoice.getDiscount().divide(BigDecimal.valueOf(100)));
+        return totalAmount.subtract(discountAmount).setScale(2, RoundingMode.CEILING);
+    }
+    
+    public BigDecimal getCurrentInvoiceTotalIncludingTaxes() {
+        return this.currentInvoice.getAmount().add(this.getCurrentInvoiceTotalTaxes().setScale(2, RoundingMode.CEILING));
+    }
+    
+    public BigDecimal getCurrentInvoiceTotalTaxes() {
+        return this.currentInvoice.getAmount().multiply(this.currentInvoice.getVatPercentage().divide(BigDecimal.valueOf(100))).setScale(2, RoundingMode.CEILING); 
+    }
+    
     /**
      * Save the current Invoice object in database.
      * @return boolean
@@ -276,7 +302,7 @@ public class AppService {
         Integer invoiceId = this.invoiceService.createInvoiceForCompany(this.currentInvoice, currentManagedCompany);
         boolean success = invoiceId > -1 ? true : false;
         
-        if (success && this.currentInvoice.getProducts().size() > 0 && !this.currentInvoice.getProducts().get(0).getName().isEmpty()) {
+        if (success && this.currentInvoice.getProducts().size() > 0) {
             this.productService.saveProductsInBatches(invoiceId, this.currentInvoice.getProducts());
         } 
         

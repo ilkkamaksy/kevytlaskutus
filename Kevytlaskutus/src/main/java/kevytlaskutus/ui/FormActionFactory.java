@@ -26,14 +26,9 @@ public class FormActionFactory {
         this.commands.put("UpdateInvoice", new FormActionUpdateInvoice(appService));
     }
     
-    public boolean execute(String actionType, HashMap<String, Node> formFields, int id) {        
+    public boolean execute(String actionType, int id) {        
         FormAction action = this.commands.get(actionType); 
         return action.execute();
     }
-    
-    public boolean execute(String actionType, HashMap<String, Node> formFields, int id, List<Product> products) {        
-        FormAction action = this.commands.get(actionType); 
-        return action.execute();
-    }
-    
+   
 }

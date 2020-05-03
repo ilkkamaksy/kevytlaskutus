@@ -37,18 +37,21 @@ import kevytlaskutus.domain.Product;
  */
 public class Form {
    
-    AppService appService;
+    private AppService appService;
+    
+    private EditInvoiceController editInvoiceController;
     
     private VBox form;
-    
-    private HashMap<String, Node> formFields;
-    
+   
     private int productRowCount = 1;
   
     public Form(AppService appService) {
         this.appService = appService;
-        this.formFields = new HashMap<>();
         form = new VBox(10);
+    }
+    
+    public void setEditInvoiceController(EditInvoiceController editInvoiceController) {
+        this.editInvoiceController = editInvoiceController;
     }
    
     public void addLineItem() {
@@ -124,24 +127,7 @@ public class Form {
         inputField.setVisible(false);
         this.addNodesToForm(inputField);
     }
-    
-    public void addDecimalField(String label, String field) { 
-        Pattern decimalPattern = Pattern.compile("-?\\d*(\\.\\d{0,2})?");
-        UnaryOperator<Change> filter = c -> {
-            if (decimalPattern.matcher(c.getControlNewText()).matches()) {
-                return c;
-            } else {
-                return null;
-            }
-        };
-        TextFormatter<Double> formatter = new TextFormatter<>(filter);
-
-        TextField inputField = new TextField(field);
-        inputField.setTextFormatter(formatter);
-        
-        this.addNodesToForm(new Label(label), inputField);
-    }
-    
+   
     public void addDecimalField(String label, String field, Object object, String property) { 
         Pattern decimalPattern = Pattern.compile("-?\\d*(\\.\\d{0,2})?");
         UnaryOperator<Change> filter = c -> {
@@ -166,6 +152,16 @@ public class Form {
                 } else {
                     method.invoke(object, new BigDecimal(0));
                 }
+                
+                this.appService.updateCurrentInvoiceTotal();
+                this.editInvoiceController.totalAmountExcludingTaxesValue.set(this.appService.getCurrentInvoice().getAmount());
+                this.editInvoiceController.updateTotalExcludingTaxes(this.editInvoiceController.totalAmountExcludingTaxesValue.asString());
+                
+                this.editInvoiceController.totalTaxesAmountValue.set(this.appService.getCurrentInvoiceTotalTaxes());
+                this.editInvoiceController.updateTotalTaxes(this.editInvoiceController.totalTaxesAmountValue.asString());
+
+                this.editInvoiceController.totalAmountIncludingTaxesValue.set(this.appService.getCurrentInvoiceTotalIncludingTaxes());
+                this.editInvoiceController.updateTotalIncludingTaxes(this.editInvoiceController.totalAmountIncludingTaxesValue.asString());
                 
             } catch (NoSuchMethodException ex) {
                 Logger.getLogger(Form.class.getName()).log(Level.SEVERE, null, ex);
@@ -314,10 +310,6 @@ public class Form {
         return form;
     }
 
-    public HashMap<String, Node> getFormFields() {
-        return this.formFields;
-    }
-   
     public static boolean isNumeric(String strNum) {
         if (strNum == null) {
             return false;
