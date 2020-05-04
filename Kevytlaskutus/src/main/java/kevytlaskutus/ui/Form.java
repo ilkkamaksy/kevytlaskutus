@@ -22,9 +22,18 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 
 import javafx.scene.control.Label;
+import javafx.scene.control.Separator;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
 import javafx.scene.control.TextFormatter.Change;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.Border;
+import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
 import javafx.util.converter.IntegerStringConverter;
 import kevytlaskutus.domain.AppService;
@@ -81,8 +90,16 @@ public class Form {
         FormFieldText descriptionField = new FormFieldText("Product Description", selectedProduct.getDescription());
         descriptionField.setOnChangeHandler(selectedProduct, "Description");
         
+
         VBox container = new VBox(10);
-        container.getChildren().addAll(nameField.getField(), priceField.getField(), priceUnitField.getField(), descriptionField.getField());
+        Separator separator = new Separator();
+        container.getChildren().add(separator);
+        
+        HBox topRow = new HBox(10);
+        topRow.getChildren().addAll(nameField.getField(), priceField.getField(), priceUnitField.getField());
+        HBox bottomRow = new HBox(10);
+        bottomRow.getChildren().addAll(descriptionField.getField());
+        container.getChildren().addAll(topRow, bottomRow);
         this.addRemoveProductItemButton(selectedProduct, container);
         
         this.addNodesToForm(container);
