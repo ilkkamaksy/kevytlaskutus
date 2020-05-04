@@ -20,6 +20,6 @@
 | 26.4. | 4    | Tuotteiden muokkaus laskulla, dao- ja serviceluokkien muokkausta, virheilmoituksien muokkausta |
 | 28.4. | 6    | JavaDoc-päivityksiä ja testien lisäämistä |
 | 3.5. | 5    | Laskun tuotteiden summan, verojen ja verollisen summan lisäys lomakkeelle |
-| 4.5. | 6    | Viitenumeron laskeminen ja lisäys laskulle, javafx-lomakekenttien generaattorin refaktorointi |
-| yht   | 103    | | 
+| 4.5. | 7    | Viitenumeron laskeminen ja lisäys laskulle, javafx-lomakekenttien generaattorin refaktorointi |
+| yht   | 104    | | 
 
