@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
 
-<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane id="AnchorPane" prefHeight="559.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <Pane fx:id="noticePane" minHeight="0.0" minWidth="0.0" prefWidth="554.0" AnchorPane.topAnchor="36.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" style="-fx-background-color: #FFFFFF;"></Pane>
       <ListView fx:id="invoiceListView" layoutX="-1.0" layoutY="37.0" prefHeight="314.0" prefWidth="600.0" AnchorPane.bottomAnchor="43.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="70.0" />

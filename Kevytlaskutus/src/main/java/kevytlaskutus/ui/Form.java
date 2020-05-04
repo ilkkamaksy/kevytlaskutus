@@ -42,9 +42,7 @@ public class Form {
     private EditInvoiceController editInvoiceController;
     
     private VBox form;
-   
-    private int productRowCount = 1;
-  
+ 
     public Form(AppService appService) {
         this.appService = appService;
         form = new VBox(10);
@@ -65,45 +63,46 @@ public class Form {
     }
     
     public void setLineItem(Product selectedProduct) {
-        this.addTextField("Product Name #" + this.productRowCount, selectedProduct.getName(), selectedProduct, "Name");
         
+        FormFieldText nameField = new FormFieldText("Product Name", selectedProduct.getName());
+        nameField.setOnChangeHandler(selectedProduct, "Name");
+       
         String price = "";
         if (selectedProduct.getPrice() != null) {
             price = "" + selectedProduct.getPrice();
         }
-        this.addDecimalField("Product Price #" + this.productRowCount, price, selectedProduct, "Price");
-        this.addTextField("Product Price Unit #" + this.productRowCount, selectedProduct.getPriceUnit(), selectedProduct, "PriceUnit");
-        this.addTextField("Product Description #" + this.productRowCount, selectedProduct.getDescription(), selectedProduct, "Description");
-        this.addHiddenField("Product ID #" + this.productRowCount, "" + selectedProduct.getId());
+        FormFieldDecimal priceField = new FormFieldDecimal("Product Price", price);
+        priceField.setOnChangeHandler(selectedProduct, "Price");
+        priceField.setCallback(this.editInvoiceController, "updateTotals");
         
-        this.addRemoveProductItemButton(productRowCount, selectedProduct);
+        FormFieldText priceUnitField = new FormFieldText("Product Price Unit", selectedProduct.getPriceUnit());
+        priceUnitField.setOnChangeHandler(selectedProduct, "PriceUnit");
         
-        this.productRowCount++;
+        FormFieldText descriptionField = new FormFieldText("Product Description", selectedProduct.getDescription());
+        descriptionField.setOnChangeHandler(selectedProduct, "Description");
+        
+        VBox container = new VBox(10);
+        container.getChildren().addAll(nameField.getField(), priceField.getField(), priceUnitField.getField(), descriptionField.getField());
+        this.addRemoveProductItemButton(selectedProduct, container);
+        
+        this.addNodesToForm(container);
     }
     
-    public void addRemoveProductItemButton(int index, Product product) {
+    public void addRemoveProductItemButton(Product product, VBox node) {
         Button button = new Button("Remove");
         button.setOnAction(e-> {
-            for (int i = 0; i < this.form.getChildren().size(); i++) {
-                if (this.form.getChildren().get(i).toString().contains("Product Name #" + index)) {
-                    for (int j = i + 9; j >= i; j--) {
-                        this.form.getChildren().remove(this.form.getChildren().get(j));
-                    }
-                    break;
-                }
-                i++;
-            }
+            this.form.getChildren().remove(node);
             product.setInvoiceId(0);
-            this.productRowCount--;
+            this.editInvoiceController.updateTotals();
         });
         
-        this.addNodesToForm(button);
+        node.getChildren().add(button);
     }
    
-    public void addTextField(String label, String field, Object object, String property) {
-        FormFieldText formfield = new FormFieldText(label, field);
-        formfield.setOnChangeHandler(object, property);
-        this.addNodesToForm(formfield.getField());
+    public void addTextField(String label, String field, Object onChangeObject, String onChangeObjectProperty) {
+        FormFieldText formField = new FormFieldText(label, field);
+        formField.setOnChangeHandler(onChangeObject, onChangeObjectProperty);
+        this.addNodesToForm(formField.getField());
     }
     
     public void addHiddenField(String label, String field) {
@@ -112,134 +111,50 @@ public class Form {
         this.addNodesToForm(inputField);
     }
    
-    public void addDecimalField(String label, String field, Object object, String property) { 
-        FormFieldDecimal formField = new FormFieldDecimal(label, field, this.appService, this.editInvoiceController);
-        formField.setOnChangeHandler(object, property);
-        formField.setCallback(object, property);
+    public void addDecimalField(String label, String field, Object onChangeObject, String onChangeObjectProperty, Object callBackObject, String callBackMethodName) { 
+        FormFieldDecimal formField = new FormFieldDecimal(label, field);
+        formField.setOnChangeHandler(onChangeObject, onChangeObjectProperty);
+        formField.setCallback(callBackObject, callBackMethodName);
         this.addNodesToForm(formField.getField());
     }
     
-    public void addIntegerField(String label, String field, Object object, String property) {     
+    public void addIntegerField(String label, String field, Object onChangeObject, String onChangeObjectProperty) {     
         FormFieldInteger formField = new FormFieldInteger(label, field);
-        formField.setOnChangeHandler(object, property);
+        formField.setOnChangeHandler(onChangeObject, onChangeObjectProperty);
         this.addNodesToForm(formField.getField()); 
     }
     
-    public void addDatePicker(String label, Date presetDate, Object object, String property) {
-        DatePicker datePicker = new DatePicker();
-        datePicker.setValue(getLocalDateForString(presetDate));
-        this.addNodesToForm(new Label(label), datePicker);
-        
-        datePicker.valueProperty().addListener((observable, oldValue, newValue) -> {
-            Method method;
-            try {
-                method = object.getClass().getDeclaredMethod("set" + property, java.sql.Date.class);
-                
-                if (newValue != null) {
-                    Date date = Date.valueOf(newValue);
-                    method.invoke(object, date);
-                }
-                
-            } catch (NoSuchMethodException ex) {
-                Logger.getLogger(Form.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IllegalAccessException ex) {
-                Logger.getLogger(Form.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IllegalArgumentException ex) {
-                Logger.getLogger(Form.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (InvocationTargetException ex) {
-                Logger.getLogger(Form.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        });
+    public void addIntegerField(String label, String field, Object onChangeObject, String onChangeObjectProperty, Object callBackObject, String callBackMethodName) {     
+        FormFieldInteger formField = new FormFieldInteger(label, field);
+        formField.setOnChangeHandler(onChangeObject, onChangeObjectProperty);
+        formField.setCallback(callBackObject, callBackMethodName);
+        this.addNodesToForm(formField.getField()); 
     }
     
-    private LocalDate getLocalDateForString(Date date) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        return LocalDate.parse(date.toString());
+    public void addDatePicker(String label, String dateString, Object onChangeObject, String onChangeObjectProperty) {
+        FormFieldDatePicker formField = new FormFieldDatePicker(label, dateString);
+        formField.setOnChangeHandler(onChangeObject, onChangeObjectProperty);
+        this.addNodesToForm(formField.getField());
     }
     
-    public void addDropDown(String label, ObservableList<String> options, String selectedItem, Object object, String property) {
-        form.getChildren().add(new Label(label));
-        ComboBox dropdown = new ComboBox(options);
-        
-        this.setDropDownPresetOption(dropdown, options, selectedItem);
-        
-        dropdown.valueProperty().addListener((observable, oldValue, newValue) -> {
-            Method method;
-            try {
-                method = object.getClass().getDeclaredMethod("set" + property, CustomerCompany.class);
-               
-                if (newValue != null) {
-                    CustomerCompany customer = this.appService.getCustomerCompanyByName((String) newValue);
-                    method.invoke(object, customer);
-                }
-                
-            } catch (NoSuchMethodException ex) {
-                Logger.getLogger(Form.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IllegalAccessException ex) {
-                Logger.getLogger(Form.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IllegalArgumentException ex) {
-                Logger.getLogger(Form.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (InvocationTargetException ex) {
-                Logger.getLogger(Form.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        });
-        
-        this.addNodesToForm(dropdown);
+    public void addDatePicker(String label, String dateString, Object onChangeObject, String onChangeProperty, Object callBackObject, String callBackMethodName) {
+        FormFieldDatePicker formField = new FormFieldDatePicker(label, dateString);
+        formField.setOnChangeHandler(onChangeObject, onChangeProperty);
+        formField.setCallback(callBackObject, callBackMethodName);
+        this.addNodesToForm(formField.getField());
     }
-    
-    private void setDropDownPresetOption(ComboBox dropdown, ObservableList<String> options, String selectedItem) {
-        for (int i = 0; i < options.size(); i++) {
-            if (options.get(i).equals(selectedItem)) {
-                dropdown.getSelectionModel().select(selectedItem);
-            }
-        }
+  
+    public void addDropDown(String label, ObservableList<String> options, String selectedItem, Object onChangeObject, String onChangeProperty) {
+        FormFieldDropdown formField = new FormFieldDropdown(label, options, selectedItem, this.appService);
+        formField.setOnChangeHandler(onChangeObject, onChangeProperty);
+        this.addNodesToForm(formField.getField());
     }
    
-    private ObservableList<String> createNameList(List<?> items) {
-        ObservableList<String> names = FXCollections.observableArrayList(); 
-        for (Object item : items) {
-            Method method;
-            try {
-                method = item.getClass().getDeclaredMethod("getName");
-                String name = (String) method.invoke(item);
-                names.add(name);
-            } catch (NoSuchMethodException ex) {
-                Logger.getLogger(Form.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IllegalAccessException ex) {
-                Logger.getLogger(Form.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IllegalArgumentException ex) {
-                Logger.getLogger(Form.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (InvocationTargetException ex) {
-                Logger.getLogger(Form.class.getName()).log(Level.SEVERE, null, ex);
-            } 
-        }
-        return names;
-    }
-    
     private void addNodesToForm(Node... node) {
         form.getChildren().addAll(node);
     }
   
     public VBox getForm() {
         return form;
-    }
-
-    public static boolean isNumeric(String strNum) {
-        if (strNum == null) {
-            return false;
-        }
-        try {
-            double d = Double.parseDouble(strNum);
-        } catch (NumberFormatException nfe) {
-            return false;
-        }
-        return true;
-    }
-    
-    public static boolean isNotEmpty(String str) {
-        if (str == null || str.isBlank()) {
-            return false;
-        }
-        return true;
     }
 }

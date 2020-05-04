@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
 
-<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane id="AnchorPane" prefHeight="559.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <Button layoutX="13.0" layoutY="8.0" mnemonicParsing="false" onAction="#manageCompaniesAction" style="-fx-background-color: none; -fx-border-color: none; -fx-padding: 2;" text="My Companies" />
       <Button layoutX="113.0" layoutY="8.0" mnemonicParsing="false" onAction="#manageCustomersAction" style="-fx-background-color: none; -fx-border-color: none; -fx-padding: 2;" text="Customers" />

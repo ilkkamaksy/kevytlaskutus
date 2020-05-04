@@ -20,23 +20,39 @@
       <Button fx:id="saveFormButton" layoutX="13.0" layoutY="367.0" mnemonicParsing="false" text="Save invoice" AnchorPane.bottomAnchor="10.0" />
       <Button fx:id="addNewRowButton" layoutX="106.0" layoutY="364.0" mnemonicParsing="false" text="Add new product to invoice" AnchorPane.bottomAnchor="10.0" />
       <Button fx:id="cancelButton" layoutX="734.0" layoutY="523.0" mnemonicParsing="false" text="Cancel" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0" />
-      <Text fx:id="totalAmountIncludingTaxes" layoutX="618.0" layoutY="215.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0,00 €" AnchorPane.topAnchor="215.0" AnchorPane.leftAnchor="618.0">
-         <font>
-            <Font size="17.0" />
-         </font>
-      </Text>
-      <Text layoutX="618.0" layoutY="197.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Total incl. Taxes" AnchorPane.topAnchor="197.0" AnchorPane.leftAnchor="618.0" />
-      <Text fx:id="totalTaxesAmount" layoutX="618.0" layoutY="158.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0,00 €" AnchorPane.topAnchor="158.0" AnchorPane.leftAnchor="618.0">
-         <font>
-            <Font size="17.0" />
-         </font>
-      </Text>
-      <Text layoutX="618.0" layoutY="139.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Total Tax" AnchorPane.topAnchor="139.0" AnchorPane.leftAnchor="618.0" />
-      <Text fx:id="totalAmountExcludingTaxes" layoutX="618.0" layoutY="102.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0,00 €" AnchorPane.topAnchor="102.0" AnchorPane.leftAnchor="618.0">
-         <font>
-            <Font size="17.0" />
-         </font>
-      </Text>
-      <Text layoutX="618.0" layoutY="83.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Total excl. Taxes" AnchorPane.topAnchor="83.0" AnchorPane.leftAnchor="618.0" />
+      <Pane layoutX="615.0" layoutY="69.0" prefHeight="303.0" prefWidth="172.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="70.0">
+         <children>
+            <Text fx:id="totalAmountIncludingTaxes" layoutX="13.0" layoutY="154.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0,00 €">
+               <font>
+                  <Font size="17.0" />
+               </font>
+            </Text>
+            <Text layoutX="12.0" layoutY="135.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Total incl. Taxes" />
+            <Text fx:id="totalTaxesAmount" layoutX="13.0" layoutY="100.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0,00 €">
+               <font>
+                  <Font size="17.0" />
+               </font>
+            </Text>
+            <Text layoutX="12.0" layoutY="81.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Total Tax" />
+            <Text fx:id="totalAmountExcludingTaxes" layoutX="15.0" layoutY="47.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0,00 €">
+               <font>
+                  <Font size="17.0" />
+               </font>
+            </Text>
+            <Text layoutX="14.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Total excl. Taxes" />
+            <Text fx:id="invoiceDueDate" layoutX="13.0" layoutY="207.0" strokeType="OUTSIDE" strokeWidth="0.0" text="00.00.0000">
+               <font>
+                  <Font size="17.0" />
+               </font>
+            </Text>
+            <Text layoutX="13.0" layoutY="186.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Due Date" />
+            <Text fx:id="invoiceReferenceNumber" layoutX="13.0" layoutY="261.0" strokeType="OUTSIDE" strokeWidth="0.0" text="000000000">
+               <font>
+                  <Font size="17.0" />
+               </font>
+            </Text>
+            <Text layoutX="13.0" layoutY="240.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Reference Number" />
+         </children>
+      </Pane>
    </children> 
 </AnchorPane>

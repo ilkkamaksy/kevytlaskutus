@@ -266,10 +266,41 @@ public class AppService {
         return this.invoiceService.getDefaultInvoiceNumber();
     }
     
+    public Integer generateInvoiceReferenceNumber() {
+        String invoiceNumber = this.currentInvoice.getInvoiceNumber().toString();
+        Integer checkSum = 0;
+        int[] multipliers = {7, 1, 3};
+        int multiplierIndex = 0;
+        for (int i = 0; i < invoiceNumber.length(); i++) {
+            int digit = Integer.valueOf(String.valueOf(invoiceNumber.charAt(i)));
+            checkSum += digit * multipliers[multiplierIndex];
+            multiplierIndex = multiplierIndex < multipliers.length-1 ? ++multiplierIndex : 0;
+        }
+        
+        int nearestTen = (int) Math.ceil(checkSum / 10.0) * 10;
+        checkSum = nearestTen - checkSum;
+        if (checkSum == 10) {
+            checkSum = 0;
+        } 
+
+        Integer result = Integer.valueOf(invoiceNumber + Math.abs(checkSum));
+        this.currentInvoice.setReferenceNumber(result);
+        return result;
+    }
+    
+    /**
+     * Updates current invoice total sum before taxes by calculating sum of products on the invoice. 
+     * If discount percentage has been defined, the discount amount will be calculated and substracted from total sum.
+     * @see calculateCurrentInvoiceDiscountAmount
+     * @see Invoice
+     * @return totalAmount  BigDecimal sum of products with discount amount substracted
+     */
     public BigDecimal updateCurrentInvoiceTotal() {
-        BigDecimal totalAmount = new BigDecimal(0);
+        BigDecimal totalAmount = BigDecimal.ZERO;
         for (Product product : this.currentInvoice.getProducts()) {
-            totalAmount = totalAmount.add(product.getPrice());
+            if (product.getPrice() != null && product.getInvoiceId() == this.currentInvoice.getId()) {
+                totalAmount = totalAmount.add(product.getPrice());
+            }
         }
         totalAmount = this.calculateCurrentInvoiceDiscountAmount(totalAmount);
         this.currentInvoice.setAmount(totalAmount.setScale(2, RoundingMode.CEILING));
@@ -277,15 +308,29 @@ public class AppService {
         return totalAmount;
     }
     
+    /**
+     * Calculates the amount of discount by discount percentage in current Invoice and substracts the amount from invoice total sum.
+     * 
+     * @param totalAmount the total sum of products before taxes.
+     * @return BigDecimal total sum of current invoice substracted by discount amount.
+     */
     private BigDecimal calculateCurrentInvoiceDiscountAmount(BigDecimal totalAmount) {
         BigDecimal discountAmount = totalAmount.multiply(this.currentInvoice.getDiscount().divide(BigDecimal.valueOf(100)));
         return totalAmount.subtract(discountAmount).setScale(2, RoundingMode.CEILING);
     }
     
+    /**
+     * Returns the total sum of current invoice with taxes included.
+     * @return BigDecimal the total sum of current invoice plus taxes
+     */
     public BigDecimal getCurrentInvoiceTotalIncludingTaxes() {
         return this.currentInvoice.getAmount().add(this.getCurrentInvoiceTotalTaxes().setScale(2, RoundingMode.CEILING));
     }
     
+    /**
+     * Calculates the amount of taxes for current invoice total sum.
+     * @return BigDecimal the amount of taxes for current invoice total sum
+     */
     public BigDecimal getCurrentInvoiceTotalTaxes() {
         return this.currentInvoice.getAmount().multiply(this.currentInvoice.getVatPercentage().divide(BigDecimal.valueOf(100))).setScale(2, RoundingMode.CEILING); 
     }

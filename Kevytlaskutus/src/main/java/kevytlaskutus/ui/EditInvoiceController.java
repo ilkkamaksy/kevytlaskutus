@@ -3,8 +3,12 @@ package kevytlaskutus.ui;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.sql.Date;
+import java.text.DateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.ResourceBundle;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -44,10 +48,12 @@ public class EditInvoiceController extends BaseController implements Initializab
     
     @FXML 
     private Text totalAmountIncludingTaxes;
+   
+    @FXML
+    private Text invoiceDueDate;
     
-    protected final ObjectProperty<BigDecimal> totalAmountExcludingTaxesValue = new SimpleObjectProperty(BigDecimal.ZERO);
-    protected final ObjectProperty<BigDecimal> totalTaxesAmountValue = new SimpleObjectProperty(BigDecimal.ZERO);
-    protected final ObjectProperty<BigDecimal> totalAmountIncludingTaxesValue = new SimpleObjectProperty(BigDecimal.ZERO);
+    @FXML
+    private Text invoiceReferenceNumber;
     
     private Form form;
    
@@ -77,17 +83,9 @@ public class EditInvoiceController extends BaseController implements Initializab
         this.setAddNewRowButtonAction();
         this.setCancelButtonAction();
        
-        
-        
-        this.totalAmountExcludingTaxesValue.set(currentInvoice.getAmount());
-        this.updateTotalExcludingTaxes(this.totalAmountExcludingTaxesValue.asString());
-        
-        this.totalTaxesAmountValue.set(this.appService.getCurrentInvoiceTotalTaxes());
-        this.updateTotalTaxes(this.totalTaxesAmountValue.asString());
-        
-        this.totalAmountIncludingTaxesValue.set(this.appService.getCurrentInvoiceTotalIncludingTaxes());
-        this.updateTotalIncludingTaxes(this.totalAmountIncludingTaxesValue.asString());
-        
+        this.updateTotals();
+        this.updateInvoiceDueDate();
+        this.updateInvoiceReferenceNumber();
     }
    
     public void setupForm() {
@@ -101,21 +99,19 @@ public class EditInvoiceController extends BaseController implements Initializab
         }      
         this.form.addDropDown("Customer", this.createCustomerNameList(), customerName, currentInvoice, "Customer");
         
-        this.form.addDatePicker("Date", currentInvoice.getCreatedDate(), currentInvoice, "CreatedDate");
-        this.form.addIntegerField("Invoice Number", "" + "" + this.currentInvoice.getInvoiceNumber(), this.currentInvoice, "InvoiceNumber");
-        this.form.addIntegerField("Reference Number", "" + currentInvoice.getReferenceNumber(), this.currentInvoice, "ReferenceNumber");
-        this.form.addIntegerField("Payment due in number of days", "" + this.currentInvoice.getPaymentTerm(), this.currentInvoice, "PaymentTerm");
-        this.form.addDatePicker("Due Date", this.currentInvoice.getDueDate(), currentInvoice, "DueDate");
-        this.form.addDecimalField("Overdue Penalty Interest %", "" + this.currentInvoice.getPenaltyInterest(), this.currentInvoice, "PenaltyInterest");
-        this.form.addDecimalField("VAT %", "" + this.currentInvoice.getVatPercentage(), this.currentInvoice, "VatPercentage");
+        this.form.addDatePicker("Date", currentInvoice.getCreatedDate().toString(), currentInvoice, "CreatedDate", this, "updateInvoiceDueDate");
+        this.form.addIntegerField("Invoice Number", "" + "" + this.currentInvoice.getInvoiceNumber(), this.currentInvoice, "InvoiceNumber", this, "updateInvoiceReferenceNumber");
+        this.form.addIntegerField("Payment due in number of days", "" + this.currentInvoice.getPaymentTerm(), this.currentInvoice, "PaymentTerm", this, "updateInvoiceDueDate");
+        this.form.addDecimalField("Overdue Penalty Interest %", "" + this.currentInvoice.getPenaltyInterest(), this.currentInvoice, "PenaltyInterest", this, "updateTotals");
         
-        this.form.addDecimalField("Discount %", "" + this.currentInvoice.getDiscount(), this.currentInvoice, "Discount");
+        this.form.addDecimalField("VAT %", "" + this.currentInvoice.getVatPercentage(), this.currentInvoice, "VatPercentage", this, "updateTotals");
+        this.form.addDecimalField("Discount %", "" + this.currentInvoice.getDiscount(), this.currentInvoice, "Discount", this, "updateTotals");
       
         this.form.addTextField("Customer Contact Name", this.currentInvoice.getCustomerContactName(), this.currentInvoice, "CustomerContactName");
         this.form.addTextField("Customer Reference", this.currentInvoice.getCustomerReference(), this.currentInvoice, "CustomerReference");
         this.form.addTextField("Our Reference", this.currentInvoice.getCompanyReference(), this.currentInvoice, "CompanyReference");
         this.form.addTextField("Delivery Terms", this.currentInvoice.getDeliveryTerms(), this.currentInvoice, "DeliveryTerms");
-        this.form.addDatePicker("Delivery Date", this.currentInvoice.getDeliveryDate(), currentInvoice, "DeliveryDate");
+        this.form.addDatePicker("Delivery Date", this.currentInvoice.getDeliveryDate().toString(), currentInvoice, "DeliveryDate");
         this.form.addTextField("Delivery Information", this.currentInvoice.getDeliveryInfo(), this.currentInvoice, "DeliveryInfo");
         this.form.addTextField("Additional Information", this.currentInvoice.getAdditionalInfo(), this.currentInvoice, "AdditionalInfo");
   
@@ -171,16 +167,25 @@ public class EditInvoiceController extends BaseController implements Initializab
         });
     }
 
-    protected void updateTotalExcludingTaxes(ObservableValue<String> textExpression) {
-        this.totalAmountExcludingTaxes.textProperty().bind(textExpression);
+    public void updateTotals() {
+        this.appService.updateCurrentInvoiceTotal();
+        this.updateTotalField(this.totalAmountExcludingTaxes, currentInvoice.getAmount().toString());
+        this.updateTotalField(this.totalTaxesAmount, this.appService.getCurrentInvoiceTotalTaxes().toString());
+        this.updateTotalField(this.totalAmountIncludingTaxes, this.appService.getCurrentInvoiceTotalIncludingTaxes().toString());
     }
     
-    protected void updateTotalTaxes(ObservableValue<String> textExpression) {
-        this.totalTaxesAmount.textProperty().bind(textExpression);
+    private void updateTotalField(Text field, String textExpression) {
+        field.textProperty().setValue(textExpression + " €"); 
     }
     
-    protected void updateTotalIncludingTaxes(ObservableValue<String> textExpression) {
-        this.totalAmountIncludingTaxes.textProperty().bind(textExpression);
+    public void updateInvoiceDueDate() {
+        DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT, Locale.getDefault());
+        String formattedDate = df.format(this.currentInvoice.getDueDate());
+        this.invoiceDueDate.textProperty().setValue(formattedDate);
     }
-
+    
+    public void updateInvoiceReferenceNumber() {
+        this.appService.generateInvoiceReferenceNumber();
+        this.invoiceReferenceNumber.textProperty().setValue(this.currentInvoice.getReferenceNumber().toString());
+    }
 }

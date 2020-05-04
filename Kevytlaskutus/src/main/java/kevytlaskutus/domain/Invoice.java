@@ -49,19 +49,30 @@ public class Invoice {
         this.createdDate = createdDate;
         this.referenceNumber = 0;
         this.paymentTerm = 14;
-        this.dueDate = this.calculateDueDate(createdDate);
         this.penaltyInterest = BigDecimal.valueOf(10);
         this.vatPercentage = BigDecimal.ZERO;
         this.amount = BigDecimal.ZERO;
         this.discount = BigDecimal.ZERO;
         this.deliveryDate = createdDate;
+        this.setDueDateByCreatedDate();
+        
         this.products = new ArrayList<>();
     }
 
-    private Date calculateDueDate(Date createdDate) {
-        return new Date(createdDate.getTime() + this.paymentTerm * 24 * 60 * 60 * 1000);
+    public void setCreatedDate(Date createdDate) {
+        this.createdDate = createdDate;
+        this.setDueDateByCreatedDate();
     }
     
+    public void setPaymentTerm(Integer term) {
+        this.paymentTerm = term;
+        this.setDueDateByCreatedDate();
+    }
+    
+    private void setDueDateByCreatedDate() {
+        this.dueDate = new Date(this.createdDate.getTime() + this.paymentTerm * 24 * 60 * 60 * 1000);
+    }
+   
     public void setReferenceNumber(Integer value) {
         this.referenceNumber = value;
     }
