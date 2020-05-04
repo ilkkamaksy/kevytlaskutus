@@ -101,25 +101,9 @@ public class Form {
     }
    
     public void addTextField(String label, String field, Object object, String property) {
-        TextField inputField = new TextField(field);
-        this.addNodesToForm(new Label(label), inputField);
-        inputField.textProperty().addListener((observable, oldValue, newValue) -> {
-            Method method;
-            try {
-                method = object.getClass().getDeclaredMethod("set" + property, String.class);
-                method.invoke(object, newValue);
-                
-                method = object.getClass().getDeclaredMethod("get" + property);
-            } catch (NoSuchMethodException ex) {
-                Logger.getLogger(Form.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IllegalAccessException ex) {
-                Logger.getLogger(Form.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IllegalArgumentException ex) {
-                Logger.getLogger(Form.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (InvocationTargetException ex) {
-                Logger.getLogger(Form.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        });
+        FormFieldText formfield = new FormFieldText(label, field);
+        formfield.setOnChangeHandler(object, property);
+        this.addNodesToForm(formfield.getField());
     }
     
     public void addHiddenField(String label, String field) {
@@ -129,86 +113,16 @@ public class Form {
     }
    
     public void addDecimalField(String label, String field, Object object, String property) { 
-        Pattern decimalPattern = Pattern.compile("-?\\d*(\\.\\d{0,2})?");
-        UnaryOperator<Change> filter = c -> {
-            if (decimalPattern.matcher(c.getControlNewText()).matches()) {
-                return c;
-            } else {
-                return null;
-            }
-        };
-        TextFormatter<Double> formatter = new TextFormatter<>(filter);
-
-        TextField inputField = new TextField(field);
-        inputField.setTextFormatter(formatter);
-        
-        inputField.textProperty().addListener((observable, oldValue, newValue) -> {
-            Method method;
-            try {
-                method = object.getClass().getDeclaredMethod("set" + property, BigDecimal.class);
-                
-                if (isNotEmpty(newValue) && isNumeric(newValue)) {
-                    method.invoke(object, new BigDecimal(newValue));
-                } else {
-                    method.invoke(object, new BigDecimal(0));
-                }
-                
-                this.appService.updateCurrentInvoiceTotal();
-                this.editInvoiceController.totalAmountExcludingTaxesValue.set(this.appService.getCurrentInvoice().getAmount());
-                this.editInvoiceController.updateTotalExcludingTaxes(this.editInvoiceController.totalAmountExcludingTaxesValue.asString());
-                
-                this.editInvoiceController.totalTaxesAmountValue.set(this.appService.getCurrentInvoiceTotalTaxes());
-                this.editInvoiceController.updateTotalTaxes(this.editInvoiceController.totalTaxesAmountValue.asString());
-
-                this.editInvoiceController.totalAmountIncludingTaxesValue.set(this.appService.getCurrentInvoiceTotalIncludingTaxes());
-                this.editInvoiceController.updateTotalIncludingTaxes(this.editInvoiceController.totalAmountIncludingTaxesValue.asString());
-                
-            } catch (NoSuchMethodException ex) {
-                Logger.getLogger(Form.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IllegalAccessException ex) {
-                Logger.getLogger(Form.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IllegalArgumentException ex) {
-                Logger.getLogger(Form.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (InvocationTargetException ex) {
-                Logger.getLogger(Form.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        });
-        this.addNodesToForm(new Label(label), inputField);
+        FormFieldDecimal formField = new FormFieldDecimal(label, field, this.appService, this.editInvoiceController);
+        formField.setOnChangeHandler(object, property);
+        formField.setCallback(object, property);
+        this.addNodesToForm(formField.getField());
     }
     
     public void addIntegerField(String label, String field, Object object, String property) {     
-        UnaryOperator<Change> integerFilter = change -> {
-            String input = change.getText();
-            if (input.matches("[0-9]*")) { 
-                return change;
-            }
-            return null;
-        };
-        TextField inputField = new TextField(field);
-        inputField.setTextFormatter(new TextFormatter<String>(integerFilter));  
-        
-        inputField.textProperty().addListener((observable, oldValue, newValue) -> {
-            Method method;
-            try {
-                method = object.getClass().getDeclaredMethod("set" + property, Integer.class);
-                
-                if (isNumeric(newValue)) {
-                    Integer val = Integer.valueOf(newValue);
-                    method.invoke(object, val);
-                }
-                
-            } catch (NoSuchMethodException ex) {
-                Logger.getLogger(Form.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IllegalAccessException ex) {
-                Logger.getLogger(Form.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IllegalArgumentException ex) {
-                Logger.getLogger(Form.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (InvocationTargetException ex) {
-                Logger.getLogger(Form.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        });
-        
-        this.addNodesToForm(new Label(label), inputField); 
+        FormFieldInteger formField = new FormFieldInteger(label, field);
+        formField.setOnChangeHandler(object, property);
+        this.addNodesToForm(formField.getField()); 
     }
     
     public void addDatePicker(String label, Date presetDate, Object object, String property) {

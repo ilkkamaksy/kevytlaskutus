@@ -15,6 +15,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import kevytlaskutus.domain.AppService;
 import kevytlaskutus.domain.CustomerCompany;
@@ -76,7 +77,7 @@ public class EditInvoiceController extends BaseController implements Initializab
         this.setAddNewRowButtonAction();
         this.setCancelButtonAction();
        
-        this.form.setEditInvoiceController(this);
+        
         
         this.totalAmountExcludingTaxesValue.set(currentInvoice.getAmount());
         this.updateTotalExcludingTaxes(this.totalAmountExcludingTaxesValue.asString());
@@ -92,6 +93,7 @@ public class EditInvoiceController extends BaseController implements Initializab
     public void setupForm() {
         
         this.form = new Form(this.appService);
+        this.form.setEditInvoiceController(this);
        
         String customerName = "";
         if (currentInvoice.getCustomer() != null) {
@@ -106,6 +108,7 @@ public class EditInvoiceController extends BaseController implements Initializab
         this.form.addDatePicker("Due Date", this.currentInvoice.getDueDate(), currentInvoice, "DueDate");
         this.form.addDecimalField("Overdue Penalty Interest %", "" + this.currentInvoice.getPenaltyInterest(), this.currentInvoice, "PenaltyInterest");
         this.form.addDecimalField("VAT %", "" + this.currentInvoice.getVatPercentage(), this.currentInvoice, "VatPercentage");
+        
         this.form.addDecimalField("Discount %", "" + this.currentInvoice.getDiscount(), this.currentInvoice, "Discount");
       
         this.form.addTextField("Customer Contact Name", this.currentInvoice.getCustomerContactName(), this.currentInvoice, "CustomerContactName");
