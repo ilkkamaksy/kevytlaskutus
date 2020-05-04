@@ -274,7 +274,7 @@ public class AppService {
         for (int i = 0; i < invoiceNumber.length(); i++) {
             int digit = Integer.valueOf(String.valueOf(invoiceNumber.charAt(i)));
             checkSum += digit * multipliers[multiplierIndex];
-            multiplierIndex = multiplierIndex < multipliers.length-1 ? ++multiplierIndex : 0;
+            multiplierIndex = multiplierIndex < multipliers.length - 1 ? ++multiplierIndex : 0;
         }
         
         int nearestTen = (int) Math.ceil(checkSum / 10.0) * 10;

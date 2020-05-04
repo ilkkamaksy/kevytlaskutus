@@ -6,6 +6,7 @@
 package kevytlaskutus.domain;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.Date;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -134,15 +135,15 @@ public class InvoiceTest {
 
     @Test
     public void sumInitiallyZero() {
-        BigDecimal sum = new BigDecimal(0.00);
-        assertEquals(invoice.getAmount(), sum);
+        BigDecimal sum = BigDecimal.ZERO;
+        assertEquals(invoice.getAmount(), sum.setScale(2, RoundingMode.CEILING));
     }
 
     @Test
     public void testSetAmount() {
-        BigDecimal sum = new BigDecimal(10.00);
+        BigDecimal sum = new BigDecimal(10);
         invoice.setAmount(sum);
-        assertEquals(invoice.getAmount(), sum);
+        assertEquals(invoice.getAmount(), sum.setScale(2, RoundingMode.CEILING));
     }
 
     public void customerContactNameInitiallyEmpty() {
