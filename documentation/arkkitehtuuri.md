@@ -23,20 +23,24 @@ Käyttöliittymä sisältää seuraavat näkymät:
 - Yrityksen laskujen hallintanäkymä, jossa käyttäjä voi hallita yrityksensä laskuja
 - Laskujen muokkaus- ja tallennusnäkymä
 
-Jokainen näkymä on toteutettu Scene-oliona, jonka asettelun pohjana on fmxl-tiedosto. Näkymät sijoitetaan yksi kerrallaan sovelluksen Stageen, josta huolehtii käyttöliittymän ViewController-luokka. Jokaisella näkymällä on oma kontrollerinsa, kuten esimerkiksi ManageCustomerController asiakkaiden hallintanäkymälle ja EditCustomerController asiakastietojen muokkausnäkymälle. Näkymäkohtaiset kontrollerit perivät puolestaan BaseController-luokan, joka sisältää mm. globaalin navigaation toiminnallisuudet. 
+Jokainen näkymä on toteutettu Scene-oliona, jonka asettelun pohjana on fmxl-malli. Näkymät sijoitetaan yksi kerrallaan sovelluksen Stageen, josta huolehtii käyttöliittymän ViewController-luokka. 
 
-Käyttöliittymä on eriytetty kokonaan sovelluslogiikasta. Käyttöliittymä saa kaiken datan kutsumalla sovelluslogiikan luokan AppService metodeja ja se myös käyttää AppServicen metodeja kaiken käyttäjän syöttämän datan välittämiseksi sovelluslogiikalle.
+Jokaisella näkymällä on taas oma kontrollerinsa, kuten esimerkiksi ManageCustomerController asiakkaiden hallintanäkymälle ja EditCustomerController asiakastietojen muokkausnäkymälle. Näkymäkohtaiset kontrollerit perivät BaseController-luokan, joka sisältää mm. globaalin navigaation toiminnallisuudet. 
 
-Kun käyttäjä lisää onnistuneesti uuden yrityksen, asiakkaan tai laskun, kyseisen näkymän kontrolleri kutsuu ViewFactoryn metodia, joka vaihtaaa näkymäksi yritysten, asiakkaiden tai laskujen hallintanäkymän. Koska jokainen näkymä piirretään uudelleen aina näkymää vaihdettaessa, käyttäjä näkee lisäämänsä tietueen heti hallintanäkymässä. Mikäli tietueen lisäys ei onnistu puuttuvista tiedoista johtuen, tästä ilmoitetaan käyttäjälle suoraan muokkausnäkymässä. 
+Käyttöliittymä on eriytetty kokonaan sovelluslogiikasta. Käyttöliittymä saa kaiken datan kutsumalla sovelluslogiikan luokan AppService metodeja ja se myös käyttää AppServicen metodeja käyttäjän syöttämän datan välittämiseksi sovelluslogiikan käsiteltäväksi.
 
-Muokkausnäkymien näkymien lomakkeet rakennetaan kutsumalla näkymän kontrollerista Form-luokan metodeja, kuten addTextField tai addDatePicker. Form-luokka huolehtii kenttien rakentamisesta käyttäjän antamien parametrien mukaan ja lisää nämä näkymään. Form-luokka puolestaan hyödyntää lomakkeen kenttien rakentamisessa FormField-rajapinnan toteuttavia luokkia, kuten FormFieldText- ja FormFieldDatePicker-luokkia. 
+Kun käyttäjä lisää onnistuneesti uuden yrityksen, asiakkaan tai laskun, kyseisen näkymän kontrolleri kutsuu ViewFactoryn soveltuvaa metodia, joka vaihtaaa näkymäksi yritysten, asiakkaiden tai laskujen hallintanäkymän. Koska jokainen näkymä piirretään uudelleen aina näkymää vaihdettaessa, käyttäjä näkee lisäämänsä tietueen heti hallintanäkymässä. Mikäli tietueen lisäys ei onnistu puuttuvista tiedoista johtuen, tästä ilmoitetaan käyttäjälle suoraan muokkausnäkymässä. 
 
-FormField-rajapinnan toteuttavilla luokilla on metodit, joiden avulla käyttäjä voi määritellä FormField-olioille tapahtumakuuntelijan ja ns. callBack-metodin dynaamisesti. Tapahtumakuuntelijoiden ja callBack-metodien kutsumat luokat ja metodien nimet välitetään parametreinä näille metodeille. 
+Muokkausnäkymien lomakkeet rakennetaan kutsumalla näkymän kontrollerista Form-luokan metodeja, kuten addTextField, addDecimalField tai addDatePicker. Form-luokan metodit huolehtivat lomakkeiden kenttien rakentamisesta käyttäjän antamien parametrien avulla ja lisää kentät näkymään. 
+
+Form-luokka hyödyntää lomakekenttien rakentamisessa FormField-rajapinnan toteuttavia luokkia, kuten FormFieldText- ja FormFieldDatePicker-luokkia. FormField-rajapinnan toteuttavilla luokilla on metodit, joiden avulla voidaan määritellä FormField-olioille tapahtumakuuntelijan ja ns. callBack-metodin dynaamisesti. Tapahtumakuuntelijoiden ja callBack-metodien kutsumat luokat ja metodien nimet välitetään parametreinä näille metodeille. 
 
 - Muokkausnäkymien lomakkeiden kentät välittävät syötetyn datan välittömästi AppService-luokalle näiden tapahtumakuuntelijoiden avulla. 
 - CallBack-metodien avulla kutsutaan pääasiassa käyttöliittymän luokkien metodeja näkymien tietojen päivittämiseksi. 
 
-Kun käyttäjä klikkaa muokkausnäkymässä tallenna-nappia, kutsutaan FormActionFactory-luokan metodia execute, jolle välitetään String-tyyppisenä parametrina "actionType", joka voi olla esimerkiksi "SaveManagedCompany" tai "SaveCustomerCompany". Tämän parametrin perusteella FormActionFactoryn poimii ja suorittaa soveltuvan FormAction-luokan execute-metodin command-suunnittelumallin mukaisesti. FormAction-luokkien metodit kutsuvat puolestaan AppService-luokan parametrittomia metodeja saveCurrentManagedCompany tai saveCurrentCustomerCompany. Nämä tallentavat sovelluksen tilassa olevat ManagedCompany- ja CustomerCompany-oliot tietokantaan.
+Kun käyttäjä klikkaa muokkausnäkymässä tallenna-nappia, kutsutaan FormActionFactory-luokan metodia execute, jolle välitetään String-tyyppisenä parametrina "actionType", joka voi olla esimerkiksi "SaveManagedCompany" tai "SaveCustomerCompany". Tämän parametrin perusteella FormActionFactoryn poimii ja suorittaa soveltuvan FormAction-luokan execute-metodin command-suunnittelumallin mukaisesti. 
+
+FormAction-luokkien metodit kutsuvat puolestaan AppService-luokan parametrittomia metodeja saveCurrentManagedCompany tai saveCurrentCustomerCompany. Nämä tallentavat sovelluksen tilassa olevat ManagedCompany-, CustomerCompany, Product ja Invoice-oliot tietokantaan.
 
 ## Sovelluslogiikka
 
