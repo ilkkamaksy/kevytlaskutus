@@ -40,7 +40,7 @@ public class CustomerCompanyDao implements CompanyDao<CustomerCompany, Integer, 
             "INSERT INTO Customer (name, regId, phone, street, postcode, commune, ovtId, provider) "
             + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
         );
-        this.buildCreateStatementData(stmt, company);
+        Populate.populateCreateStatementData(stmt, company);
         int rows = stmt.executeUpdate();  
         
         conn.close();
@@ -53,7 +53,7 @@ public class CustomerCompanyDao implements CompanyDao<CustomerCompany, Integer, 
        
         PreparedStatement stmt = conn.prepareStatement(
             "UPDATE Customer SET name=?, regId=?, phone=?, street=?, postcode=?, commune=?, ovtId=?, provider=? WHERE id=?");
-        this.buildUpdateStatementData(stmt, company, id);
+        Populate.populateUpdateStatementData(stmt, company, id);
         int rows = stmt.executeUpdate();  
 
         conn.close();
@@ -83,7 +83,7 @@ public class CustomerCompanyDao implements CompanyDao<CustomerCompany, Integer, 
 
         CustomerCompany company = null;
         while (rs.next()) {
-            company = this.populateCustomer(rs);
+            company = Populate.populateCustomer(rs);
         }
         conn.close();
         return company;
@@ -101,7 +101,7 @@ public class CustomerCompanyDao implements CompanyDao<CustomerCompany, Integer, 
         
         CustomerCompany company = null;
         while (rs.next()) {
-            company = this.populateCustomer(rs);
+            company = Populate.populateCustomer(rs);
         }
 
         conn.close();
@@ -117,45 +117,11 @@ public class CustomerCompanyDao implements CompanyDao<CustomerCompany, Integer, 
         ResultSet rs = stmt.executeQuery();
 
         while (rs.next()) {
-            results.add(this.populateCustomer(rs));
+            results.add(Populate.populateCustomer(rs));
         }
         
         conn.close();
         return results;
     }
 
-    private void buildCreateStatementData(PreparedStatement stmt, CustomerCompany company) throws SQLException {
-        this.addCustomerDefaultDataToStatement(stmt, company);
-    }
-    
-    private void buildUpdateStatementData(PreparedStatement stmt, CustomerCompany company, int id) throws SQLException {
-        this.addCustomerDefaultDataToStatement(stmt, company);
-        stmt.setInt(9, id);
-    }
-   
-    private void addCustomerDefaultDataToStatement(PreparedStatement stmt, CustomerCompany company) throws SQLException {
-        stmt.setString(1, company.getName());
-        stmt.setString(2, company.getRegId());
-        stmt.setString(3, company.getPhone());
-        stmt.setString(4, company.getStreet());
-        stmt.setString(5, company.getPostcode());
-        stmt.setString(6, company.getCommune());
-        stmt.setString(7, company.getOvtId());
-        stmt.setString(8, company.getProvider());
-    }
-    
-    private CustomerCompany populateCustomer(ResultSet rs) throws SQLException {
-        CustomerCompany customer = new CustomerCompany(
-            rs.getString("Customer.name"),
-            rs.getString("Customer.regId"), 
-            rs.getString("Customer.phone"), 
-            rs.getString("Customer.street"), 
-            rs.getString("Customer.postcode"),
-            rs.getString("Customer.commune"),
-            rs.getString("Customer.ovtId"),
-            rs.getString("Customer.provider")
-        );
-        customer.setId(rs.getInt("Customer.id"));
-        return customer;
-    }
 }

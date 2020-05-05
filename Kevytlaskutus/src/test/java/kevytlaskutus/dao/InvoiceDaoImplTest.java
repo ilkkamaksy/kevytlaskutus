@@ -46,14 +46,13 @@ public class InvoiceDaoImplTest {
     }
 
     @Test
-    public void newInvoiceCanBeCreatedWithValidInvoiceObject() {
+    public void newInvoiceCannotBeCreatedWithNullInvoiceObject() {
         Invoice invoice = new Invoice();
         invoice.setInvoiceNumber(1001);
-        
         try {
             Integer id = dao.create(invoice);
             boolean result = id > -1 ? true : false;
-            assertEquals(Integer.valueOf(1), id);
+            assertEquals(result, 1);
             assertTrue(result);
         } catch (SQLException e) {}
     }

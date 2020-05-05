@@ -31,6 +31,51 @@ public class Populate {
         return stmt;
     }
     
+    public static PreparedStatement populateCreateStatementData(PreparedStatement stmt, CustomerCompany company) throws SQLException {
+        addCustomerDefaultDataToStatement(stmt, company);
+        return stmt;
+    }
+    
+    public static PreparedStatement populateUpdateStatementData(PreparedStatement stmt, CustomerCompany company, int id) throws SQLException {
+        addCustomerDefaultDataToStatement(stmt, company);
+        stmt.setInt(9, id);
+        return stmt;
+    }
+    
+    public static PreparedStatement populateCreateStatementData(PreparedStatement stmt, Invoice invoice) throws SQLException {
+        addInvoiceDefaultDataToStatement(stmt, invoice);
+        return stmt;
+    }
+    
+    public static PreparedStatement populateUpdateStatementData(PreparedStatement stmt, Invoice invoice, int id) throws SQLException {
+        addInvoiceDefaultDataToStatement(stmt, invoice);
+        stmt.setInt(20, id);
+        return stmt;
+    }
+   
+    public static PreparedStatement populateCreateStatementData(PreparedStatement stmt, ManagedCompany company) throws SQLException {
+        populateCustomerDefaultDataToStatement(stmt, company);
+        return stmt;
+    }
+    
+    public static PreparedStatement populateUpdateStatementData(PreparedStatement stmt, ManagedCompany company, int id) throws SQLException {
+        populateCustomerDefaultDataToStatement(stmt, company);
+        stmt.setInt(11, id);
+        return stmt;
+    }
+    
+    public static PreparedStatement addCustomerDefaultDataToStatement(PreparedStatement stmt, CustomerCompany company) throws SQLException {
+        stmt.setString(1, company.getName());
+        stmt.setString(2, company.getRegId());
+        stmt.setString(3, company.getPhone());
+        stmt.setString(4, company.getStreet());
+        stmt.setString(5, company.getPostcode());
+        stmt.setString(6, company.getCommune());
+        stmt.setString(7, company.getOvtId());
+        stmt.setString(8, company.getProvider());
+        return stmt;
+    }
+   
     public static PreparedStatement addProductDefaultDataToStatement(PreparedStatement stmt, Product product) throws SQLException {
         stmt.setString(1, product.getName());
         stmt.setBigDecimal(2, product.getPrice());
@@ -49,17 +94,6 @@ public class Populate {
         product.setId(rs.getInt("Product.id"));
         
         return product;
-    }
-    
-    public static PreparedStatement populateCreateStatementData(PreparedStatement stmt, Invoice invoice) throws SQLException {
-        addInvoiceDefaultDataToStatement(stmt, invoice);
-        return stmt;
-    }
-    
-    public static PreparedStatement populateUpdateStatementData(PreparedStatement stmt, Invoice invoice) throws SQLException {
-        addInvoiceDefaultDataToStatement(stmt, invoice);
-        stmt.setInt(20, invoice.getId());
-        return stmt;
     }
    
     public static PreparedStatement addInvoiceDefaultDataToStatement(PreparedStatement stmt, Invoice invoice) throws SQLException {
@@ -123,7 +157,7 @@ public class Populate {
         customer.setId(rs.getInt("Customer.id"));
         return customer;
     }
-    
+ 
     public static ManagedCompany populateManagedCompany(ResultSet rs) throws SQLException {
         ManagedCompany company = new ManagedCompany(
             rs.getString("Company.name"), 
@@ -140,16 +174,7 @@ public class Populate {
         company.setBic(rs.getString("Company.bic"));
         return company;
     }
-    
-    public static void populateCreateStatementData(PreparedStatement stmt, ManagedCompany company) throws SQLException {
-        populateCustomerDefaultDataToStatement(stmt, company);
-    }
-    
-    public static void populateUpdateStatementData(PreparedStatement stmt, ManagedCompany company, int id) throws SQLException {
-        populateCustomerDefaultDataToStatement(stmt, company);
-        stmt.setInt(11, id);
-    }
-    
+   
     public static void populateCustomerDefaultDataToStatement(PreparedStatement stmt, ManagedCompany company) throws SQLException {
         stmt.setString(1, company.getName());
         stmt.setString(2, company.getRegId());

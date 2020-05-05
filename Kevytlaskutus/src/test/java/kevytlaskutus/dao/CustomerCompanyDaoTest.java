@@ -58,8 +58,9 @@ public class CustomerCompanyDaoTest {
             CustomerCompany customer = new CustomerCompany();
             customer.setName("Acme");
             boolean result = dao.create(customer);
-            assertTrue(result);    
-            result = dao.update(1, mockCustomer);
+            assertTrue(result);
+            customer.setName("Muutettu");
+            result = dao.update(1, customer);
             assertTrue(result);    
         } catch (SQLException e) {}
     }

@@ -122,7 +122,7 @@ public class InvoiceDaoImpl implements InvoiceDao<Invoice, Integer, String>  {
                 + "companyId=?, "
                 + "vatPercentage=? "
                 + "WHERE id=?");
-        populate.populateUpdateStatementData(stmt, invoice);
+        populate.populateUpdateStatementData(stmt, invoice, id);
         int rows = stmt.executeUpdate();
         
         stmt.close();
