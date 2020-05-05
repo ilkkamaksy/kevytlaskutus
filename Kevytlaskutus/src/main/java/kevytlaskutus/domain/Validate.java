@@ -6,8 +6,7 @@
 package kevytlaskutus.domain;
 
 /**
- *
- * @author ilkka
+ * Class responsible for validating objects before saving into database.
  */
 public class Validate {
     

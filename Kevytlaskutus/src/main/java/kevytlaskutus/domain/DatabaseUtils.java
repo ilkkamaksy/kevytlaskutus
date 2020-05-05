@@ -16,8 +16,7 @@ import kevytlaskutus.dao.ManagedCompanyDao;
 import kevytlaskutus.dao.ProductDaoImpl;
 
 /**
- *
- * @author ilkka
+ * Utility class for initializing the database.
  */
 public class DatabaseUtils {
     

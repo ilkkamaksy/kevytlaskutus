@@ -8,8 +8,7 @@ package kevytlaskutus.domain;
 import java.util.HashMap;
 
 /**
- *
- * @author ilkka
+ * Class containing default notice messages for UI.
  */
 public class NoticeMessages {
    

@@ -16,8 +16,7 @@ import kevytlaskutus.dao.ProductDao;
 import kevytlaskutus.dao.ProductDaoImpl;
 
 /**
- *
- * @author ilkka
+ * Service class responsible for dispatching requests for ProductDao and returning Product entities from database.
  */
 public class ProductService {
     

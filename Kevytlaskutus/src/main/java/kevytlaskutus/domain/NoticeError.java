@@ -6,8 +6,7 @@
 package kevytlaskutus.domain;
 
 /**
- *
- * @author ilkka
+ * The error Notice class.
  */
 public class NoticeError implements Notice {
     protected String noticeType = "error";

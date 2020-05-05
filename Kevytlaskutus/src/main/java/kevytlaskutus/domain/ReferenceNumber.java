@@ -6,8 +6,7 @@
 package kevytlaskutus.domain;
 
 /**
- *
- * @author ilkka
+ * Class responsible for generating reference numbers for Invoices.
  */
 public class ReferenceNumber {
     

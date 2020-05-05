@@ -9,8 +9,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 /**
- *
- * @author ilkka
+ * Class responsible for calculating total sums for Invoices.
  */
 public class InvoiceTotal {
     /**

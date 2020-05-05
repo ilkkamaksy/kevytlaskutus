@@ -6,8 +6,7 @@
 package kevytlaskutus.domain;
 
 /**
- *
- * @author ilkka
+ * The class for success notices.
  */
 public class NoticeSuccess implements Notice {
     
