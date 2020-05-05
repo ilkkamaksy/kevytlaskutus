@@ -29,20 +29,28 @@ public class CustomerCompanyService {
     }    
     
     /**
-     * Save a CustomerCompany object in database. 
-     * 
-     * @param company the CustomerCompany to be saved
-     * @return boolean
-     * @see CustomerCompany
+     * Save a CustomerCompany object in database.
+     * @param customer the CustomerCompany object to be saved.
+     * @return boolean result of operation
      */
-    public boolean createCustomerCompany(CustomerCompany company) {
+    public boolean saveCustomerCompany(CustomerCompany customer) {
+        boolean result = false;
+        if (customer.getId() == 0) {
+            result = this.createCustomerCompany(customer);
+        } else {
+            result = this.updateCustomerCompany(customer);
+        }
         
-        Boolean result = false;
-        
+        return result;
+    }
+    
+    
+    private boolean createCustomerCompany(CustomerCompany customer) {
+        boolean result = false;
         try {    
             Connection conn = this.databaseUtils.getConnection();
             dao.setConnection(conn);
-            result = dao.create(company);
+            result = dao.create(customer);
         } catch (SQLException e) {
             Logger.getLogger(AppService.class.getName()).log(Level.SEVERE, null, e);
         }
@@ -50,22 +58,14 @@ public class CustomerCompanyService {
         return result;
     }
     
-    /**
-     * Update a CustomerCompany object in database. 
-     *
-     * @param id the id of the CustomerCompany to be updated
-     * @param company the CustomerCompany to be updated
-     * @return boolean
-     * @see CustomerCompany
-     */
-    public boolean updateCustomerCompany(int id, CustomerCompany company) {
+    private boolean updateCustomerCompany(CustomerCompany customer) {
         
         Boolean result = false;
         
         try {    
             Connection conn = this.databaseUtils.getConnection();
             dao.setConnection(conn);
-            result = dao.update(id, company);
+            result = dao.update(customer.getId(), customer);
         } catch (SQLException e) {
             Logger.getLogger(AppService.class.getName()).log(Level.SEVERE, null, e);
         }

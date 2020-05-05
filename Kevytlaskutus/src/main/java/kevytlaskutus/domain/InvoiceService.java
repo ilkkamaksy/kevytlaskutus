@@ -20,16 +20,19 @@ import kevytlaskutus.dao.InvoiceDaoImpl;
 public class InvoiceService {
     
     private InvoiceDaoImpl dao;
-    
+    private ProductService productService;
     private DatabaseUtils databaseUtils;
-    
     private int startInvoiceNumbering = 1001;
     
     public InvoiceService(InvoiceDaoImpl dao, DatabaseUtils databaseUtils) {
-        this.databaseUtils = databaseUtils;
         this.dao = dao;
+        this.databaseUtils = databaseUtils;
     }
-    
+
+    public void setProductService(ProductService productService) {
+        this.productService = productService;
+    }
+   
     /**
      * Retrieves a default invoice number
      *
@@ -48,20 +51,57 @@ public class InvoiceService {
     }
     
     /**
-     * Save an Invoice object in database. 
-     * 
-     * @param invoice the Invoice to be saved
-     * @param managedCompany the ManagedCompany to be attached to the invoice
-     * @return invoice id
-     * @see Invoice
-     */
-    public Integer createInvoiceForCompany(Invoice invoice, ManagedCompany managedCompany) {
+     * Save the current Invoice object in database.
+     * @param invoice the Invoice object to save
+     * @param company the ManagedCompany object attached to the invoice.
+     * @return boolean
+     */    
+    public boolean saveInvoice(Invoice invoice, ManagedCompany company) {
+        boolean success = false;
+
+        if (invoice.getId() == 0) {
+            Integer invoiceId = this.createInvoiceForCompany(invoice, company);
+            success = invoiceId > -1 ? true : false;
+            this.saveProductsInBatches(success, invoiceId, invoice.getProducts());
+        } else {
+            success = this.updateInvoice(invoice, company);
+            this.updateProductsInBatches(success, invoice);
+        }
+
+        return success;
+    }
+    
+    private void updateProductsInBatches(boolean success, Invoice invoice) {
+        if (success && invoice.getProducts().size() > 0) {
+            this.productService.updateProductsInBatches(invoice.getId(), invoice.getProducts());
+            List<Product> newProducts = this.getNewProductsFromInvoice(invoice);
+            if (newProducts.size() > 0) {
+                this.saveProductsInBatches(success, invoice.getId(), newProducts);
+            }
+        }
+    }
+
+    private void saveProductsInBatches(boolean success, Integer invoiceId, List<Product> products) {
+        if (success && products.size() > 0) {
+            this.productService.saveProductsInBatches(invoiceId, products);
+        }
+    }
+    
+    private List<Product> getNewProductsFromInvoice(Invoice invoice) {
+        List<Product> products = new ArrayList<>();
+        for (Product prod : invoice.getProducts()) {
+            if (prod.getId() == 0) {
+                products.add(prod);
+            }
+        }
+        return products;
+    }
+    
+    private Integer createInvoiceForCompany(Invoice invoice, ManagedCompany managedCompany) {
         if (invoice == null || managedCompany == null || managedCompany.getId() < 1) {
             return -1;
         }
-        
         Integer result = -1;
-        
         try {    
             Connection conn = this.databaseUtils.getConnection();
             dao.setConnection(conn);
@@ -74,27 +114,16 @@ public class InvoiceService {
         return result;
     }
     
-    /**
-     * Update an Invoice object in database. 
-     * 
-     * @param id the id of the Invoice to be updated
-     * @param invoice the Invoice to be updated
-     * @param managedCompany the ManagedCompany to be attached to the invoice
-     * @return boolean
-     * @see Invoice
-     */
-    public Boolean updateInvoice(int id, Invoice invoice, ManagedCompany managedCompany) {
-        Boolean result = false;
-        
+    private boolean updateInvoice(Invoice invoice, ManagedCompany managedCompany) {
+        boolean result = false;
         try {    
             Connection conn = this.databaseUtils.getConnection();
             dao.setConnection(conn);
             invoice.setCompany(managedCompany);
-            result = dao.update(id, invoice);
+            result = dao.update(invoice.getId(), invoice);
         } catch (SQLException e) {
             Logger.getLogger(AppService.class.getName()).log(Level.SEVERE, null, e);
         }
-        
         return result;
     }
   
@@ -105,9 +134,8 @@ public class InvoiceService {
      * @return boolean
      * @see Invoice
      */
-    public Boolean deleteInvoice(int id) {
-        Boolean result = false;
-        
+    public boolean deleteInvoice(int id) {
+        boolean result = false;
         try {    
             Connection conn = this.databaseUtils.getConnection();
             dao.setConnection(conn);
@@ -115,7 +143,6 @@ public class InvoiceService {
         } catch (SQLException e) {
             Logger.getLogger(AppService.class.getName()).log(Level.SEVERE, null, e);
         }
-        
         return result;
     }
     
@@ -128,7 +155,6 @@ public class InvoiceService {
      */
     public List<Invoice> getInvoicesForCompany(int managedCompanyId) {
         List<Invoice> results = new ArrayList<>();
-        
         try {
             Connection conn = this.databaseUtils.getConnection();
             dao.setConnection(conn);
@@ -136,7 +162,6 @@ public class InvoiceService {
         } catch (SQLException e) {
             Logger.getLogger(AppService.class.getName()).log(Level.SEVERE, null, e);
         }
-        
         return results;
     }
     
@@ -148,7 +173,6 @@ public class InvoiceService {
      * @see Invoice
      */
     public Invoice getInvoiceById(int id) {
-        
         try {
             Connection conn = this.databaseUtils.getConnection();
             dao.setConnection(conn);
@@ -156,7 +180,6 @@ public class InvoiceService {
         } catch (SQLException e) {
             Logger.getLogger(AppService.class.getName()).log(Level.SEVERE, null, e);
         }
-        
         return null;
     }
 }

@@ -16,12 +16,9 @@ public class NoticeMessages {
     public static HashMap<String, String> messages = new HashMap<>();
    
     public NoticeMessages() {     
-        messages.put("createManagedCompany", "A new company has been added");
-        messages.put("updateManagedCompany", "Company has been updated");
-        messages.put("createCustomerCompany", "A new customer has been added");
-        messages.put("updateCustomerCompany", "Customer has been updated");
-        messages.put("createInvoice", "A new invoice has been added");
-        messages.put("updateInvoice", "Invoice has been updated");
+        messages.put("saveManagedCompany", "Company has been saved successfully.");
+        messages.put("saveCustomerCompany", "Customer has been saved successfully.");
+        messages.put("saveInvoice", "Invoice has been saved successfully.");
         messages.put("delete", "Item has been deleted");
     }
 

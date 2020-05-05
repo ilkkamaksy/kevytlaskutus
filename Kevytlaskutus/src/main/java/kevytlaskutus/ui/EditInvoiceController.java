@@ -71,8 +71,6 @@ public class EditInvoiceController extends BaseController implements Initializab
     public void initialize(URL arg0, ResourceBundle arg1) {
         this.currentInvoice = this.appService.getCurrentInvoice();
        
-        this.setActionType();
-        
         super.primaryNotice.setupNotice();
         super.noticePane.getChildren().add(super.primaryNotice.notice);
         super.primaryNotice.showPendingNoticeMessage();
@@ -136,14 +134,6 @@ public class EditInvoiceController extends BaseController implements Initializab
         return customerNames;
     }
    
-    public void setActionType() {
-        if (this.currentInvoice.getId() > 0) {
-            this.actionType = "UpdateInvoice";
-        } else {
-            this.actionType = "NewInvoice";
-        }
-    }
-    
     private void setAddNewRowButtonAction() {
         this.addNewRowButton.setOnAction(e-> {
             this.form.addLineItem();
@@ -152,7 +142,7 @@ public class EditInvoiceController extends BaseController implements Initializab
     
     private void setSaveButtonAction() {
         this.saveFormButton.setOnAction(e-> {
-            boolean success = this.actionFactory.execute(this.actionType, this.currentInvoice.getId());
+            boolean success = this.actionFactory.execute("SaveInvoice", this.currentInvoice.getId());
             if (success) {
                 this.viewFactory.showManageInvoicesView();
             } else {
@@ -185,7 +175,7 @@ public class EditInvoiceController extends BaseController implements Initializab
     }
     
     public void updateInvoiceReferenceNumber() {
-        this.appService.generateInvoiceReferenceNumber();
+        this.appService.updateInvoiceReferenceNumber();
         this.invoiceReferenceNumber.textProperty().setValue(this.currentInvoice.getReferenceNumber().toString());
     }
 }

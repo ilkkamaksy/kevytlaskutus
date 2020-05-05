@@ -29,15 +29,22 @@ public class ManagedCompanyService {
     }    
     
     /**
-     * Save a ManagedCompany object in database. 
-     * 
-     * @param company the ManagedCompany to be saved
-     * @return boolean
-     * @see ManagedCompany
+     * Save a ManagedCompany object into database.
+     * @param company the ManagedCompany object to be saved.
+     * @return boolean result of operation 
      */
-    public boolean createManagedCompany(ManagedCompany company) {
-        
-        Boolean result = false;
+    public boolean saveCurrentManagedCompany(ManagedCompany company) {
+        boolean result = false;
+        if (company.getId() == 0) {
+            result = this.createManagedCompany(company);
+        } else {
+            result = this.updateManagedCompany(company);
+        }
+        return result;
+    }
+    
+    private boolean createManagedCompany(ManagedCompany company) {
+        boolean result = false;
         
         try {    
             Connection conn = this.databaseUtils.getConnection();
@@ -50,22 +57,13 @@ public class ManagedCompanyService {
         return result;
     }
     
-    /**
-     * Update a ManagedCompany object in database. 
-     *
-     * @param id the id of the ManagedCompany to be updated
-     * @param company the ManagedCompany to be updated
-     * @return boolean
-     * @see ManagedCompany
-     */
-    public Boolean updateManagedCompany(int id, ManagedCompany company) {
-        
-        Boolean result = false;
+    private boolean updateManagedCompany(ManagedCompany company) {
+        boolean result = false;
         
         try {    
             Connection conn = this.databaseUtils.getConnection();
             dao.setConnection(conn);
-            result = dao.update(id, company);
+            result = dao.update(company.getId(), company);
         } catch (SQLException e) {
             Logger.getLogger(AppService.class.getName()).log(Level.SEVERE, null, e);
         }

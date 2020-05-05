@@ -38,8 +38,7 @@ public class EditCustomerController extends BaseController implements Initializa
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
         this.currentCompany = this.appService.getCurrentCustomerCompany();
-        this.setActionType();
-        
+      
         super.primaryNotice.setupNotice();
         super.noticePane.getChildren().add(super.primaryNotice.notice);
         super.primaryNotice.showPendingNoticeMessage();
@@ -53,11 +52,7 @@ public class EditCustomerController extends BaseController implements Initializa
     public void setupForm() {
    
         this.form = new Form(this.appService);
-        
-        if (currentCompany == null) {
-            this.appService.setCurrentCustomerCompany(new CustomerCompany());
-        }
-        
+
         this.form.addTextField("Name", currentCompany.getName(), currentCompany, "Name");
         this.form.addTextField("Register Id", currentCompany.getRegId(), currentCompany, "RegId");
         this.form.addTextField("Phone", currentCompany.getPhone(), currentCompany, "Phone");
@@ -70,17 +65,9 @@ public class EditCustomerController extends BaseController implements Initializa
         this.editFormContainerPane.getChildren().add(this.form.getForm());
     }
   
-    public void setActionType() {
-        if (this.currentCompany.getId() > 0) {
-            this.actionType = "UpdateCustomerCompany";
-        } else {
-            this.actionType = "NewCustomerCompany";
-        }
-    }
-    
     private void setButtonAction() {
         this.saveFormButton.setOnAction(e-> {
-            boolean success = this.actionFactory.execute(this.actionType, this.currentCompany.getId());
+            boolean success = this.actionFactory.execute("SaveCustomerCompany", this.currentCompany.getId());
             if (success) {
                 this.viewFactory.showManageCustomerView();
             } else {
