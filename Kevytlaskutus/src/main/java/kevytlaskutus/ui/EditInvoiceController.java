@@ -175,7 +175,7 @@ public class EditInvoiceController extends BaseController implements Initializab
     }
     
     public void updateInvoiceReferenceNumber() {
-        this.appService.updateInvoiceReferenceNumber();
+        this.appService.updateCurrentInvoiceReferenceNumber();
         this.invoiceReferenceNumber.textProperty().setValue(this.currentInvoice.getReferenceNumber().toString());
     }
 }

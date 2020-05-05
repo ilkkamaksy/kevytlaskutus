@@ -174,12 +174,12 @@ public class AppService {
     }
     
     /**
-     * Update the reference number for current Invoice by invoiceNumber.
+     * Update the reference number for current Invoice by invoice number.
      * @see Invoice
      * @see ReferenceNumber
      * @return Integer referenceNumber
      */
-    public Integer updateInvoiceReferenceNumber() {
+    public Integer updateCurrentInvoiceReferenceNumber() {
         Integer referenceNumber = ReferenceNumber.generateInvoiceReferenceNumber(this.currentInvoice);
         this.currentInvoice.setReferenceNumber(referenceNumber);
         return referenceNumber;
