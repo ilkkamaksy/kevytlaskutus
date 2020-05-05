@@ -32,6 +32,9 @@ public class AppServiceTest {
     AppService appService;
     
     InvoiceService mockInvoiceService;
+    CustomerCompanyService mockCustomerCompanyService;
+    ManagedCompanyService mockManagedCompanyService;
+    
     ManagedCompanyDao mockManagedCompanyDao;
     CustomerCompanyDao mockCustomerCompanyDao;
     InvoiceDaoImpl mockInvoiceDao;
@@ -71,7 +74,9 @@ public class AppServiceTest {
         when(mockCustomer.getId()).thenReturn(1);
         when(mockCustomer.getName()).thenReturn("Acme");
         
-        mockInvoiceService = mock(InvoiceService.class);
+        this.mockInvoiceService = mock(InvoiceService.class);
+        this.mockCustomerCompanyService = mock(CustomerCompanyService.class);
+        this.mockManagedCompanyService = mock(ManagedCompanyService.class);
     }
     
     @Test
@@ -114,7 +119,7 @@ public class AppServiceTest {
     
     @Test
     public void newManagedCompanyCanNotBeCreatedWithEmptyCompanyObject() {
-        this.appService.setCurrentManagedCompany(null);
+        this.appService.setCurrentManagedCompany(new ManagedCompany());
         boolean result = appService.saveCurrentManagedCompany();
         assertFalse(result);
     }
@@ -148,7 +153,7 @@ public class AppServiceTest {
         try {
             when(mockManagedCompanyDao.update(1, mockManagedCompany)).thenReturn(true);
             this.appService.setCurrentManagedCompany(mockManagedCompany);
-            boolean result = appService.updateCurrentManagedCompany();  
+            boolean result = appService.saveCurrentManagedCompany();  
             assertTrue(result);
         } catch (SQLException ex) {}
        
@@ -156,8 +161,8 @@ public class AppServiceTest {
     
     @Test
     public void updatingNonExistingManagedCompanyReturnsFalse() {
-        this.appService.setCurrentManagedCompany(null);
-        boolean result = appService.updateCurrentManagedCompany(); 
+        this.appService.setCurrentManagedCompany(new ManagedCompany());
+        boolean result = appService.saveCurrentManagedCompany(); 
         assertFalse(result);
     }
     
@@ -203,17 +208,7 @@ public class AppServiceTest {
             assertEquals(results.size(), companies.size());
         } catch (SQLException e) {}
     }
-    
-    @Test
-    public void newCustomerCanBeCreatedWithValidCompanyObject() {
-        try {
-            when(mockCustomerCompanyDao.create(mockCustomer)).thenReturn(true);
-            this.appService.setCurrentCustomerCompany(mockCustomer);
-            boolean result = appService.saveCurrentCustomerCompany();  
-            assertTrue(result);
-        } catch (SQLException ex) {}
-    }
-    
+   
     @Test
     public void newCustomerCanNotBeCreatedWithEmptyCustomer() {
         try {
@@ -222,21 +217,11 @@ public class AppServiceTest {
             assertFalse(result);
         } catch (SQLException e) {}
     }
-    
-    @Test
-    public void existingCustomerCanBeUpdated() {
-        try {
-            when(this.mockCustomerCompanyDao.update(1, mockCustomer)).thenReturn(true);    
-            this.appService.setCurrentCustomerCompany(mockCustomer);
-            boolean result = appService.updateCurrentCustomerCompany(); 
-            assertTrue(result);
-        } catch (SQLException e) {}
-    }
-    
+   
     @Test
     public void updatingNonExistingCustomerReturnsFalse() {    
-        this.appService.setCurrentCustomerCompany(null);
-        boolean result = appService.updateCurrentCustomerCompany(); 
+        this.appService.setCurrentCustomerCompany(new CustomerCompany());
+        boolean result = appService.saveCurrentCustomerCompany(); 
         assertFalse(result);
     }
     
@@ -321,7 +306,7 @@ public class AppServiceTest {
             
             boolean result = appService.saveCurrentCustomerCompany();
             assertTrue(result);
-            assertEquals("A new customer has been added", appService.getPendingNotice().getNoticeMessage());
+            assertEquals("Customer has been saved successfully.", appService.getPendingNotice().getNoticeMessage());
         } catch (SQLException ex) {}
     }
     
@@ -351,7 +336,7 @@ public class AppServiceTest {
         invoice.setCustomer(customer);
         invoice.getProducts().add(product);
 
-        when(mockInvoiceService.createInvoiceForCompany(invoice, mockManagedCompany)).thenReturn(1);
+        when(mockInvoiceService.saveInvoice(invoice, mockManagedCompany)).thenReturn(true);
 
         this.appService.setCurrentManagedCompany(mockManagedCompany);
         this.appService.setCurrentCustomerCompany(customer);
@@ -407,7 +392,7 @@ public class AppServiceTest {
         invoice.setReferenceNumber(Integer.valueOf(0));
         invoice.getProducts().add(product);
 
-        when(mockInvoiceService.updateInvoice(1, invoice, mockManagedCompany)).thenReturn(true);
+        when(mockInvoiceService.saveInvoice(invoice, mockManagedCompany)).thenReturn(true);
 
         this.appService.setCurrentManagedCompany(mockManagedCompany);
         this.appService.setCurrentCustomerCompany(customer);
@@ -416,7 +401,7 @@ public class AppServiceTest {
         
         assertEquals(Integer.valueOf(1), this.appService.getCurrentInvoice().getReferenceNumber());
         
-        boolean result = this.appService.updateCurrentInvoice();
+        boolean result = this.appService.saveCurrentInvoice();
 
         assertTrue(result);
         

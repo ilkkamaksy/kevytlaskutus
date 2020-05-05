@@ -20,20 +20,23 @@ import kevytlaskutus.domain.Product;
  */
 public class Populate {
     
-    public static void populateCreateStatementData(PreparedStatement stmt, Product product) throws SQLException {
+    public static PreparedStatement populateCreateStatementData(PreparedStatement stmt, Product product) throws SQLException {
         addProductDefaultDataToStatement(stmt, product);
+        return stmt;
     }
     
-    public static void populateUpdateStatementData(PreparedStatement stmt, Product product, int id) throws SQLException {
+    public static PreparedStatement populateUpdateStatementData(PreparedStatement stmt, Product product, int id) throws SQLException {
         addProductDefaultDataToStatement(stmt, product);
         stmt.setInt(5, id);
+        return stmt;
     }
     
-    public static void addProductDefaultDataToStatement(PreparedStatement stmt, Product product) throws SQLException {
+    public static PreparedStatement addProductDefaultDataToStatement(PreparedStatement stmt, Product product) throws SQLException {
         stmt.setString(1, product.getName());
         stmt.setBigDecimal(2, product.getPrice());
         stmt.setString(3, product.getPriceUnit());
         stmt.setString(4, product.getDescription());
+        return stmt;
     }
     
     public static Product populateProduct(ResultSet rs) throws SQLException {
@@ -48,16 +51,18 @@ public class Populate {
         return product;
     }
     
-    public static void populateCreateStatementData(PreparedStatement stmt, Invoice invoice) throws SQLException {
+    public static PreparedStatement populateCreateStatementData(PreparedStatement stmt, Invoice invoice) throws SQLException {
         addInvoiceDefaultDataToStatement(stmt, invoice);
+        return stmt;
     }
     
-    public static void populateUpdateStatementData(PreparedStatement stmt, Invoice invoice) throws SQLException {
+    public static PreparedStatement populateUpdateStatementData(PreparedStatement stmt, Invoice invoice) throws SQLException {
         addInvoiceDefaultDataToStatement(stmt, invoice);
         stmt.setInt(20, invoice.getId());
+        return stmt;
     }
    
-    public static void addInvoiceDefaultDataToStatement(PreparedStatement stmt, Invoice invoice) throws SQLException {
+    public static PreparedStatement addInvoiceDefaultDataToStatement(PreparedStatement stmt, Invoice invoice) throws SQLException {
         stmt.setInt(1, invoice.getInvoiceNumber());
         stmt.setInt(2, invoice.getReferenceNumber());
         stmt.setDate(3, invoice.getCreatedDate());
@@ -77,6 +82,8 @@ public class Populate {
         stmt.setString(17, invoice.getAdditionalInfo());
         stmt.setInt(18, invoice.getCompany().getId());
         stmt.setBigDecimal(19, invoice.getVatPercentage());
+        
+        return stmt;
     }
     
     public static Invoice populateInvoice(ResultSet rs) throws SQLException {

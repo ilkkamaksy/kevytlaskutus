@@ -57,6 +57,10 @@ public class InvoiceService {
      * @return boolean
      */    
     public boolean saveInvoice(Invoice invoice, ManagedCompany company) {
+        if (invoice == null || company == null || company.getId() < 1) {
+            return false;
+        }
+        
         boolean success = false;
 
         if (invoice.getId() == 0) {
@@ -98,9 +102,6 @@ public class InvoiceService {
     }
     
     private Integer createInvoiceForCompany(Invoice invoice, ManagedCompany managedCompany) {
-        if (invoice == null || managedCompany == null || managedCompany.getId() < 1) {
-            return -1;
-        }
         Integer result = -1;
         try {    
             Connection conn = this.databaseUtils.getConnection();

@@ -45,7 +45,9 @@ public class CustomerCompanyDaoTest {
     @Test
     public void newCustomerCanBeCreated() {
         try {
-            boolean result = dao.create(mockCustomer);
+            CustomerCompany customer = new CustomerCompany();
+            customer.setName("Acme");
+            boolean result = dao.create(customer);
             assertTrue(result);    
         } catch (SQLException e) {}
     }
@@ -53,7 +55,11 @@ public class CustomerCompanyDaoTest {
     @Test
     public void customerCanBeUpdated() {
         try {
-            boolean result = dao.update(1, mockCustomer);
+            CustomerCompany customer = new CustomerCompany();
+            customer.setName("Acme");
+            boolean result = dao.create(customer);
+            assertTrue(result);    
+            result = dao.update(1, mockCustomer);
             assertTrue(result);    
         } catch (SQLException e) {}
     }

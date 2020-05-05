@@ -25,6 +25,7 @@ import static org.mockito.Mockito.when;
 public class InvoiceTest {
     
     Invoice invoice;
+    Invoice mockInvoice;
     CustomerCompany mockCustomer;
     ManagedCompany mockCompany;
       
@@ -39,6 +40,8 @@ public class InvoiceTest {
         mockCustomer = mock(CustomerCompany.class);
         when(mockCompany.getId()).thenReturn(2);
         when(mockCompany.getName()).thenReturn("asiakas");
+        
+        mockInvoice = mock(Invoice.class);
     }
     
    
@@ -230,4 +233,18 @@ public class InvoiceTest {
         assertEquals(invoice.getAdditionalInfo(), info);
     }
     
+    @Test
+    public void invoiceEqualsSameInvoice() {
+        Invoice invoice = new Invoice();
+        invoice.setInvoiceNumber(1001);
+        assertTrue(invoice.equals(invoice));
+    }
+    
+    @Test
+    public void invoiceDoesNotEqualDifferentInvoice() {
+        Invoice invoice = new Invoice();
+        invoice.setInvoiceNumber(1001);
+        assertFalse(invoice.equals(mockInvoice));
+    }
+   
 }

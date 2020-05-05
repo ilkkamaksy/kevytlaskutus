@@ -68,9 +68,11 @@ public class CustomerCompanyServiceTest {
     @Test
     public void testCreateCustomerCompany() {
         try {
-            when(mockCustomerCompanyDao.create(mockCustomer)).thenReturn(true);
-            boolean result = this.service.createCustomerCompany(mockCustomer);
-            verify(this.mockCustomerCompanyDao).create(mockCustomer); 
+            CustomerCompany customer = new CustomerCompany();
+            customer.setName("Acme");
+            when(mockCustomerCompanyDao.create(customer)).thenReturn(true);
+            boolean result = this.service.saveCustomerCompany(customer);
+            verify(this.mockCustomerCompanyDao).create(customer); 
             assertTrue(result);
         } catch (SQLException e) {}
     }
@@ -79,7 +81,7 @@ public class CustomerCompanyServiceTest {
     public void testUpdateCustomerCompany() {
         try {
             when(mockCustomerCompanyDao.update(1, mockCustomer)).thenReturn(true);
-            boolean result = this.service.updateCustomerCompany(1, mockCustomer);
+            boolean result = this.service.saveCustomerCompany(mockCustomer);
             verify(this.mockCustomerCompanyDao).update(1, mockCustomer); 
             assertTrue(result);
         } catch (SQLException e) {}

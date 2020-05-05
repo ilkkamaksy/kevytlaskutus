@@ -38,6 +38,7 @@ public class InvoiceServiceTest {
     ProductDaoImpl mockProductDao;
     
     InvoiceService invoiceService;
+    ProductService mockProductService;
     
     Invoice mockInvoice;
     ManagedCompany mockCompany;
@@ -50,6 +51,8 @@ public class InvoiceServiceTest {
         mockInvoiceDao = mock(InvoiceDaoImpl.class);
         mockProductDao = mock(ProductDaoImpl.class);
         
+        mockProductService = mock(ProductService.class);
+        
         databaseUtils = new DatabaseUtils(
                 mockManagedCompanyDao, 
                 mockCustomerCompanyDao, 
@@ -61,7 +64,8 @@ public class InvoiceServiceTest {
         );
         databaseUtils.initDb();
         invoiceService = new InvoiceService(mockInvoiceDao, databaseUtils);
-       
+        invoiceService.setProductService(mockProductService);
+        
         mockInvoice = mock(Invoice.class);
         when(mockInvoice.getId()).thenReturn(1);
         when(mockInvoice.getReferenceNumber()).thenReturn(1001);
@@ -74,42 +78,42 @@ public class InvoiceServiceTest {
     @Test
     public void newInvoiceCanBeCreatedWithValidInvoiceObject() {
         try {
-            when(mockInvoiceDao.create(mockInvoice)).thenReturn(1);
-            Integer invoiceId = invoiceService.createInvoiceForCompany(mockInvoice, mockCompany);
-            verify(mockInvoiceDao).create(mockInvoice); 
+            Invoice invoice = new Invoice();
+            ManagedCompany company = new ManagedCompany();
+            company.setName("Acme");
+            company.setId(1);
+            Product prod = new Product();
+            prod.setName("tuote");
+            invoice.setCompany(company);
+            invoice.getProducts().add(prod);
+            invoice.setReferenceNumber(123);
+            assertEquals(Integer.valueOf(123), invoice.getReferenceNumber());
             
-            boolean result = invoiceId > -1 ? true : false;
-            assertTrue(result);
+            when(mockInvoiceDao.create(invoice)).thenReturn(1);
+            boolean success = invoiceService.saveInvoice(invoice, company);
+
+            assertTrue(success);
         } catch (SQLException e) {}
     }
-    
-    @Test
-    public void newInvoiceCannotBeCreatedWithNullInvoiceObject() {
-        Integer invoiceId = invoiceService.createInvoiceForCompany(null, mockCompany); 
-        boolean result = invoiceId > -1 ? true : false;
-        assertFalse(result);
-    }
-    
+   
     @Test
     public void invoiceCannotBeCreatedWithoutManagedCompany() {
-        Integer invoiceId = invoiceService.createInvoiceForCompany(mockInvoice, null);
-        boolean result = invoiceId > -1 ? true : false;
-        assertFalse(result);
+        boolean success = invoiceService.saveInvoice(mockInvoice, null);
+        assertFalse(success);
     }
     
     @Test
     public void invoiceCannotBeCreatedWithoutValidManagedCompany() {
         when(mockCompany.getId()).thenReturn(-1);
-        Integer invoiceId = invoiceService.createInvoiceForCompany(mockInvoice, mockCompany);
-        boolean result = invoiceId > -1 ? true : false;
-        assertFalse(result);
+        boolean success = invoiceService.saveInvoice(mockInvoice, mockCompany);
+        assertFalse(success);
     }
     
     @Test
     public void invoiceCanBeUpdatedWithValidInvoiceObject() {
         try {
             when(mockInvoiceDao.update(1, mockInvoice)).thenReturn(true);
-            boolean result = invoiceService.updateInvoice(1, mockInvoice, mockCompany);
+            boolean result = invoiceService.saveInvoice(mockInvoice, mockCompany);
             verify(mockInvoiceDao).update(1, mockInvoice); 
             assertTrue(result);
         } catch (SQLException e) {}
@@ -117,7 +121,7 @@ public class InvoiceServiceTest {
     
     @Test
     public void invoiceCanNotBeUpdatedWithNegativeId() {    
-        boolean result = invoiceService.updateInvoice(-1, mockInvoice, mockCompany);    
+        boolean result = invoiceService.saveInvoice(mockInvoice, mockCompany);    
         assertFalse(result);    
     }
    
@@ -157,4 +161,49 @@ public class InvoiceServiceTest {
         } catch (SQLException e) {}
     }
     
+    @Test
+    public void productsAreUpdatedInBatchesIfInvoiceHasAny() {
+        try {
+            Invoice invoice = new Invoice();
+            invoice.setId(1);
+            invoice.setReferenceNumber(123);
+
+            ManagedCompany company = new ManagedCompany();
+            company.setName("Acme");
+            company.setId(1);
+            invoice.setCompany(company);
+            
+            Product prod1 = new Product();
+            prod1.setId(1);
+            prod1.setName("vanha");
+            Product prod2 = new Product();
+            prod2.setName("uusi");
+            invoice.getProducts().add(prod1);
+            invoice.getProducts().add(prod2);
+            
+            when(mockInvoiceDao.update(1, invoice)).thenReturn(true);
+            when(this.mockProductService.saveProductsInBatches(1, invoice.getProducts())).thenReturn(true);
+            
+            boolean success = invoiceService.saveInvoice(invoice, company);
+            
+            assertTrue(success);    
+        } catch (SQLException e) {}
+    }
+    
+    @Test
+    public void invoiceCanNotBeCreatedWithoutExistingManagedCompany() {
+        Invoice invoice = new Invoice();
+        invoice.setReferenceNumber(123);
+        boolean success = invoiceService.saveInvoice(invoice, new ManagedCompany());
+        assertFalse(success);    
+    }
+    
+    @Test
+    public void getInvoiceByIdReturnsNullIfNotFound() {
+        try {
+            when(mockInvoiceDao.getItemById(1)).thenThrow(new SQLException("virhe"));
+            Invoice invoice = invoiceService.getInvoiceById(1);
+            assertNull(invoice);    
+        } catch (SQLException e) {}
+    }
 }

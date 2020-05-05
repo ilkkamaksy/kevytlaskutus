@@ -7,14 +7,12 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-
 import kevytlaskutus.domain.Invoice;
 import kevytlaskutus.domain.Product;
 
 public class InvoiceDaoImpl implements InvoiceDao<Invoice, Integer, String>  {
     
     Connection conn;
-    
     static Populate populate;
     
     public void setConnection(Connection conn) {
@@ -52,13 +50,10 @@ public class InvoiceDaoImpl implements InvoiceDao<Invoice, Integer, String>  {
             + "         ON DELETE CASCADE "
             + "         ON UPDATE CASCADE "
             + ");").executeUpdate();
-        
-        
     }
     
     @Override
     public Integer create(Invoice invoice) throws SQLException {
-   
         PreparedStatement pstmt = conn.prepareStatement(
             "INSERT INTO Invoice ("
             + "invoiceNumber, \n"
@@ -88,10 +83,8 @@ public class InvoiceDaoImpl implements InvoiceDao<Invoice, Integer, String>  {
         pstmt.executeUpdate();
         
         int invoiceId = this.getGeneratedItemKey(pstmt);
-        
         pstmt.close();
         conn.close();
-        
         return invoiceId;
     }
 
@@ -101,7 +94,6 @@ public class InvoiceDaoImpl implements InvoiceDao<Invoice, Integer, String>  {
         if (generatedKeys.next()) {
             id = generatedKeys.getInt(1);
         }
-        
         generatedKeys.close();
         return id;
     }
@@ -152,19 +144,16 @@ public class InvoiceDaoImpl implements InvoiceDao<Invoice, Integer, String>  {
         ResultSet rs = stmt.executeQuery();
 
         Invoice invoice = null;
-        
         int i = 0;
         while (rs.next()) {
             if (i == 0) {
                 invoice = populate.populateInvoice(rs);
                 invoice.setCustomer(populate.populateCustomer(rs));
                 invoice.setCompany(populate.populateManagedCompany(rs));    
-            }
-            
+            }            
             Product prod = populate.populateProduct(rs);
             prod.setInvoiceId(invoice.getId());
             invoice.getProducts().add(prod);
-            
             i++;
         }
        
@@ -178,14 +167,12 @@ public class InvoiceDaoImpl implements InvoiceDao<Invoice, Integer, String>  {
         PreparedStatement stmt = conn.prepareStatement("DELETE FROM Invoice WHERE id=?");
         stmt.setInt(1, id);
         int rows = stmt.executeUpdate();  
-        
         conn.close();
         return rows > 0;
     }
 
     @Override
     public List<Invoice> getItems(Integer managedCompanyId) throws SQLException {
-        
         PreparedStatement stmt = conn.prepareStatement("SELECT * FROM Invoice WHERE companyId = ?");
         stmt.setInt(1, managedCompanyId);
         ResultSet rs = stmt.executeQuery();

@@ -45,7 +45,7 @@ public class ProductDaoImpl implements ProductDao<Product, Integer, String> {
     }
     
     @Override
-    public void updateProductsInBatches(Integer invoiceId, List<Product> products) throws SQLException {
+    public boolean updateProductsInBatches(Integer invoiceId, List<Product> products) throws SQLException {
         String sql = "UPDATE Product "
                 +   "SET name=?, price=?, priceUnit=?, description=?, invoiceId=?, modifiedTime=? \n" 
                 +   "WHERE id=?";
@@ -78,6 +78,8 @@ public class ProductDaoImpl implements ProductDao<Product, Integer, String> {
         conn.setAutoCommit(true);
             
         this.deleteObsolete(ts, 0);
+        
+        return affectedRecords.length > 0;
     }
     
     public void deleteObsolete(Timestamp ts, Integer id) throws SQLException {
@@ -88,7 +90,7 @@ public class ProductDaoImpl implements ProductDao<Product, Integer, String> {
     }
     
     @Override
-    public void saveProductsInBatches(Integer invoiceId, List<Product> products) throws SQLException {
+    public boolean saveProductsInBatches(Integer invoiceId, List<Product> products) throws SQLException {
         String sql = "INSERT INTO Product (name, price, priceUnit, description, invoiceId, modifiedTime) VALUES (?, ?, ?, ?, ?, ?)";
         PreparedStatement stmt = null;    
         this.conn.setAutoCommit(false);
@@ -111,6 +113,8 @@ public class ProductDaoImpl implements ProductDao<Product, Integer, String> {
         
         conn.commit();
         conn.setAutoCommit(true);
+        
+        return affectedRecords.length > 0;
     }
   
   

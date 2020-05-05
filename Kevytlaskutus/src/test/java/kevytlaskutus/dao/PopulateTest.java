@@ -48,7 +48,7 @@ public class PopulateTest {
             conn = this.getConnection();
         } catch (SQLException e) {}
     }
-    
+   
     @Test
     public void productCanBePopulated() {
         

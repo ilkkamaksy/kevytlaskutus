@@ -30,24 +30,28 @@ public class ProductService {
         this.dao = dao;
     }    
      
-    public void saveProductsInBatches(Integer invoiceId, List<Product> products) {
+    public boolean saveProductsInBatches(Integer invoiceId, List<Product> products) {
+        boolean success = false;
         try {    
             Connection conn = this.databaseUtils.getConnection();
             dao.setConnection(conn);
-            dao.saveProductsInBatches(invoiceId, products);
+            success = dao.saveProductsInBatches(invoiceId, products);
         } catch (SQLException e) {
             Logger.getLogger(AppService.class.getName()).log(Level.SEVERE, null, e);
         }
+        return success;
     }
     
-    public void updateProductsInBatches(Integer invoiceId, List<Product> products) {
+    public boolean updateProductsInBatches(Integer invoiceId, List<Product> products) {
+        boolean success = false;
         try {    
             Connection conn = this.databaseUtils.getConnection();
             dao.setConnection(conn);
-            dao.updateProductsInBatches(invoiceId, products);
+            success = dao.updateProductsInBatches(invoiceId, products);
         } catch (SQLException e) {
             Logger.getLogger(AppService.class.getName()).log(Level.SEVERE, null, e);
         }
+        return success;
     }
     
     

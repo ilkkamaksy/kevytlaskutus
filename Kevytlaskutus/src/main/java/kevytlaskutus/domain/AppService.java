@@ -121,7 +121,7 @@ public class AppService {
      * @return boolean result of operation
      */
     public boolean saveCurrentCustomerCompany() {
-        if (Validate.customerCompanyHasName(currentCustomerCompany)) {
+        if (!Validate.customerCompanyHasName(this.currentCustomerCompany)) {
             this.addNoticeToQueue(false, "Please add a name for the customer before saving.");
             return false;
         }
