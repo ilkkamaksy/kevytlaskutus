@@ -35,31 +35,54 @@ Muokkausnäkymien lomakkeet rakennetaan kutsumalla näkymän kontrollerista Form
 
 Form-luokka hyödyntää lomakekenttien rakentamisessa FormField-rajapinnan toteuttavia luokkia, kuten FormFieldText- ja FormFieldDatePicker-luokkia. FormField-rajapinnan toteuttavilla luokilla on metodit, joiden avulla voidaan määritellä FormField-olioille tapahtumakuuntelijan ja ns. callBack-metodin dynaamisesti. Tapahtumakuuntelijoiden ja callBack-metodien kutsumat luokat ja metodien nimet välitetään parametreinä näille metodeille. 
 
-- Muokkausnäkymien lomakkeiden kentät välittävät syötetyn datan välittömästi AppService-luokalle näiden tapahtumakuuntelijoiden avulla. 
+- Muokkausnäkymien lomakkeiden kentät välittävät syötetyn datan välittömästi AppService-luokalle tapahtumakuuntelijoiden avulla. 
 - CallBack-metodien avulla kutsutaan pääasiassa käyttöliittymän luokkien metodeja näkymien tietojen päivittämiseksi. 
 
 Kun käyttäjä klikkaa muokkausnäkymässä tallenna-nappia, kutsutaan FormActionFactory-luokan metodia execute, jolle välitetään String-tyyppisenä parametrina "actionType", joka voi olla esimerkiksi "SaveManagedCompany" tai "SaveCustomerCompany". Tämän parametrin perusteella FormActionFactoryn poimii ja suorittaa soveltuvan FormAction-luokan execute-metodin command-suunnittelumallin mukaisesti. 
 
 FormAction-luokkien metodit kutsuvat puolestaan AppService-luokan parametrittomia metodeja saveCurrentManagedCompany tai saveCurrentCustomerCompany. Nämä tallentavat sovelluksen tilassa olevat ManagedCompany-, CustomerCompany, Product ja Invoice-oliot tietokantaan.
 
-## Sovelluslogiikka
+## Sovelluslogiikka ja datamalli
 
-Toiminnallisista kokonaisuuksista vastaa luokka appService, joka hyödyntää myös luokkia productService, invoiceService, managedCompanyService ja customerCompanyService. AppService-luokka tarjoaa kaikille käyttöliittymän toiminnoille oman metodin. 
+Luokka AppService tarjoaa metodit kaikille käyttöliittymän toiminnoille ja hallitsee sovelluslogiikkaa kokonaisuutena. Sovelluslogiikka sisältää myös sovelluksen datamalliin kuuluvat luokat ja lisäksi palveluluokkia, jotka vastaavat näiden data-luokkien ilmentymien tallennuksesta ja noutamisesta tietokannasta. 
 
-Näitä ovat esim.
+Tämän lisäksi sovelluslogiikka sisältää apuluokkia laskujen viitenumeroiden tuottamiseen, loppusummien laskemiseen ja käyttäjälle näytettävien ilmoitusten luomiseen ja hallintaan.
 
-- void setCurrentManagedCompany(ManagedCompany company) 
-- ManagedCompany getCurrentManagedCompany()
-- boolean saveCurrentManagedCompany()
-- boolean updateCurrentManagedCompany()
-- boolean deleteManagedCompany(int id)
+### Datamalli
 
-ja vastaavat metodit myös Invoice ja CustomerCompany-olioille. Lisäksi luokka tarjoaa toiminnot:
+Sovelluksen datamallin muodostavat luokat CustomerCompany, ManagedCompany, Invoice ja Product. 
 
-- boolean hasNoticePending()
-- Notice getPendingNotice() 
+- ManagedCompany kuvaa käyttäjän hallitsemia yrityksiä
+- CustomerCompany kuvaa asiakasyrityksiä
+- Invoice kuvaa yritykselle lisätty laskuja
+- Product kuvaa tuotteita, joita käyttäjä voi lisätä laskuihin
 
-AppService pääsee käsiksi kaikkiin olioihin pakkauksen kevytlaskutus.dao luokkien kautta, jotka toteuttavat ManagedCompanyDao, CustomerCompanyDao, InvoiceDao ja ProductDao-rajapinnat. 
+Data-olioita ovat lisäksi Notice-rajapinnan toteuttamat NoticeSuccess- ja NoticeError-luokat, jotka ilmentävät käyttäjälle välitettäviä ilmoituksia. Notice-luokan ilmentymät ovat staattisia, eikä niitä tallenneta tietokantaan.
+
+### Sovelluslogiikka
+
+AppService hyödyntää tietokannan tietojen noutamisessa ja tallennuksessa palveluluokkia 
+
+- productService, 
+- invoiceService, 
+- managedCompanyService ja 
+- customerCompanyService. 
+
+AppService tarjoaa käyttöliittymälle metodit kaikkia sen tarvitsemia toiminnallisuuksia ja tietoja varten. Näitä ovat esimerkiksi
+
+- List<Invoice> getInvoices()
+- Invoice getInvoiceById(int id)
+- boolean saveCurrentInvoice()
+- boolean deleteInvoice(int id)
+
+Samaan tapaan AppService tarjoaa vastaavia metodeja myös muille datamallin luokille. AppService pääsee käsiksi kaikkiin olioihin palveluluokkien - esimerkiksi luokat ProductService, InvoiceService tai CustomerCompanyService - välityksellä, jotka puolestaan pääsevät olioihin käsiksi pakkauksen kevytlaskutus.dao luokkien kautta.  
+
+Lisäksi AppService tarjoaa metodit:
+
+- Integer updateCurrentInvoiceReferenceNumber() - päivitä valitun laskun viitenumero
+- BigDecimal updateCurrentInvoiceTotal() - päivitä valitun laskun loppusumma
+- boolean hasNoticePending() - onko käyttäjälle esitettäviä ilmoituksia?
+- Notice getPendingNotice() - hae esittävien ilmoituksien jonosta ensimmäinen ilmoitus
 
 Kaikki riippuvuudet injektoidaan sovelluslogiikalle konstruktorikutsun yhteydessä.
 
@@ -69,11 +92,18 @@ Ohjelman osien suhdetta kuvaava luokka/pakkauskaavio:
 
 ### Tietojen pysyväistallennus
 
-Pakkauksen kevytlaskutus.dao luokat ManagedCompanyDao, CustomerCompanyDao, InvoiceDaoImpl ja ProductDaoImpl huolehtivat tietojen tallentamisesta tietokantaan ja tietojen noutamisesta tietokannasta.
+Sovelluslogiikan palveluluokat käyttävät tietokannan tietojen hakuun ja tallennukseen pakkauksen kevytlaskutus.dao luokkia
 
-Pakkauksen Populate-luokka käsittelee sekä tietokannasta noudetut tiedot, että sinne tallennettavat tiedot. Kaikki tietokantatulokset toisaalta välitetään Populate-luokalle, joka tuottaa tiedoista olioita, ja toisaalta kaikki tallennettavat tiedot välitetään ensin Populate-luokalle, joka lisää tiedot PreparedStatement-olioon. 
+- ManagedCompanyDao
+- CustomerCompanyDao
+- InvoiceDaoImpl
+- ProductDaoImpl
 
-Kaikki Dao-Luokat noudattavat Data Access Object -suunnittelumallia ja ne voidaan korvata uusilla toteutuksilla, jos tallennusmenetelmiä halutaan vaihtaa. Luokkien sisäinen logiikka on häivytetty rajapintojen taakse, jolloin sovelluslogiikkan käyttäjän ei tarvitse tietää niiden yksityiskohdista. 
+Nämä luokat toteuttavat CompanyDao, InvoiceDao ja ProductDao-rajapinnat. Ainoastaan nämä luokat huolehtivat tietojen tallentamisesta tietokantaan ja tietojen noutamisesta tietokannasta.
+
+Kevytlaskutus.dao -pakkauksen Populate-luokka puolestaan käsittelee sekä tietokannasta noudetut tiedot, että sinne tallennettavat tiedot. Toisaalta kaikki tietokannasta noudetut tiedot välitetään Populate-luokalle - joka tuottaa tiedoista olioita, ja toisaalta kaikki tallennettavat tiedot välitetään ensin Populate-luokalle, joka lisää tiedot tietokantakutsuun. 
+
+Koska kaikki dao-Luokat noudattavat Data Access Object -suunnittelumallia ja ne voidaan korvata uusilla toteutuksilla, jos tallennusmenetelmiä halutaan vaihtaa. Luokkien sisäinen logiikka on häivytetty rajapintojen taakse, jolloin sovelluslogiikkan käyttäjän ei tarvitse tietää niiden yksityiskohdista. 
 
 Sovelluslogiikan testaus käyttää tietokantaa, joka on keskusmuistissa, kun taas itse sovellus tallentaa tietokannan käyttäjän laitteelle massamuistiin.
 

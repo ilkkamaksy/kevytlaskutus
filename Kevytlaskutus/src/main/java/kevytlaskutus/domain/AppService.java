@@ -219,7 +219,7 @@ public class AppService {
      * @return boolean
      */    
     public boolean saveCurrentInvoice() {
-        if (!this.validateInvoice()) {
+        if (!this.validateInvoiceProperties()) {
             return false;
         }
         boolean success = this.invoiceService.saveInvoice(this.currentInvoice, this.currentManagedCompany);
@@ -227,7 +227,7 @@ public class AppService {
         return success;
     }
     
-    private boolean validateInvoice() {
+    private boolean validateInvoiceProperties() {
         if (!Validate.invoiceHasCustomer(this.currentInvoice)) {
             this.addNoticeToQueue(false, "Please select a customer for the invoice first.");
             return false;
