@@ -68,6 +68,8 @@ AppService hyödyntää tietokannan tietojen noutamisessa ja tallennuksessa palv
 - managedCompanyService ja 
 - customerCompanyService. 
 
+AppService pääsee käsiksi kaikkiin olioihin palveluluokkien - esimerkiksi luokat ProductService, InvoiceService tai CustomerCompanyService - välityksellä, jotka puolestaan pääsevät olioihin käsiksi pakkauksen kevytlaskutus.dao luokkien kautta.  
+
 AppService tarjoaa käyttöliittymälle metodit kaikkia sen tarvitsemia toiminnallisuuksia ja tietoja varten. Näitä ovat esimerkiksi
 
 - List<Invoice> getInvoices()
@@ -75,9 +77,9 @@ AppService tarjoaa käyttöliittymälle metodit kaikkia sen tarvitsemia toiminna
 - boolean saveCurrentInvoice()
 - boolean deleteInvoice(int id)
 
-Samaan tapaan AppService tarjoaa vastaavia metodeja myös muille datamallin luokille. AppService pääsee käsiksi kaikkiin olioihin palveluluokkien - esimerkiksi luokat ProductService, InvoiceService tai CustomerCompanyService - välityksellä, jotka puolestaan pääsevät olioihin käsiksi pakkauksen kevytlaskutus.dao luokkien kautta.  
+Samaan tapaan AppService tarjoaa käyttöliittymälle vastaavia metodeja myös muille datamallin luokille. 
 
-Lisäksi AppService tarjoaa metodit:
+Datamalliin liittyvien metodien lisäksi AppService tarjoaa metodit:
 
 - Integer updateCurrentInvoiceReferenceNumber() - päivitä valitun laskun viitenumero
 - BigDecimal updateCurrentInvoiceTotal() - päivitä valitun laskun loppusumma
