@@ -11,58 +11,48 @@ Sovelluksessa on yksi käyttäjärooli, eli **normaali käyttäjä**.
 ## Käyttöliittymäluonnos
 
 Sovellus koostuu seuraavista näkymistä:
-1. **Hallintapaneeli**, jossa käyttäjät voi valita toiminnoista: 
-  - lisää, poista tai muokkaa hallittavia yrityksiä 
-  - hallitse asiakkaita
-  - hallitse tuotteita 
-2. **Lisää hallittava yritys** käyttäjä voi lisätä uuden hallittavan yrityksen
-3. **Muokkaa hallittavia yrityksiä** käyttäjä voi muokata hallittavan yrityksen tietoja
-4. **Hallitse asiakkaita** käyttäjä voi selata, lisätä, muokata ja poistaa asiakkaita.
-5. **Lisää asiakas** käyttäjä voi lisätä uuden asiakkaan.
-6. **Muokkaa asiakasta**: käyttäjä voi muokata asiakkaan tietoja.
-7. **Hallitse yritystä** käyttäjä voi selata, lisätä, muokata ja poistaa yrityksen laskuja.
-8. **Lisää lasku** käyttäjä voi lisätä yritykselle laskun.
-9. **Muokkaa laskua** käyttäjä voi muokata laskua.
+1. **Hallintapaneeli**, jossa käyttäjä voi selata, lisätä, poistaa tai muokata hallittavia yrityksiä 
+2. **Muokkaa yritystä** käyttäjä voi muokata hallittavan yrityksen tietoja
+3. **Hallitse asiakkaita** käyttäjä voi selata, lisätä, muokata ja poistaa asiakkaita.
+4. **Muokkaa asiakasta**: käyttäjä voi muokata asiakkaan tietoja.
+5. **Hallitse yritystä** käyttäjä voi selata, lisätä, muokata ja poistaa yrityksen laskuja.
+6. **Muokkaa laskua** käyttäjä voi muokata laskun tietoja.
 
 Sovellus aukeaa hallintapaneeliin käynnistymisen yhteydessä. 
 
-## Perusversion tarjoama toiminnallisuus
+## Perusversion toiminnallisuudet
 
-- (Tehty) Käyttäjä voi lisätä uuden hallittavan yrityksen
-  - (Tehty) yritykselle annetaan nimi, y-tunnus, yhteystiedot, OVT-tunnus, välittäjätunnus, sekä IBAN-tilinumero ja BIC-tunniste 
+### Yritysten hallinta:
 
-- (Tehty) Käyttäjä voi muokata hallittavien yritysten tietoja
+- Käyttäjä voi lisätä uuden hallittavan yrityksen
+  - yritykselle annetaan nimi, y-tunnus, yhteystiedot, OVT-tunnus, välittäjätunnus, sekä IBAN-tilinumero ja BIC-tunniste 
+- Käyttäjä voi muokata hallittavien yritysten tietoja
+- Käyttäjä voi poistaa hallittavia yrityksiä
 
-- (Tehty) Käyttäjä voi poistaa hallittavia yrityksiä
+### Asiakashallinta:
 
 - Käyttäjä voi lisätä uuden asiakkaan
-  - (Tehty) asiakkaalle annetaan nimi, y-tunnus, yhteystiedot, sekä OVT-tunnus ja välittäjätunnus 
-  - asiakkaalle luodaan asiakasnumero automaattisesti
+  - asiakkaalle annetaan nimi, y-tunnus, yhteystiedot, sekä OVT-tunnus ja välittäjätunnus 
+- Käyttäjä voi muokata asiakkaiden tietoja
+- Käyttäjä voi poistaa asiakkaita
 
-- (Tehty) Käyttäjä voi muokata asiakkaiden tietoja
+### Laskujen hallinta:
 
-- (Tehty) Käyttäjä voi poistaa asiakkaita
+- Käyttäjä voi lisätä hallitsemilleen yrityksille laskuja.
+  - Laskun vastaanottajaksi valitaan jokin tallennettu asiakas. 
+  - Laskulle lisätään laskunumero, jonka perusteella generoidaan viitenumero automaattisesti.
+  - Laskulle voidaan lisätä luontipäivämäärä ja maksuaika päivissä, eräpäivä generoidaan automaattisesti näiden perusteella.
+  - Laskulle voidaan antaa arvonlisäveron prosentti
+  - Laskulle voidaan lisätä alennusprosentti
+  - Laskulle lisätään tuotteita, joille annetaan vähintään nimi. Lisäksi tuotteille voidaan lisätä hinta, laskutusyksikkö (kpl, tunti, kk, ym.) ja kuvaus.
+  - Laskun summa lasketaan automaattisesti laskulle lisättyjen tuotteiden hintojen, alennusprosentin ja verojen perusteella.
+  - Käyttäjä voi poistaa tuotteita laskulta.
+  - Käyttäjälle ilmoitetaan, jos laskulta puuttuu tarvittavia tietoja
 
-- Käyttäjä voi lisätä hallitsemilleen yrityksille laskuja
-  - (Tehty) Laskulle valitaan asiakas 
-  - (Tehty) Laskulle annetaan laskunumero ja eräpäivä
-  - laskun viitenumero luodaan automaattisesti
-  - Laskun summa lasketaan automaattisesti 
-  - Laskun eräpäivä luodaan automaattisesti
-  - (Tehty) käyttäjälle ilmoitetaan, jos laskulta puuttuu tarvittavia tietoja
-
-- Käyttäjä voi lisätä ja muokata laskujen tuotteita
-  - (Tehty) Laskulle voi lisätä tuotteita, tuotteelle lisätään nimi, hinta, laskutusyksikkö ja kuvaus
-  - (Tehty) Laskulla olevien tuotteiden tietoja voi muokata
-  - (Tehty) Laskulla olevien tuotteiden tietoja voi muokata
-  - (Tehty) Laskusta voi poistaa tuotteita
-  - (Tehty) Käyttäjälle ilmoitetaan, jos tarvittavia tietoja puuttuu tuotteista
+- Käyttäjä voi tarkastella ja muokata lisättyjä laskuja
 
 - Käyttäjä voi navigoida näkymien välillä helposti
- - (Tehty) muokkausnäkymistä pääsee palaamaan takaisin hallintanäkymään cancel- tai save-napeilla
-
-- (Tehty) Käyttäjä voi tarkastella lisättyjä laskuja
-- (Tehty) Käyttäjä voi tarkastella lisättyjä asiakkaita
+ - muokkausnäkymistä pääsee palaamaan takaisin hallintanäkymään joko globaalin navigaation kautta tai cancel- tai save-napeilla.
 
 # Toimintaympäristön rajoitteet  
 
@@ -75,15 +65,12 @@ Jatkossa ohjelmaan lisätään seuraavia toiminnallisuuksia:
 
 - Käyttäjä voi tallentaa laskuja pdf-tiedostona
 - käyttäjä voi luoda hyvityslaskun
-- tuotteita voi lisätä ryhmiin ja ryhmän voi suoraan lisätä laskulle
-- uuden laskun voi luoda monistamalla jonkun valmiin laskun
+- käyttäjä voi hakea luotuja tuotteita ja lisätä niitä useammille laskuille
+- käyttäjä voi lisätä tuotteita ryhmiin ja ryhmän voi suoraan lisätä laskulle
+- käyttäjä voi luoda uuden laskun monistamalla jonkun vanhan laskun
 - käyttäjä voi tarkastella yhteenvetoraportteja: laskutus per asiakas, tuote tai ajanjakso
 - järjestelmä voidaan yhdistää kirjanpito-ohjelmistoihin rajapinnan kautta 
-- sähköiset laskut voidaaan lähettää suoraan ohjelmasta 
+- käyttäjä voi lähettää sähköisiä laskuja suoraan ohjelmasta 
 - asiakas-, tuote- ja laskutiedot voidaan tallentaa pilveen, jonka avulla niihin pääsee käsiksi useammalta laitteelta
-
-
-
-
 
 
