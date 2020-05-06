@@ -2,13 +2,13 @@
 
 Kevään 2020 ohjelmistotekniikka-kurssi.
 
-# KevytlaskutusApp
+# Kevytlaskutus-sovellus
 
 Sovelluksen avulla freelancerit ja pienyrittäjät voivat hallita yhden tai useamman yrityksensä asiakakkaita, tuotteita ja palveluita, sekä laskutustietoja. Sovellus ei vaadi rekisteröitymistä.
 
 ## Dokumentaatio
 
-- [Viikko 7 -release](https://github.com/ilkkamaksy/ot-harjoitustyo/releases/tag/viikko7a)
+- [Loppupalautus -release](https://github.com/ilkkamaksy/ot-harjoitustyo/releases/tag/loppupalautus)
 - [Viikko 6 -release](https://github.com/ilkkamaksy/ot-harjoitustyo/releases/tag/viikko6)
 - [Viikko 5 -release](https://github.com/ilkkamaksy/ot-harjoitustyo/releases/tag/viikko5)
 - [Vaatimusmäärittely](/documentation/vaatimusmaarittely.md)

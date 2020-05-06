@@ -1,6 +1,6 @@
 # Käyttöohje
 
-Lataa tiedosto [Kevytlaskutus-1.0-SNAPSHOT.jar](https://github.com/ilkkamaksy/ot-harjoitustyo/releases/download/viikko6/Kevytlaskutus-1.0-SNAPSHOT.jar)
+Lataa tiedosto [Kevytlaskutus-1.0-SNAPSHOT.jar](https://github.com/ilkkamaksy/ot-harjoitustyo/releases/download/loppupalautus/Kevytlaskutus-1.0-SNAPSHOT.jar) ja suorita se komennolla
 
 ## Ohjelman käynnistäminen
 
