@@ -125,14 +125,34 @@ Alla oleva sekvenssikaavio kuvaa, miten sovelluksen kontrolli etenee kun käytt�
 
 ![sekvenssikaavio yrityksen tallennus](sekvenssikaavio-savemanagedcompany.png)
 
-Tapahtumakäsittelijä kutsuu AppService-luokan metodia saveCurrentManagedCompany ja AppService tarkistaa ensin, että sovelluksen tilassa on valittuna ManagedCompany-olio ja että tällä on vähintäänkin nimi. Jos nämä ovat kunnossa, AppService kutsuu ManagedCompanyService-luokan metodia createManagedCompany, lähettäen parametrina nykyisen ManagedCompany-olion. 
+Käyttäjä klikkaa ensin "add new company to manage" ja näkymän kontrolleri asettaa AppService-luokan currentManagedCompany-kenttään uuden ManagedCompany-olion. Tämän jälkeen näkymäksi vaihdetaan EditCompanyView-näkymä.
 
-ManagedCompanyService kutsuu puolestaan ManagedCompanyDao-luokan metodia create ja välittää ManagedCompany-olion edelleen parametrina. ManagedCompanyDao-luokka tallentaa tiedot tietokantaan ja palauttaa true, jos operaatio onnistuu ja false, jos se epäonnistuu.
+Kun käyttäjä klikkaa muokkausnäkymässä "save"-nappia, tapahtumakäsittelijä kutsuu AppService-luokan metodia saveCurrentManagedCompany ja AppService tarkistaa ensin, että currentManagedCompany-kentässä on valittuna ManagedCompany-olio ja että tällä on vähintäänkin nimi. 
 
-Jos operaatio onnistuu, ManagedCompanyDao palauttaa true ManagedCompanyServicelle, joka välittää vastauksen eteen päin AppService-luokalle. Tämän jälkeen appService lisää notifikaation NoticeQueue-jonoon. Lisättävässä Notice-oliossa on indikaattori onnistuneesta operaatiosta ja viesti käyttäjälle. Indikaattoreiden true ja false avulla määritellään, onko kyseessä NoticeSuccess- vai NoticeError-luokka. 
+Jos nämä ovat kunnossa, AppService kutsuu ManagedCompanyService-luokan metodia saveManagedCompany, lähettäen parametrina currentManagedCompany -kentän sisältämän ManagedCompany-olion. 
 
-Tämän jälkeen AppService välittää tiedon operaation onnistumisesta tai epäonnistumisesta käyttöliittymälle, joka onnistumisen yhteydessä siirtää käyttäjän dashboard-näkymään. Dashboard puolestaan kysyy välittömästi AppService-luokalta, onko NoticeQueue-jonossa uusia ilmoituksia ja jos on, se pyytää ensimmäisenä jonossa olevan Notice-olion tältä ja esittää sen käyttäjälle.
+ManagedCompanyService tarkistaa, onko kyseessä uusi vai vanha ManagedCompany-olio ja jos kyseessä on uusi, se kutsuu puolestaan ManagedCompanyDao-luokan metodia create ja välittää ManagedCompany-olion edelleen parametrina. 
+
+ManagedCompanyDao-luokka tallentaa tiedot tietokantaan ja palauttaa operaation onnistumisesta riippuen true tai false.
+
+Jos operaatio onnistuu, ManagedCompanyDao palauttaa true ManagedCompanyServicelle, joka välittää vastauksen eteen päin AppService-luokalle. Tämän jälkeen AppService lisää NoticeSuccess-olion NoticeQueue-jonoon. Lisättävässä Notice-oliossa on viesti onnistuneesta operaatiosta käyttäjälle. 
+
+Tämän jälkeen AppService välittää tiedon operaation onnistumisesta tai epäonnistumisesta käyttöliittymälle, joka onnistumisen yhteydessä siirtää käyttäjän dashboard-näkymään. 
+
+Dashboard puolestaan kysyy initialize-metodissa AppService-luokalta, onko NoticeQueue-jonossa uusia ilmoituksia ja jos on, se pyytää ensimmäisenä jonossa olevan Notice-olion tältä ja esittää sen käyttäjälle.
 
 ### Muut toiminnallisuudet
 
 Sama periaate toistuu myös tallennettaessa ja päivitettäessä ManagedCompany, CustomerCompany ja Invoice-olioita. 
+
+## Ohjelman rakenteeseen jääneet heikkoudet
+
+Sovelluksessa on vielä runsaasti kehitettävää:
+
+- Käyttöliittymän Form-luokassa lineItem-metodin luomat useamman lomakekentän rivit olisi syytä erottaa omaan luokkaansa. Lisäksi lineItem-metodi luo toistaiseksi staattisesti Product-olioihin perustuvia rivejä.
+- Laskujen arvonlisävero asetetaan nyt laskukohtaisesti, kun sen tulisi olla tuoterivikohtainen. 
+- Laskulle lisättyjen tuotteiden määrää ei tällä hetkellä pysty muuttamaan muuten kuin lisäämällä samaa tuotetta laskulle useampaan kertaan. Tämä olisi syytä muuttaa jatkossa siten, että tuotteen muiden tietojen lisäksi käyttäjä voi lisätä kappalemäärän.
+- Tietokannan taulujen alustus olisi syytä siirtää sovelluslogiikan palveluluokista konfiguraatiotiedostoon.
+- Valuutta, aikaformaatti ja muut lokalisointimääreet ovat kovakoodattu sovellukseen, nämä olisi syytä antaa käyttäjän konfiguroitavaksi omassa asetukset-näkymässä.
+- Käyttöliittymän lomakkeiden käytettävyys ei ole paras mahdollinen, näitä olisi hyvä kehittää.
+- Hallintanäkymien createListNode-metodit ovat liian laajoja ja ne sisältävät paljon toisteista koodia. Metodit olisi hyvä pilkkoa SRP-periaatteen mukaisesti tai eristää omaan luokkaansa.
