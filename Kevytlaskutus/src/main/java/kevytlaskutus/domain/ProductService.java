@@ -29,6 +29,13 @@ public class ProductService {
         this.dao = dao;
     }    
      
+    /**
+     * Saves Product objects in batches to database.
+     * @param invoiceId the id of the Invoice that the products are associated with.
+     * @param products the List of Product objects to be saved
+     * @return boolean
+     * @see Product
+     */
     public boolean saveProductsInBatches(Integer invoiceId, List<Product> products) {
         boolean success = false;
         try {    
@@ -41,6 +48,13 @@ public class ProductService {
         return success;
     }
     
+    /**
+     * Update Product objects in batches in the database.
+     * @param invoiceId the id of the Invoice associated with the products.
+     * @param products the List of Product objects to be saved
+     * @return boolean
+     * @see Product
+     */
     public boolean updateProductsInBatches(Integer invoiceId, List<Product> products) {
         boolean success = false;
         try {    
@@ -53,7 +67,12 @@ public class ProductService {
         return success;
     }
     
-    
+    /**
+     * Retrieves a List of Product objects associated with an Invoice from the database.
+     * @param id the id of the Invoice 
+     * @return List of Product objects 
+     * @see Product
+     */
     public List<Product> getProductsByInvoiceId(Integer id) {
         List<Product> results = new ArrayList<>();
         

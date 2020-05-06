@@ -9,7 +9,13 @@ package kevytlaskutus.domain;
  * Class responsible for generating reference numbers for Invoices.
  */
 public class ReferenceNumber {
-    
+   
+    /**
+     * Generates a reference number for the Invoice based on the invoice number.
+     * @param invoice the Invoice object for which the reference number is generated.
+     * @return Integer the reference number
+     * @see Invoice
+     */
     public static Integer generateInvoiceReferenceNumber(Invoice invoice) {
         String invoiceNumberAsString = invoice.getInvoiceNumber().toString();
         Integer checkSum = calculateCheckSumByDigits(invoiceNumberAsString);

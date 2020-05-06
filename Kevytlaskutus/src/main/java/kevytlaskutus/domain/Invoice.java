@@ -9,7 +9,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 /**
- * The Invoice data entity class. 
+ * The Invoice data object class. 
  * 
  */
 @Data
