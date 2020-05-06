@@ -68,7 +68,7 @@ AppService hyödyntää tietokannan tietojen noutamisessa ja tallennuksessa palv
 - managedCompanyService ja 
 - customerCompanyService. 
 
-AppService pääsee käsiksi kaikkiin olioihin palveluluokkien - esimerkiksi luokat ProductService, InvoiceService tai CustomerCompanyService - välityksellä, jotka puolestaan pääsevät olioihin käsiksi pakkauksen kevytlaskutus.dao luokkien kautta.  
+AppService pääsee käsiksi kaikkiin olioihin näiden palveluluokkien välityksellä, jotka puolestaan pääsevät olioihin käsiksi pakkauksen kevytlaskutus.dao luokkien kautta.   
 
 AppService tarjoaa käyttöliittymälle metodit kaikkia sen tarvitsemia toiminnallisuuksia ja tietoja varten. Näitä ovat esimerkiksi
 
