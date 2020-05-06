@@ -7,9 +7,9 @@ import kevytlaskutus.domain.*;
 /**
  * Action to execute a new customer.
  */
-public class FormActionSaveNewCustomerCompany extends FormCustomerCompanyAction {
+public class FormActionSaveCustomerCompany extends FormAction {
    
-    public FormActionSaveNewCustomerCompany(AppService appService) {
+    public FormActionSaveCustomerCompany(AppService appService) {
         super(appService);
     }
 

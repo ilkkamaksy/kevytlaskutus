@@ -18,9 +18,9 @@ public class FormActionFactory {
     public FormActionFactory(AppService appService) {
         this.appService = appService;
         this.commands = new HashMap<>();
-        this.commands.put("SaveManagedCompany", new FormActionSaveNewManagedCompany(appService));
-        this.commands.put("SaveCustomerCompany", new FormActionSaveNewCustomerCompany(appService));
-        this.commands.put("SaveInvoice", new FormActionSaveNewInvoice(appService));
+        this.commands.put("SaveManagedCompany", new FormActionSaveManagedCompany(appService));
+        this.commands.put("SaveCustomerCompany", new FormActionSaveCustomerCompany(appService));
+        this.commands.put("SaveInvoice", new FormActionSaveInvoice(appService));
     }
     
     public boolean execute(String actionType) {        

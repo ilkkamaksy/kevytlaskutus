@@ -5,21 +5,30 @@
  */
 package kevytlaskutus.ui;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import javafx.scene.Node;
 import kevytlaskutus.domain.AppService;
 import kevytlaskutus.domain.CustomerCompany;
+import kevytlaskutus.domain.Invoice;
+import kevytlaskutus.domain.Product;
 
 /**
  *
  * @author ilkka
  */
-public abstract class FormCustomerCompanyAction extends FormAction {
-   
-    public FormCustomerCompanyAction(AppService appService) {
+public class FormActionSaveInvoice extends FormAction {
+    
+    private Invoice invoice; 
+    
+    public FormActionSaveInvoice(AppService appService) {
         super(appService);
     }
     
-    public abstract boolean execute();
-   
+    @Override
+    public boolean execute() {
+        return super.appService.saveCurrentInvoice();
+    }
 }

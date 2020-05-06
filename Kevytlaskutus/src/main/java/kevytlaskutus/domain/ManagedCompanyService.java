@@ -33,7 +33,7 @@ public class ManagedCompanyService {
      * @param company the ManagedCompany object to be saved.
      * @return boolean result of operation 
      */
-    public boolean saveCurrentManagedCompany(ManagedCompany company) {
+    public boolean saveManagedCompany(ManagedCompany company) {
         boolean result = false;
         if (company.getId() == 0) {
             result = this.createManagedCompany(company);

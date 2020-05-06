@@ -80,7 +80,7 @@ public class AppService {
             return false;
         }
         
-        boolean result = this.managedCompanyService.saveCurrentManagedCompany(currentManagedCompany);
+        boolean result = this.managedCompanyService.saveManagedCompany(currentManagedCompany);
         this.addNoticeToQueue(result, noticeMessages.getNoticeMessage("save" + this.currentManagedCompany.getClass().getSimpleName()));
         return result;
     }

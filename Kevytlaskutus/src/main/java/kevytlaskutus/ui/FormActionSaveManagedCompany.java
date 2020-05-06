@@ -7,9 +7,9 @@ import kevytlaskutus.domain.*;
 /**
  * Action to execute a new managed company.
  */
-public class FormActionSaveNewManagedCompany extends FormManagedCompanyAction {
+public class FormActionSaveManagedCompany extends FormAction {
    
-    public FormActionSaveNewManagedCompany(AppService appService) {
+    public FormActionSaveManagedCompany(AppService appService) {
         super(appService);
     }
    
