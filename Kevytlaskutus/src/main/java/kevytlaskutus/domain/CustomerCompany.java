@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 
 /**
  *
- * Customer object class.
+ * Customer data object class.
  */
 @NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)

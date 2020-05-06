@@ -47,6 +47,9 @@ public class DatabaseUtils {
         this.dbPassword = dbPassword;
     }
     
+    /**
+     * Intializes the database tables in the database.
+     */
     public void initDb() {
         
         try {
