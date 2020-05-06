@@ -20,14 +20,20 @@ import kevytlaskutus.domain.Product;
  */
 public class Populate {
     
-    public static PreparedStatement populateCreateStatementData(PreparedStatement stmt, Product product) throws SQLException {
+    public static PreparedStatement populateCreateStatementData(PreparedStatement stmt, Product product, int invoiceId) throws SQLException {
         addProductDefaultDataToStatement(stmt, product);
+        stmt.setInt(5, invoiceId);
         return stmt;
     }
     
-    public static PreparedStatement populateUpdateStatementData(PreparedStatement stmt, Product product, int id) throws SQLException {
+    public static PreparedStatement populateUpdateStatementData(PreparedStatement stmt, Product product) throws SQLException {
         addProductDefaultDataToStatement(stmt, product);
-        stmt.setInt(5, id);
+        if (product.getInvoiceId() > 0) {
+            stmt.setInt(5, product.getInvoiceId());    
+        } else {
+            stmt.setNull(5, java.sql.Types.INTEGER);
+        }
+        stmt.setInt(6, product.getId());
         return stmt;
     }
     
@@ -92,7 +98,6 @@ public class Populate {
             rs.getString("Product.description")
         );
         product.setId(rs.getInt("Product.id"));
-        
         return product;
     }
    
@@ -116,7 +121,6 @@ public class Populate {
         stmt.setString(17, invoice.getAdditionalInfo());
         stmt.setInt(18, invoice.getCompany().getId());
         stmt.setBigDecimal(19, invoice.getVatPercentage());
-        
         return stmt;
     }
     

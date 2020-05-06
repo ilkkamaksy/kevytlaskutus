@@ -1,6 +1,5 @@
 package kevytlaskutus.dao;
 
-import java.lang.reflect.ParameterizedType;
 import java.sql.*;
 import java.util.List;
 import java.util.ArrayList;
@@ -18,8 +17,7 @@ public class CustomerCompanyDao implements CompanyDao<CustomerCompany, Integer, 
         this.conn = conn;
     }
     
-    public void initDb() throws SQLException {
-        
+    public void initDb() throws SQLException {        
         conn.prepareStatement("CREATE TABLE IF NOT EXISTS Customer (\n"
             + "    id INTEGER AUTO_INCREMENT PRIMARY KEY,\n"
             + "    name VARCHAR(200),\n"
@@ -35,7 +33,6 @@ public class CustomerCompanyDao implements CompanyDao<CustomerCompany, Integer, 
     
     @Override
     public boolean create(CustomerCompany company) throws SQLException {
-   
         PreparedStatement stmt = conn.prepareStatement(
             "INSERT INTO Customer (name, regId, phone, street, postcode, commune, ovtId, provider) "
             + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
@@ -44,38 +41,32 @@ public class CustomerCompanyDao implements CompanyDao<CustomerCompany, Integer, 
         int rows = stmt.executeUpdate();  
         
         conn.close();
-
         return rows > 0;
     }
     
     @Override
     public boolean update(Integer id, CustomerCompany company) throws SQLException {
-       
         PreparedStatement stmt = conn.prepareStatement(
             "UPDATE Customer SET name=?, regId=?, phone=?, street=?, postcode=?, commune=?, ovtId=?, provider=? WHERE id=?");
         Populate.populateUpdateStatementData(stmt, company, id);
         int rows = stmt.executeUpdate();  
 
         conn.close();
- 
         return rows > 0;
     }
 
     @Override
     public boolean delete(Integer id) throws SQLException {
-        
         PreparedStatement stmt = conn.prepareStatement("DELETE FROM Customer WHERE id=?");
         stmt.setInt(1, id);
         int rows = stmt.executeUpdate();  
 
         conn.close();
-        
         return rows > 0;
     }
 
     @Override
     public CustomerCompany getItemById(Integer id) throws SQLException {
-        
         PreparedStatement stmt = conn.prepareStatement(
             "SELECT * FROM Customer WHERE id=" + id + " LIMIT 1"
         );
@@ -91,7 +82,6 @@ public class CustomerCompanyDao implements CompanyDao<CustomerCompany, Integer, 
     
     @Override
     public CustomerCompany getItemByName(String name) throws SQLException {
-        
         PreparedStatement stmt = conn.prepareStatement(
             "SELECT * FROM Customer WHERE name LIKE ? LIMIT 1"
         );
@@ -110,7 +100,6 @@ public class CustomerCompanyDao implements CompanyDao<CustomerCompany, Integer, 
     
     @Override
     public List<CustomerCompany> getItems() throws SQLException {
-        
         List<CustomerCompany> results = new ArrayList<>(); 
        
         PreparedStatement stmt = conn.prepareStatement("SELECT * FROM Customer");
@@ -123,5 +112,4 @@ public class CustomerCompanyDao implements CompanyDao<CustomerCompany, Integer, 
         conn.close();
         return results;
     }
-
 }

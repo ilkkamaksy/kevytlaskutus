@@ -22,8 +22,6 @@ public class ProductDaoImpl implements ProductDao<Product, Integer, String> {
 
     Connection conn;
     
-    static Populate populate;
-    
     public void setConnection(Connection conn) {
         this.conn = conn;
     }
@@ -47,28 +45,15 @@ public class ProductDaoImpl implements ProductDao<Product, Integer, String> {
     @Override
     public boolean updateProductsInBatches(Integer invoiceId, List<Product> products) throws SQLException {
         String sql = "UPDATE Product "
-                +   "SET name=?, price=?, priceUnit=?, description=?, invoiceId=?, modifiedTime=? \n" 
+                +   "SET name=?, price=?, priceUnit=?, description=?, invoiceId=? \n" 
                 +   "WHERE id=?";
                 
         PreparedStatement stmt = null;    
         this.conn.setAutoCommit(false);
         stmt = conn.prepareStatement(sql);
-        
-        long timeNow = Calendar.getInstance().getTimeInMillis();
-        java.sql.Timestamp ts = new java.sql.Timestamp(timeNow);
 
         for (Product product : products) {
-            stmt.setString(1, product.getName());
-            stmt.setBigDecimal(2, product.getPrice());
-            stmt.setString(3, product.getPriceUnit());
-            stmt.setString(4, product.getDescription());
-            if (product.getInvoiceId() > 0) {
-                stmt.setInt(5, product.getInvoiceId());    
-            } else {
-                stmt.setNull(5, java.sql.Types.INTEGER);
-            }
-            stmt.setTimestamp(6, ts);
-            stmt.setInt(7, product.getId());
+            Populate.populateUpdateStatementData(stmt, product);
             stmt.addBatch();
         }
 
@@ -77,12 +62,11 @@ public class ProductDaoImpl implements ProductDao<Product, Integer, String> {
         conn.commit();
         conn.setAutoCommit(true);
             
-        this.deleteObsolete(ts, 0);
-        
+        this.deleteObsolete(0);
         return affectedRecords.length > 0;
     }
     
-    public void deleteObsolete(Timestamp ts, Integer id) throws SQLException {
+    public void deleteObsolete(Integer id) throws SQLException {
         String sql = "DELETE FROM Product WHERE invoiceId=?";
         PreparedStatement stmt = conn.prepareStatement(sql);
         stmt.setInt(1, id);
@@ -91,29 +75,19 @@ public class ProductDaoImpl implements ProductDao<Product, Integer, String> {
     
     @Override
     public boolean saveProductsInBatches(Integer invoiceId, List<Product> products) throws SQLException {
-        String sql = "INSERT INTO Product (name, price, priceUnit, description, invoiceId, modifiedTime) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Product (name, price, priceUnit, description, invoiceId) VALUES (?, ?, ?, ?, ?)";
         PreparedStatement stmt = null;    
         this.conn.setAutoCommit(false);
         stmt = conn.prepareStatement(sql);
-
-        long timeNow = Calendar.getInstance().getTimeInMillis();
-        java.sql.Timestamp ts = new java.sql.Timestamp(timeNow);
        
         for (Product product : products) {
-            stmt.setString(1, product.getName());
-            stmt.setBigDecimal(2, product.getPrice());
-            stmt.setString(3, product.getPriceUnit());
-            stmt.setString(4, product.getDescription());
-            stmt.setInt(5, invoiceId);
-            stmt.setTimestamp(6, ts);
+            Populate.populateCreateStatementData(stmt, product, invoiceId);
             stmt.addBatch();
         }
-
         int[] affectedRecords = stmt.executeBatch();
         
         conn.commit();
         conn.setAutoCommit(true);
-        
         return affectedRecords.length > 0;
     }
   
@@ -127,7 +101,7 @@ public class ProductDaoImpl implements ProductDao<Product, Integer, String> {
 
         List<Product> results = new ArrayList<>(); 
         while (rs.next()) {
-            results.add(populate.populateProduct(rs));
+            results.add(Populate.populateProduct(rs));
         }
 
         conn.close();

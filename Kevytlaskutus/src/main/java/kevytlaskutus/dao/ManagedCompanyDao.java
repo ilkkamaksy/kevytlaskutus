@@ -12,14 +12,12 @@ import kevytlaskutus.domain.ManagedCompany;
 public class ManagedCompanyDao implements CompanyDao<ManagedCompany, Integer, String> {
 
     Connection conn;
-    static Populate populate;
     
     public void setConnection(Connection conn) {
         this.conn = conn;
     }
     
     public void initDb() throws SQLException {
-
         conn.prepareStatement("CREATE TABLE IF NOT EXISTS Company (\n"
             + "    id INTEGER AUTO_INCREMENT PRIMARY KEY,\n"
             + "    name VARCHAR(200),\n"
@@ -37,12 +35,11 @@ public class ManagedCompanyDao implements CompanyDao<ManagedCompany, Integer, St
     
     @Override
     public boolean create(ManagedCompany company) throws SQLException {
-                
         PreparedStatement stmt = conn.prepareStatement(
             "INSERT INTO Company (name, regId, phone, street, postcode, commune, ovtId, provider, iban, bic) "
             + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
         );
-        populate.populateCreateStatementData(stmt, company);
+        Populate.populateCreateStatementData(stmt, company);
         int rows = stmt.executeUpdate();  
 
         conn.close();
@@ -51,10 +48,9 @@ public class ManagedCompanyDao implements CompanyDao<ManagedCompany, Integer, St
     
     @Override
     public boolean update(Integer id, ManagedCompany company) throws SQLException {
-       
         PreparedStatement stmt = conn.prepareStatement(
             "UPDATE Company SET name=?, regId=?, phone=?, street=?, postcode=?, commune=?, ovtId=?, provider=?, iban=?, bic=? WHERE id=?");
-        populate.populateUpdateStatementData(stmt, company, id);
+        Populate.populateUpdateStatementData(stmt, company, id);
         int rows = stmt.executeUpdate();  
 
         conn.close();
@@ -63,7 +59,6 @@ public class ManagedCompanyDao implements CompanyDao<ManagedCompany, Integer, St
 
     @Override
     public boolean delete(Integer id) throws SQLException {
-       
         PreparedStatement stmt = conn.prepareStatement("DELETE FROM Company WHERE id=?");
         stmt.setInt(1, id);
         int rows = stmt.executeUpdate();  
@@ -74,7 +69,6 @@ public class ManagedCompanyDao implements CompanyDao<ManagedCompany, Integer, St
 
     @Override
     public ManagedCompany getItemById(Integer id) throws SQLException {
-      
         PreparedStatement stmt = conn.prepareStatement(
             "SELECT * FROM Company WHERE id=" + id + " LIMIT 1"
         );
@@ -82,7 +76,7 @@ public class ManagedCompanyDao implements CompanyDao<ManagedCompany, Integer, St
 
         ManagedCompany company = null;
         while (rs.next()) {
-            company = populate.populateManagedCompany(rs);
+            company = Populate.populateManagedCompany(rs);
         }
 
         conn.close();
@@ -91,7 +85,6 @@ public class ManagedCompanyDao implements CompanyDao<ManagedCompany, Integer, St
     
     @Override
     public ManagedCompany getItemByName(String name) throws SQLException {
-      
         PreparedStatement stmt = conn.prepareStatement(
             "SELECT * FROM Company WHERE name LIKE %" + name + "% LIMIT 1"
         );
@@ -99,7 +92,7 @@ public class ManagedCompanyDao implements CompanyDao<ManagedCompany, Integer, St
 
         ManagedCompany company = null;
         while (rs.next()) {
-            company = populate.populateManagedCompany(rs);
+            company = Populate.populateManagedCompany(rs);
         }
 
         conn.close();
@@ -108,13 +101,12 @@ public class ManagedCompanyDao implements CompanyDao<ManagedCompany, Integer, St
     
     @Override
     public List<ManagedCompany> getItems() throws SQLException {
-              
         PreparedStatement stmt = conn.prepareStatement("SELECT * FROM Company");
         ResultSet rs = stmt.executeQuery();
 
         List<ManagedCompany> results = new ArrayList<>(); 
         while (rs.next()) {
-            results.add(populate.populateManagedCompany(rs));
+            results.add(Populate.populateManagedCompany(rs));
         }
 
         conn.close();

@@ -13,7 +13,6 @@ import kevytlaskutus.domain.Product;
 public class InvoiceDaoImpl implements InvoiceDao<Invoice, Integer, String>  {
     
     Connection conn;
-    static Populate populate;
     
     public void setConnection(Connection conn) {
         this.conn = conn;
@@ -79,7 +78,7 @@ public class InvoiceDaoImpl implements InvoiceDao<Invoice, Integer, String>  {
             + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
             Statement.RETURN_GENERATED_KEYS
         );
-        populate.populateCreateStatementData(pstmt, invoice);
+        Populate.populateCreateStatementData(pstmt, invoice);
         pstmt.executeUpdate();
         
         int invoiceId = this.getGeneratedItemKey(pstmt);
@@ -122,7 +121,7 @@ public class InvoiceDaoImpl implements InvoiceDao<Invoice, Integer, String>  {
                 + "companyId=?, "
                 + "vatPercentage=? "
                 + "WHERE id=?");
-        populate.populateUpdateStatementData(stmt, invoice, id);
+        Populate.populateUpdateStatementData(stmt, invoice, id);
         int rows = stmt.executeUpdate();
         
         stmt.close();
@@ -147,11 +146,11 @@ public class InvoiceDaoImpl implements InvoiceDao<Invoice, Integer, String>  {
         int i = 0;
         while (rs.next()) {
             if (i == 0) {
-                invoice = populate.populateInvoice(rs);
-                invoice.setCustomer(populate.populateCustomer(rs));
-                invoice.setCompany(populate.populateManagedCompany(rs));    
+                invoice = Populate.populateInvoice(rs);
+                invoice.setCustomer(Populate.populateCustomer(rs));
+                invoice.setCompany(Populate.populateManagedCompany(rs));    
             }            
-            Product prod = populate.populateProduct(rs);
+            Product prod = Populate.populateProduct(rs);
             prod.setInvoiceId(invoice.getId());
             invoice.getProducts().add(prod);
             i++;
@@ -179,7 +178,7 @@ public class InvoiceDaoImpl implements InvoiceDao<Invoice, Integer, String>  {
 
         List<Invoice> results = new ArrayList<>(); 
         while (rs.next()) {
-            Invoice invoice = populate.populateInvoice(rs);
+            Invoice invoice = Populate.populateInvoice(rs);
             results.add(invoice);
         }
 
