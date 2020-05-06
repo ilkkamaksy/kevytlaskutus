@@ -36,6 +36,16 @@ Lisää uusi lasku:
 
 ![Lisää lasku](ohje-add-invoice.jpg)
 
-Lisää laskulle asiakas ja tarvittavat tiedot. Minimivaatimuksena on asiakas ja kaikille tuotteille tulee antaa vähintään nimi:
+Lisää laskulle asiakas ja tarvittavat tiedot. Minimivaatimuksena on asiakas ja kaikille tuotteille tulee antaa vähintään nimi.
 
-![tallenna lasku](ohje-save-invoice.jpg)
+Valitse asiakas ja täytä tarvittaessa myös lisäkentät:
+
+![muokkaa laskun perustietoja](ohje-invoice-1.jpg)
+
+Lisää laskulle muita tietoja tarvittaessa:
+
+![muokkaa laskun lisätietoja](ohje-invoice-2.jpg)
+
+Lisää laskulle tuotteita ja muokkaa tuotteiden tietoja:
+
+![muokkaa laskun tuotteita](ohje-invoice-3.jpg)
