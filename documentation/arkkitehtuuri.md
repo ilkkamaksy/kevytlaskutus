@@ -57,7 +57,7 @@ FormAction-luokkien metodit kutsuvat puolestaan AppService-luokan parametrittomi
 
 Luokka AppService tarjoaa metodit kaikille käyttöliittymän toiminnoille ja hallitsee sovelluslogiikkaa kokonaisuutena. Sovelluslogiikka sisältää myös sovelluksen datamalliin kuuluvat luokat ja lisäksi palveluluokkia, jotka vastaavat näiden data-luokkien ilmentymien tallennuksesta ja noutamisesta tietokannasta. 
 
-Tämän lisäksi sovelluslogiikka sisältää apuluokkia laskujen viitenumeroiden tuottamiseen, loppusummien laskemiseen ja käyttäjälle näytettävien ilmoitusten luomiseen ja hallintaan.
+Tämän lisäksi sovelluslogiikka sisältää apuluokkia laskujen viitenumeroiden ja loppusummien laskemiseen, sekä käyttäjälle näytettävien ilmoitusten luomiseen ja hallintaan.
 
 ### Datamalli
 
