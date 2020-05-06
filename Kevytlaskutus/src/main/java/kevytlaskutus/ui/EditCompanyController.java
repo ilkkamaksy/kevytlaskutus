@@ -76,7 +76,7 @@ public class EditCompanyController extends BaseController implements Initializab
   
     private void setButtonAction() {
         this.saveFormButton.setOnAction(e-> {
-            boolean success = this.actionFactory.execute("SaveManagedCompany", this.currentCompany.getId());
+            boolean success = this.actionFactory.execute("SaveManagedCompany");
             if (success) {
                 this.viewFactory.showDashBoard();
             } else {

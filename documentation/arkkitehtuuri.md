@@ -14,6 +14,8 @@ Pakkaukset:
 
 ## Käyttöliittymä
 
+Käyttöliittymä on eriytetty kokonaan sovelluslogiikasta. Käyttöliittymä saa kaikki tarvitsemansa tiedot ja välittää kaikki käyttäjän syöttämät tiedot sovelluslogiikalle kutsumalla luokan AppService metodeja.
+
 Käyttöliittymä sisältää seuraavat näkymät:
 
 - Yritysten hallintanäkymä, jossa käyttäjä voi hallita yrityksiensä tietoja
@@ -25,24 +27,33 @@ Käyttöliittymä sisältää seuraavat näkymät:
 
 Jokainen näkymä on toteutettu Scene-oliona, jonka asettelun pohjana on fmxl-malli. Näkymät sijoitetaan yksi kerrallaan sovelluksen Stageen, josta huolehtii käyttöliittymän ViewController-luokka. 
 
-Jokaisella näkymällä on taas oma kontrollerinsa, kuten esimerkiksi ManageCustomerController asiakkaiden hallintanäkymälle ja EditCustomerController asiakastietojen muokkausnäkymälle. Näkymäkohtaiset kontrollerit perivät BaseController-luokan, joka sisältää mm. globaalin navigaation toiminnallisuudet. 
+## Siirtymät näkymien välillä
 
-Käyttöliittymä on eriytetty kokonaan sovelluslogiikasta. Käyttöliittymä saa kaiken datan kutsumalla sovelluslogiikan luokan AppService metodeja ja se myös käyttää AppServicen metodeja käyttäjän syöttämän datan välittämiseksi sovelluslogiikan käsiteltäväksi.
+Jokaisella näkymällä on oma kontrollerinsa, kuten esimerkiksi ManageCustomerController asiakkaiden hallintanäkymälle ja EditCustomerController asiakastietojen muokkausnäkymälle. Näkymäkohtaiset kontrollerit perivät BaseController-luokan, joka sisältää mm. globaalin navigaation toiminnallisuudet. 
 
 Kun käyttäjä lisää onnistuneesti uuden yrityksen, asiakkaan tai laskun, kyseisen näkymän kontrolleri kutsuu ViewFactoryn soveltuvaa metodia, joka vaihtaaa näkymäksi yritysten, asiakkaiden tai laskujen hallintanäkymän. Koska jokainen näkymä piirretään uudelleen aina näkymää vaihdettaessa, käyttäjä näkee lisäämänsä tietueen heti hallintanäkymässä. Mikäli tietueen lisäys ei onnistu puuttuvista tiedoista johtuen, tästä ilmoitetaan käyttäjälle suoraan muokkausnäkymässä. 
 
-Muokkausnäkymien lomakkeet rakennetaan kutsumalla näkymän kontrollerista Form-luokan metodeja, kuten addTextField, addDecimalField tai addDatePicker. Form-luokan metodit huolehtivat lomakkeiden kenttien rakentamisesta käyttäjän antamien parametrien avulla ja lisää kentät näkymään. 
+## Lomakkeet
 
-Form-luokka hyödyntää lomakekenttien rakentamisessa FormField-rajapinnan toteuttavia luokkia, kuten FormFieldText- ja FormFieldDatePicker-luokkia. FormField-rajapinnan toteuttavilla luokilla on metodit, joiden avulla voidaan määritellä FormField-olioille tapahtumakuuntelijan ja ns. callBack-metodin dynaamisesti. Tapahtumakuuntelijoiden ja callBack-metodien kutsumat luokat ja metodien nimet välitetään parametreinä näille metodeille. 
+Muokkausnäkymien lomakkeet rakennetaan kutsumalla näkymän kontrollerista Form-luokan metodeja, kuten addTextField, addDecimalField tai addDatePicker. Form-luokan metodit huolehtivat lomakkeiden kenttien rakentamisesta annettujen parametrien perusteella. 
 
-- Muokkausnäkymien lomakkeiden kentät välittävät syötetyn datan välittömästi AppService-luokalle tapahtumakuuntelijoiden avulla. 
-- CallBack-metodien avulla kutsutaan pääasiassa käyttöliittymän luokkien metodeja näkymien tietojen päivittämiseksi. 
+Form-luokka hyödyntää lomakekenttien rakentamisessa FormField-rajapinnan toteuttavia luokkia, kuten FormFieldText- ja FormFieldDatePicker-luokkia. 
 
-Kun käyttäjä klikkaa muokkausnäkymässä tallenna-nappia, kutsutaan FormActionFactory-luokan metodia execute, jolle välitetään String-tyyppisenä parametrina "actionType", joka voi olla esimerkiksi "SaveManagedCompany" tai "SaveCustomerCompany". Tämän parametrin perusteella FormActionFactoryn poimii ja suorittaa soveltuvan FormAction-luokan execute-metodin command-suunnittelumallin mukaisesti. 
+FormField-rajapinnan toteuttavilla luokilla on metodit, joiden avulla voidaan määritellä FormField-olioille tapahtumakuuntelija ja ns. callBack-metodi dynaamisesti. Tapahtumakuuntelijoiden ja callBack-metodien kutsumat luokat ja metodien nimet välitetään parametreinä näille metodeille. 
 
-FormAction-luokkien metodit kutsuvat puolestaan AppService-luokan parametrittomia metodeja saveCurrentManagedCompany tai saveCurrentCustomerCompany. Nämä tallentavat sovelluksen tilassa olevat ManagedCompany-, CustomerCompany, Product ja Invoice-oliot tietokantaan.
+### Tapahtumakuuntelijat ja callBack-metodit
 
-## Sovelluslogiikka ja datamalli
+Muokkausnäkymien lomakkeiden kentät välittävät tapahtumakuuntelijoiden avulla syötetyn datan välittömästi AppService-luokalle, joka päivittää sovelluksen tilassa olevia tietoja syötteen perusteella.
+
+CallBack-metodien avulla kutsutaan pääasiassa käyttöliittymän luokkien metodeja näkymien tietojen päivittämiseksi. 
+
+### Lomakkeen tietojen tallentaminen
+
+Kun käyttäjä klikkaa muokkausnäkymässä tallenna-nappia, kontrolleri kutsuu FormActionFactory-luokan metodia execute, jolle välitetään String-tyyppisenä parametrina "actionType". Tämä parametri voi olla esimerkiksi "SaveManagedCompany" tai "SaveCustomerCompany". Parametrin perusteella FormActionFactoryn poimii ja suorittaa soveltuvan FormAction-luokan execute-metodin command-suunnittelumallin mukaisesti. 
+
+FormAction-luokkien metodit kutsuvat puolestaan AppService-luokan parametrittomia metodeja, kuten saveCurrentManagedCompany tai saveCurrentCustomerCompany. Nämä tallentavat sovelluksen tilassa olevat ManagedCompany-, CustomerCompany, Product ja Invoice-oliot tietokantaan.
+
+## Sovelluslogiikka, datamalli ja tietojen pysyväistallennus
 
 Luokka AppService tarjoaa metodit kaikille käyttöliittymän toiminnoille ja hallitsee sovelluslogiikkaa kokonaisuutena. Sovelluslogiikka sisältää myös sovelluksen datamalliin kuuluvat luokat ja lisäksi palveluluokkia, jotka vastaavat näiden data-luokkien ilmentymien tallennuksesta ja noutamisesta tietokannasta. 
 
@@ -61,32 +72,31 @@ Data-olioita ovat lisäksi Notice-rajapinnan toteuttamat NoticeSuccess- ja Notic
 
 ### Sovelluslogiikka
 
-AppService hyödyntää tietokannan tietojen noutamisessa ja tallennuksessa palveluluokkia 
+AppService hyödyntää tietokannan tietojen noutamisessa ja tallennuksessa palveluluokkia, joita ovat: 
 
 - productService, 
 - invoiceService, 
 - managedCompanyService ja 
 - customerCompanyService. 
 
-AppService pääsee käsiksi kaikkiin olioihin näiden palveluluokkien välityksellä, jotka puolestaan pääsevät olioihin käsiksi pakkauksen kevytlaskutus.dao luokkien kautta.   
+AppService pääsee käsiksi kaikkiin datamallin olioihin vain näiden palveluluokkien välityksellä, jotka puolestaan pääsevät olioihin käsiksi vain pakkauksen kevytlaskutus.dao luokkien kautta.   
 
-AppService tarjoaa käyttöliittymälle metodit kaikkia sen tarvitsemia toiminnallisuuksia ja tietoja varten. Näitä ovat esimerkiksi
+Tietojen haun ja tallennuksen lisäksi AppService tarjoaa käyttöliittymälle metodit kaikkia sen tarvitsemia toiminnallisuuksia ja tietoja varten. Näitä ovat esimerkiksi
 
 - List<Invoice> getInvoices()
 - Invoice getInvoiceById(int id)
 - boolean saveCurrentInvoice()
 - boolean deleteInvoice(int id)
+- Samaan tapaan vastaavat metodit myös muille datamallin luokille. 
 
-Samaan tapaan AppService tarjoaa käyttöliittymälle vastaavia metodeja myös muille datamallin luokille. 
-
-Datamalliin liittyvien metodien lisäksi AppService tarjoaa metodit:
+Näiden metodien lisäksi AppService tarjoaa käyttöliittymälle seuraavat metodit:
 
 - Integer updateCurrentInvoiceReferenceNumber() - päivitä valitun laskun viitenumero
 - BigDecimal updateCurrentInvoiceTotal() - päivitä valitun laskun loppusumma
 - boolean hasNoticePending() - onko käyttäjälle esitettäviä ilmoituksia?
 - Notice getPendingNotice() - hae esittävien ilmoituksien jonosta ensimmäinen ilmoitus
 
-Kaikki riippuvuudet injektoidaan sovelluslogiikalle konstruktorikutsun yhteydessä.
+Kaikki AppService-luokan ja muiden palveluluokkien riippuvuudet injektoidaan luokille konstruktorikutsun yhteydessä.
 
 Ohjelman osien suhdetta kuvaava luokka/pakkauskaavio:
 
@@ -101,7 +111,7 @@ Sovelluslogiikan palveluluokat käyttävät tietokannan tietojen hakuun ja talle
 - InvoiceDaoImpl
 - ProductDaoImpl
 
-Nämä luokat toteuttavat CompanyDao, InvoiceDao ja ProductDao-rajapinnat. Ainoastaan nämä luokat huolehtivat tietojen tallentamisesta tietokantaan ja tietojen noutamisesta tietokannasta.
+Nämä luokat puolestaan toteuttavat CompanyDao, InvoiceDao ja ProductDao-rajapinnat. Ainoastaan nämä luokat huolehtivat tietojen tallentamisesta tietokantaan ja tietojen noutamisesta tietokannasta.
 
 Kevytlaskutus.dao -pakkauksen Populate-luokka puolestaan käsittelee sekä tietokannasta noudetut tiedot, että sinne tallennettavat tiedot. Toisaalta kaikki tietokannasta noudetut tiedot välitetään Populate-luokalle - joka tuottaa tiedoista olioita, ja toisaalta kaikki tallennettavat tiedot välitetään ensin Populate-luokalle, joka lisää tiedot tietokantakutsuun. 
 
@@ -109,7 +119,7 @@ Koska kaikki dao-Luokat noudattavat Data Access Object -suunnittelumallia ja ne 
 
 Sovelluslogiikan testaus käyttää tietokantaa, joka on keskusmuistissa, kun taas itse sovellus tallentaa tietokannan käyttäjän laitteelle massamuistiin.
 
-## Päätoiminnallisuudet
+## Sovelluksen päätoiminnallisuudet
 
 Alla oleva sekvenssikaavio kuvaa, miten sovelluksen kontrolli etenee kun käyttäjä lisää uuden hallittavan yrityksen.
 

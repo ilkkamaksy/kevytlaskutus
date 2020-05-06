@@ -1,12 +1,6 @@
 package kevytlaskutus.ui;
 
-import java.util.HashMap;
-import javafx.scene.Node;
 import kevytlaskutus.domain.AppService;
-import kevytlaskutus.domain.CustomerCompany;
-import kevytlaskutus.domain.ManagedCompany;
-import kevytlaskutus.domain.Product;
-
 
 /**
  * Abstract class for form actions.

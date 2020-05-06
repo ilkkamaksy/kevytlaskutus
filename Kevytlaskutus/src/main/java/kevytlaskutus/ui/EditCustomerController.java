@@ -67,7 +67,7 @@ public class EditCustomerController extends BaseController implements Initializa
   
     private void setButtonAction() {
         this.saveFormButton.setOnAction(e-> {
-            boolean success = this.actionFactory.execute("SaveCustomerCompany", this.currentCompany.getId());
+            boolean success = this.actionFactory.execute("SaveCustomerCompany");
             if (success) {
                 this.viewFactory.showManageCustomerView();
             } else {

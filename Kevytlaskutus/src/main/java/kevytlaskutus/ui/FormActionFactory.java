@@ -23,7 +23,7 @@ public class FormActionFactory {
         this.commands.put("SaveInvoice", new FormActionSaveNewInvoice(appService));
     }
     
-    public boolean execute(String actionType, int id) {        
+    public boolean execute(String actionType) {        
         FormAction action = this.commands.get(actionType); 
         return action.execute();
     }

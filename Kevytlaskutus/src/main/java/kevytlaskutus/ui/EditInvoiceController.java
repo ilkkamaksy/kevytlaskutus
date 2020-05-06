@@ -142,7 +142,7 @@ public class EditInvoiceController extends BaseController implements Initializab
     
     private void setSaveButtonAction() {
         this.saveFormButton.setOnAction(e-> {
-            boolean success = this.actionFactory.execute("SaveInvoice", this.currentInvoice.getId());
+            boolean success = this.actionFactory.execute("SaveInvoice");
             if (success) {
                 this.viewFactory.showManageInvoicesView();
             } else {
