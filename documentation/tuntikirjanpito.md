@@ -22,5 +22,7 @@
 | 3.5. | 5    | Laskun tuotteiden summan, verojen ja verollisen summan lisäys lomakkeelle |
 | 4.5. | 7    | Viitenumeron laskeminen ja lisäys laskulle, javafx-lomakekenttien generaattorin refaktorointi |
 | 5.5. | 6    | Testien korjaus ja lisäys, sovelluslogiikan refaktorointi, javadoc-päivitys |
-| yht   | 110    | | 
+| 6.5. | 6    | Testien lisäys, javadoc-päivitys, refaktorointi |
+| 7.5. | 4    | Testien lisäys ja korjaus |
+| yht   | 120    | | 
 
