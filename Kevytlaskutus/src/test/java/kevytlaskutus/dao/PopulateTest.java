@@ -243,14 +243,7 @@ public class PopulateTest {
     
         } catch (SQLException ex) {}
     }
-    
-    @After
-    public void tearDown() {
-        try {
-            conn.close();
-        } catch (SQLException e) {}
-    }
-    
+   
     public Connection getConnection() throws SQLException {     
         return DriverManager.getConnection("jdbc:h2:mem:testdb");
     }

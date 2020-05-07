@@ -11,20 +11,19 @@ import java.sql.SQLException;
 import java.util.List;
 import kevytlaskutus.domain.CustomerCompany;
 import kevytlaskutus.domain.DatabaseUtils;
+import kevytlaskutus.domain.ManagedCompany;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 /**
  *
  * @author ilkka
  */
-public class CustomerCompanyDaoTest {
+public class ManagedCompanyDaoTest {
     
     Connection conn;
     CustomerCompany mockCustomer;
@@ -34,8 +33,7 @@ public class CustomerCompanyDaoTest {
     ProductDaoImpl productDao;
     DatabaseUtils databaseUtils;
     
-    public CustomerCompanyDaoTest() {
-        
+    public ManagedCompanyDaoTest() {
         this.managedCompanyDao = new ManagedCompanyDao();
         this.customerCompanyDao = new CustomerCompanyDao();
         this.invoiceDao = new InvoiceDaoImpl();
@@ -55,82 +53,77 @@ public class CustomerCompanyDaoTest {
     
     @Before
     public void setUp() {
-        
         try {
             Connection conn = this.databaseUtils.getConnection();
-            customerCompanyDao.setConnection(conn);
-        } catch (SQLException e) {
-            
-        }
-        
-        mockCustomer = mock(CustomerCompany.class);
-        when(mockCustomer.getId()).thenReturn(1);
-        when(mockCustomer.getName()).thenReturn("Acme");
-    }
-
-    @Test
-    public void newCustomerCanBeCreated() {
-        try {
-            CustomerCompany customer = new CustomerCompany();
-            customer.setName("Acme");
-            boolean result = customerCompanyDao.create(customer);
-            assertTrue(result);    
+            this.managedCompanyDao.setConnection(conn);
         } catch (SQLException e) {
             
         }
     }
     
     @Test
-    public void customerCanBeUpdated() {
+    public void newManagedCompanyCanBeCreated() {
         try {
-            CustomerCompany customer = new CustomerCompany();
-            customer.setName("Acme");
-            boolean success = customerCompanyDao.create(customer);
-            assertTrue(success);
+            ManagedCompany company = new ManagedCompany();
+            company.setName("Acme");
+            boolean success = this.managedCompanyDao.create(company);
+            assertTrue(success);    
+        } catch (SQLException e) {
+            
+        }
+    }
+    
+    @Test
+    public void companyCanBeUpdated() {
+        try {
+            ManagedCompany company = new ManagedCompany();
+            company.setName("Original");
+            boolean success = this.managedCompanyDao.create(company);
+            assertTrue(success);    
             
             Connection conn = this.databaseUtils.getConnection();
-            customerCompanyDao.setConnection(conn);
-            CustomerCompany originalCustomer = customerCompanyDao.getItemByName("Acme");
-            
-            originalCustomer.setName("Muutettu");
+            this.managedCompanyDao.setConnection(conn);
+            ManagedCompany originalCompany = this.managedCompanyDao.getItemByName("Original");
+            originalCompany.setName("Changed");
             
             conn = this.databaseUtils.getConnection();
-            customerCompanyDao.setConnection(conn);
-            success = customerCompanyDao.update(originalCustomer.getId(), originalCustomer);
+            this.managedCompanyDao.setConnection(conn);
+            success = this.managedCompanyDao.update(originalCompany.getId(), originalCompany);
             assertTrue(success);
             
             conn = this.databaseUtils.getConnection();
-            customerCompanyDao.setConnection(conn);
-            CustomerCompany result = customerCompanyDao.getItemById(originalCustomer.getId());
-            assertEquals(originalCustomer.getName(), result.getName());
+            this.managedCompanyDao.setConnection(conn);
+            ManagedCompany changedCompany = this.managedCompanyDao.getItemByName("Changed");
+            assertEquals(originalCompany.getName(), changedCompany.getName());
         } catch (SQLException e) {}
     }
     
     @Test
-    public void customerCannotBeUpdatedWithoutValidId() {
+    public void companyCannotBeUpdatedWithoutValidId() {
         try {
-            boolean result = customerCompanyDao.update(-1, mockCustomer);
-            assertFalse(result);    
+            boolean success = this.managedCompanyDao.update(-1, new ManagedCompany());
+            assertFalse(success);    
         } catch (SQLException e) {}
     }
 
     @Test
-    public void customerCannotDeletedWithoutValidId() {
+    public void companyCannotDeletedWithoutValidId() {
         try {
-            boolean result = customerCompanyDao.delete(-1);
-            assertFalse(result);    
+            boolean success = this.managedCompanyDao.delete(-1);
+            assertFalse(success);    
         } catch (SQLException e) {}
     }
     
     @Test
-    public void customerCanBeRetrievedById() {
+    public void companyCanBeRetrievedById() {
         try {
-            List<CustomerCompany> customers = this.customerCompanyDao.getItems();
+            List<ManagedCompany> companies = this.managedCompanyDao.getItems();
+            Integer id = companies.get(0).getId();
             
             Connection conn = this.databaseUtils.getConnection();
-            customerCompanyDao.setConnection(conn);
-            CustomerCompany result = this.customerCompanyDao.getItemById(customers.get(0).getId());
-            assertEquals(customers.get(0).getId(), result.getId());
+            this.managedCompanyDao.setConnection(conn);
+            ManagedCompany result = this.managedCompanyDao.getItemById(id);
+            assertEquals(companies.get(0).getId(), result.getId());
         } catch (SQLException e) {}
     }
     

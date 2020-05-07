@@ -6,7 +6,7 @@ Ohjelmaa on testattu sekä yksikkötestein, että integraatiotestein JUnitilla. 
 
 ### DAO-luokat
 
-DAO-luokkia testataan hyödyntämällä muistiin tallennettua tietokantaa. Toistaiseksi tuntemattomasta syystä jacoco ei poimi suurinta osaa DAO-testeistä kattavuusraporttiin.
+DAO-luokkia testataan hyödyntämällä muistiin tallennettua tietokantaa. 
 
 ### Sovelluslogiikan testaus
 
@@ -16,7 +16,7 @@ Sovelluslogiikan luokista testataan lisäksi InvoiceTotalTest ja ReferenceNumber
 
 ### Testauskattavuus
 
-Käyttöliittymäkerrosta lukuunottamatta sovelluksen testauksen rivikattavuus on 67% ja haarautumakattavuus 48%. Toistaiseksi tuntemattomasta syystä jacoco ei poimi kaikkia DAO-luokkien testejä kattavuusraporttiin.
+Käyttöliittymäkerrosta lukuunottamatta sovelluksen testauksen rivikattavuus on 78% ja haarautumakattavuus 61%. 
 
 ![kattavuusraportt](testikattavuus.jpg)
 

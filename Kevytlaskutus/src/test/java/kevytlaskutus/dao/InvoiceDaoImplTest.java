@@ -31,69 +31,158 @@ import static org.mockito.Mockito.verify;
 public class InvoiceDaoImplTest {
 
     Connection conn;
+    CustomerCompany mockCustomer;
+    CustomerCompanyDao customerCompanyDao;
+    ManagedCompanyDao managedCompanyDao;
+    InvoiceDaoImpl invoiceDao;
+    ProductDaoImpl productDao;
+    DatabaseUtils databaseUtils;
     Invoice mockInvoice;
-    InvoiceDaoImpl dao;
+    
+    public InvoiceDaoImplTest() {
+        
+        this.managedCompanyDao = new ManagedCompanyDao();
+        this.customerCompanyDao = new CustomerCompanyDao();
+        this.invoiceDao = new InvoiceDaoImpl();
+        this.productDao = new ProductDaoImpl();
+       
+        this.databaseUtils = new DatabaseUtils(
+                managedCompanyDao, 
+                customerCompanyDao, 
+                invoiceDao,
+                productDao,
+                "jdbc:h2:mem:testdb",
+                "sa", 
+                ""
+        ); 
+        this.databaseUtils.initDb();
+    }
     
     @Before
     public void setUp() {
-        dao = new InvoiceDaoImpl();
         try {
-            conn = this.getConnection();
-            dao.setConnection(conn);
-        } catch (SQLException e) {}
+            Connection conn = this.databaseUtils.getConnection();
+            this.managedCompanyDao.setConnection(conn);
+            ManagedCompany company = new ManagedCompany();
+            company.setName("Company");
+            managedCompanyDao.create(company);
+
+            conn = this.databaseUtils.getConnection();
+            this.customerCompanyDao.setConnection(conn);
+            CustomerCompany customer = new CustomerCompany();
+            customer.setName("Acme");
+            customerCompanyDao.create(customer);
+            
+            conn = this.databaseUtils.getConnection();
+            this.productDao.setConnection(conn);
+            this.invoiceDao.setConnection(conn);
+            
+        } catch (SQLException e) {
+            System.out.println("stup " + e);
+        }
         
         mockInvoice = mock(Invoice.class);    
     }
 
     @Test
-    public void newInvoiceCannotBeCreatedWithNullInvoiceObject() {
-        Invoice invoice = new Invoice();
-        invoice.setInvoiceNumber(1001);
+    public void newInvoiceCanBeCreatedWithCustomerAndManagedCompany() {
+
         try {
-            Integer id = dao.create(invoice);
+            
+            Connection conn = this.databaseUtils.getConnection();
+            this.managedCompanyDao.setConnection(conn);
+            List<ManagedCompany> companies = this.managedCompanyDao.getItems();
+            
+            conn = this.databaseUtils.getConnection();
+            this.customerCompanyDao.setConnection(conn);
+            List<CustomerCompany> customers = this.customerCompanyDao.getItems();
+
+            conn = this.databaseUtils.getConnection();
+            this.invoiceDao.setConnection(conn);
+
+            Invoice invoice = new Invoice();
+            invoice.setInvoiceNumber(1001);
+            invoice.setCompany(companies.get(0));
+            invoice.setCustomer(customers.get(0));
+            
+            Integer id = this.invoiceDao.create(invoice);
             boolean result = id > -1 ? true : false;
-            assertEquals(result, 1);
             assertTrue(result);
-        } catch (SQLException e) {}
+        } catch (SQLException e) {
+            System.out.println("error " + e);
+        }
     }
     
     @Test
-    public void invoiceCannotBeUpdatedWithNullInvoiceObject() {
+    public void invoiceCanBeUpdated() {
         try {
-            boolean result = dao.update(1, null);
-            assertFalse(result);    
-        } catch (SQLException e) {}
-    }
-    
-    @Test
-    public void invoiceCannotBeUpdatedWithoutValidId() {
-        try {
-            boolean result = dao.update(-1, mockInvoice);
-            assertFalse(result);    
-        } catch (SQLException e) {}
-    }
-    
-    @Test
-    public void invoiceCanBeUpdatedWithValidId() {
-        try {
-            boolean result = dao.update(1, mockInvoice);
+            
+            Connection conn = this.databaseUtils.getConnection();
+            this.managedCompanyDao.setConnection(conn);
+            List<ManagedCompany> companies = this.managedCompanyDao.getItems();
+
+            conn = this.databaseUtils.getConnection();
+            this.customerCompanyDao.setConnection(conn);
+            List<CustomerCompany> customers = this.customerCompanyDao.getItems();
+
+            conn = this.databaseUtils.getConnection();
+            this.invoiceDao.setConnection(conn);
+
+            Invoice invoice = new Invoice();
+            invoice.setInvoiceNumber(1001);
+            invoice.setCompany(companies.get(0));
+            invoice.setCustomer(customers.get(0));
+            
+            Integer id = this.invoiceDao.create(invoice);
+            
+            conn = this.databaseUtils.getConnection();
+            this.invoiceDao.setConnection(conn);
+            Invoice invoiceToBeChanged = this.invoiceDao.getItemById(id);
+            invoiceToBeChanged.setDeliveryInfo("delivery info");
+            boolean result = this.invoiceDao.update(invoiceToBeChanged.getId(), invoiceToBeChanged);
             assertTrue(result);    
+            
+            Invoice changedInvoice = this.invoiceDao.getItemById(invoiceToBeChanged.getId());
+            assertEquals(invoiceToBeChanged.getAdditionalInfo(), changedInvoice.getAdditionalInfo());
+            
         } catch (SQLException e) {}
     }
+
    
     @Test
-    public void invoiceCannotDeletedWithoutValidId() {
+    public void invoiceCanBeDeleted() {
         try {
-            boolean result = dao.delete(-1);
-            assertFalse(result);    
+            Connection conn = this.databaseUtils.getConnection();
+            this.managedCompanyDao.setConnection(conn);
+            List<ManagedCompany> companies = this.managedCompanyDao.getItems();
+
+            conn = this.databaseUtils.getConnection();
+            this.customerCompanyDao.setConnection(conn);
+            List<CustomerCompany> customers = this.customerCompanyDao.getItems();
+
+            Invoice invoice = new Invoice();
+            invoice.setInvoiceNumber(1001);
+            invoice.setCompany(companies.get(0));
+            invoice.setCustomer(customers.get(0));
+            
+            conn = this.databaseUtils.getConnection();
+            this.invoiceDao.setConnection(conn);
+            Integer id = this.invoiceDao.create(invoice);
+            
+            conn = this.databaseUtils.getConnection();
+            this.invoiceDao.setConnection(conn);
+            boolean result = this.invoiceDao.delete(id);
+            assertTrue(result);
         } catch (SQLException e) {}
     }
     
     @Test
     public void invoiceListAlwaysRetursnList() {
         try {
-            List<Invoice> results = dao.getItems(1);
-            assertEquals(results.size(), 0);    
+            conn = this.databaseUtils.getConnection();
+            this.invoiceDao.setConnection(conn);
+            List<Invoice> results = this.invoiceDao.getItems(0);
+            assertEquals(0, results.size());    
         } catch (SQLException e) {}
     }
     
@@ -101,54 +190,37 @@ public class InvoiceDaoImplTest {
     public void invoiceCanBeRetrievedById() {
         try {
             
-            CustomerCompany customer = new CustomerCompany(
-                "Acme",
-                "regid",
-                "09123123",
-                "Katuosoite",
-                "postikoodi",
-                "toimipaikka",
-                "ovt",
-                "provider"
-            );
-            
-            ManagedCompany company = new ManagedCompany(
-                "Acme",
-                "regid",
-                "09123123",
-                "Katuosoite",
-                "postikoodi",
-                "toimipaikka",
-                "ovt",
-                "provider"
-            );
-            
+            Connection conn = this.databaseUtils.getConnection();
+            this.managedCompanyDao.setConnection(conn);
+            List<ManagedCompany> companies = this.managedCompanyDao.getItems();
+
+            conn = this.databaseUtils.getConnection();
+            this.customerCompanyDao.setConnection(conn);
+            List<CustomerCompany> customers = this.customerCompanyDao.getItems();
+
             Invoice invoice = new Invoice();
-            invoice.setReferenceNumber(1);
-            invoice.setCustomer(customer);
-            invoice.setCompany(company);
+            invoice.setInvoiceNumber(1001);
+            invoice.setCompany(companies.get(0));
+            invoice.setCustomer(customers.get(0));
+
+            conn = this.databaseUtils.getConnection();
+            this.invoiceDao.setConnection(conn);            
+            Integer id = this.invoiceDao.create(invoice);
             
-            Integer id = this.dao.create(invoice);
-            
-            Invoice result = dao.getItemById(id);
-            assertTrue(result.equals(invoice));
-            assertFalse(result.equals(this.mockInvoice));
-            Integer refNo = result.getReferenceNumber();
-            assertEquals(Integer.valueOf(1), refNo);
+            conn = this.databaseUtils.getConnection();
+            this.invoiceDao.setConnection(conn);
+            Invoice invoiceInDb = this.invoiceDao.getItemById(id);
+            assertEquals(invoice.getInvoiceNumber(), invoiceInDb.getInvoiceNumber());
             
         } catch (SQLException e) {}
     }
    
-    @After
-    public void tearDown() {
+    @AfterClass
+    public static void tearDownClass() {
         try {
-            conn.close();
+            Connection conn = DriverManager.getConnection("jdbc:h2:mem:testdb");
+            conn.prepareStatement("DROP DATABASE testdb").execute();
         } catch (SQLException e) {}
     }
-    
-    // Helpers
-    
-    public Connection getConnection() throws SQLException {     
-        return DriverManager.getConnection("jdbc:h2:mem:testdb");
-    }
+
 }
